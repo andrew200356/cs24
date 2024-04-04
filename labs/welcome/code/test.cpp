@@ -1,9 +1,8 @@
-// C++ program to print words in a sentence
-// Using Temporary String
-
 #include <iostream>
 #include <string>
 #include <vector>
+
+// solving problem in traditional way but using vector and string fucntions
 
 int main(int argc, char *argv[])
 {
@@ -45,13 +44,17 @@ int main(int argc, char *argv[])
         words.push_back(tempWord);
     }
 
-    // Print the list of words
-    for (std::string word : words)
+    // Print the list of words, add space in between except for the last word
+    for (size_t i = 0; i < words.size(); i++)
     {
-        std::cout << word << std::endl;
+        std::cout << words[i];
+        if (i < words.size() - 1)
+        {
+            std::cout << " ";
+        }
     }
 
     return 0;
 }
 
-// This code is contributed by Susobhan Akhuli
+// thanks for the help of Susobhan Akhuli

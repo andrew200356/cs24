@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <numeric>
 
 int main(int argc, char *argv[])
 {
@@ -25,15 +27,22 @@ int main(int argc, char *argv[])
 
     std::istringstream lineStream(line);
     std::string word;
+    std::vector<std::string> words;
     while (lineStream >> word)
     {
         if (word.length() != wordLength)
         {
-            std::cout << word << " ";
+            words.push_back(word);
         }
     }
 
-    std::cout << std::endl;
+    // Join the words with spaces and print the result
+    std::cout << std::accumulate(std::next(words.begin()), words.end(), words[0],
+                                 [](std::string a, std::string b)
+                                 {
+                                     return a + ' ' + b;
+                                 })
+              << std::endl;
 
     return 0;
 }
