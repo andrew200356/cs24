@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int wordLength;
+    size_t wordLength;
     std::istringstream iss(argv[1]);
     if (!(iss >> wordLength))
     {

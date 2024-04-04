@@ -1,0 +1,13 @@
+labs/welcome/code/censor
+
+# Object files
+*.o
+
+# Static libraries
+*.a
+
+# Dynamic libraries
+*.so
+
+# Executable files
+*.out
