@@ -29,10 +29,10 @@ public:
     FibVec();
     ~FibVec();
     // Member Functions
-    size_t capacity();
-    size_t count();
+    size_t capacity() const;
+    size_t count() const;
     void insert(int value, size_t index);
-    size_t lookup(size_t index);
+    size_t lookup(size_t index) const;
     int pop();
     void push(int value);
     void remove(size_t index);

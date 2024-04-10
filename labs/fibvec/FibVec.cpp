@@ -24,13 +24,13 @@ FibVec::~FibVec()
     }
 }
 
-size_t FibVec::capacity()
+size_t FibVec::capacity() const
 {
     // Return the capacity of the vector
     return m_capacity;
 }
 
-size_t FibVec::count()
+size_t FibVec::count() const
 {
     // Return the number of elements in the vector
     return size;
@@ -95,7 +95,7 @@ void FibVec::insert(int value, size_t index)
     m_data[index] = value;
 }
 
-size_t FibVec::lookup(size_t index)
+size_t FibVec::lookup(size_t index) const
 {
     // Check if the index is out of bounds
     if (index >= size)
