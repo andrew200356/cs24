@@ -7,7 +7,7 @@
 FibVec::FibVec()
 {
     // Initialize the size and capacity to 0
-    size = 1;
+    size = 0;
     m_capacity = 1;
     num1 = 1;
     num2 = 1;
