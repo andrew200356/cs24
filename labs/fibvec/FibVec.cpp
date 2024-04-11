@@ -38,41 +38,54 @@ size_t FibVec::count() const
 
 void FibVec::resize()
 {
-    // Create a new array with the new capacity
-    int *new_data = new int[num1 + num2];
-    num2 = num1 + num2;
-    num1 = num2;
-
-    // Copy the data from the old array to the new array
-    for (size_t i = 0; i < m_count; i++)
+    // Check if the number of elements is equal to the capacity
+    if (m_count == m_capacity)
     {
-        new_data[i] = m_data[i];
+        int nextFib = num1 + num2; // Next Fibonacci number for new capacity
+        int *new_data = new int[nextFib];
+
+        // Copy the data from the old array to the new array
+        for (size_t i = 0; i < m_count; i++)
+        {
+            new_data[i] = m_data[i];
+        }
+
+        delete[] m_data;
+        m_data = new_data;
+
+        // Update the capacity to the new Fibonacci number
+        m_capacity = nextFib;
+
+        // Update Fibonacci numbers for future resizing
+        num1 = num2;
+        num2 = nextFib;
     }
-
-    // Delete the old array
-    delete[] m_data;
-
-    // Update the data pointer and capacity
-    m_data = new_data;
-    m_capacity = num2;
 }
 
 void FibVec::downsize()
 {
-    int *new_data = new int[num1];
-    int a = num1; // num2 now
-    num1 = num2 - num1;
-    num2 = a;
-
-    for (size_t i = 0; i < m_count; i++)
+    // Check if the number of elements is less than the previous Fibonacci number
+    if (m_count < size_t(num1))
     {
-        new_data[i] = m_data[i];
+        int *new_data = new int[num1];
+
+        // Copy the data from the old array to the new array
+        for (size_t i = 0; i < m_count; i++)
+        {
+            new_data[i] = m_data[i];
+        }
+
+        delete[] m_data;
+        m_data = new_data;
+
+        // Update the capacity to the new Fibonacci number
+        m_capacity = num1;
+
+        // Update Fibonacci numbers for future resizing
+        int temp = num1;
+        num1 = num2 - num1; // num1 becomes f(n-3)
+        num2 = temp;        // num2 becomes f(n-2)
     }
-
-    delete[] m_data;
-
-    m_data = new_data;
-    m_capacity = num2;
 }
 
 void FibVec::insert(int value, size_t index)
@@ -83,7 +96,7 @@ void FibVec::insert(int value, size_t index)
         throw std::out_of_range("Index out of bounds");
     }
 
-    // 
+    // Resize the vector if necessary
     resize();
 
     // Shift the elements to the right to make room for the new value
