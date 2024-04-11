@@ -14,7 +14,7 @@ Your vector must obey the following rules:
 class FibVec
 {
     // Member Variables
-    size_t size;
+    size_t m_count;
     size_t m_capacity;
     int *m_data;
     int num1;

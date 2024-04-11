@@ -7,7 +7,7 @@
 FibVec::FibVec()
 {
     // Initialize the size and capacity to 0
-    size = 0;
+    m_count = 0;
     m_capacity = 1;
     num1 = 1;
     num2 = 1;
@@ -33,7 +33,7 @@ size_t FibVec::capacity() const
 size_t FibVec::count() const
 {
     // Return the number of elements in the vector
-    return size;
+    return m_count;
 }
 
 void FibVec::resize()
@@ -44,7 +44,7 @@ void FibVec::resize()
     num1 = num2;
 
     // Copy the data from the old array to the new array
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 0; i < m_count; i++)
     {
         new_data[i] = m_data[i];
     }
@@ -64,7 +64,7 @@ void FibVec::downsize()
     num1 = num2 - num1;
     num2 = a;
 
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 0; i < m_count; i++)
     {
         new_data[i] = m_data[i];
     }
@@ -78,15 +78,16 @@ void FibVec::downsize()
 void FibVec::insert(int value, size_t index)
 {
     // Check if the index is out of bounds
-    if (index > size)
+    if (index > m_capacity)
     {
         throw std::out_of_range("Index out of bounds");
     }
 
+    // 
     resize();
 
     // Shift the elements to the right to make room for the new value
-    for (size_t i = size; i > index; i--)
+    for (size_t i = m_count; i > index; i--)
     {
         m_data[i] = m_data[i - 1];
     }
@@ -98,7 +99,7 @@ void FibVec::insert(int value, size_t index)
 size_t FibVec::lookup(size_t index) const
 {
     // Check if the index is out of bounds
-    if (index >= size)
+    if (index >= m_count)
     {
         throw std::out_of_range("Index out of bounds");
     }
@@ -110,16 +111,16 @@ size_t FibVec::lookup(size_t index) const
 int FibVec::pop()
 {
     // Check if the vector is empty
-    if (size == 0)
+    if (m_count == 0)
     {
-        throw std::out_of_range("Vector is empty");
+        throw std::underflow_error("Vector is empty");
     }
 
     // Get the last value in the vector
-    int value = m_data[size - 1];
+    int value = m_data[m_count - 1];
 
     // Decrement the size of the vector
-    size--;
+    m_count--;
 
     downsize();
 
@@ -132,28 +133,28 @@ void FibVec::push(int value)
     resize();
 
     // Insert the new value at the end of the vector
-    m_data[size] = value;
+    m_data[m_count] = value;
 
     // Increment the size of the vector
-    size++;
+    m_count++;
 }
 
 void FibVec::remove(size_t index)
 {
     // Check if the index is out of bounds
-    if (index >= size)
+    if (index >= m_count)
     {
         throw std::out_of_range("Index out of bounds");
     }
 
     // Shift the elements to the left to remove the value at the specified index
-    for (size_t i = index; i < size - 1; i++)
+    for (size_t i = index; i < m_count - 1; i++)
     {
         m_data[i] = m_data[i + 1];
     }
 
     // Decrement the size of the vector
-    size--;
+    m_count--;
 
     downsize();
 }
