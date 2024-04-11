@@ -8,8 +8,9 @@ int main()
 {
     FibVec fibvec;
 
-    // test count
-    std::cout << "count: " << fibvec.count() << std::endl;
+    fibvec.insert(1, 0);
 
+    // print: [1/1]: 1
+    std::cout << fibvec.lookup(0) << std::endl;
     return 0;
 }

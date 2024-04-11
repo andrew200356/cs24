@@ -8,7 +8,7 @@ FibVec::FibVec()
 {
     // Initialize the size and capacity to 0
     m_count = 0;
-    m_capacity = 1;
+    m_capacity = 1; // f(2) = 1
     num1 = 1;
     num2 = 1;
     // Initialize the data array to nullptr
@@ -64,8 +64,10 @@ void FibVec::resize()
 
 void FibVec::downsize()
 {
-    // Check if the number of elements is less than the previous Fibonacci number
-    if (m_count < size_t(num1))
+    // When removing from a vector with capacity f(n): if the number of items drops below f(n-2), the vector must resize its capacity to f(n-1).
+
+    int downsizeFib = num2 - num1; // f(n-2)
+    if (m_count < size_t(downsizeFib))
     {
         int *new_data = new int[num1];
 
@@ -78,20 +80,19 @@ void FibVec::downsize()
         delete[] m_data;
         m_data = new_data;
 
-        // Update the capacity to the new Fibonacci number
+        // Update the capacity to f(n-1)
         m_capacity = num1;
 
         // Update Fibonacci numbers for future resizing
-        int temp = num1;
-        num1 = num2 - num1; // num1 becomes f(n-3)
-        num2 = temp;        // num2 becomes f(n-2)
+        num2 = num1;
+        num1 = downsizeFib;
     }
 }
 
 void FibVec::insert(int value, size_t index)
 {
     // Check if the index is out of bounds
-    if (index > m_capacity)
+    if (index > m_count)
     {
         throw std::out_of_range("Index out of bounds");
     }
@@ -153,15 +154,20 @@ void FibVec::push(int value)
     m_count++;
 }
 
-void FibVec::remove(size_t index)
+int FibVec::remove(size_t index)
 {
+    // The remove function takes one argument: an index. It removes the value stored at that index and returns it. If the index is invalid, it throws a std::out_of_range exception.
+
     // Check if the index is out of bounds
     if (index >= m_count)
     {
         throw std::out_of_range("Index out of bounds");
     }
 
-    // Shift the elements to the left to remove the value at the specified index
+    // Get the value at the specified index
+    int value = m_data[index];
+
+    // Shift the elements to the left to fill the gap
     for (size_t i = index; i < m_count - 1; i++)
     {
         m_data[i] = m_data[i + 1];
@@ -171,4 +177,7 @@ void FibVec::remove(size_t index)
     m_count--;
 
     downsize();
+
+    // Return the value that was removed
+    return value;
 }
