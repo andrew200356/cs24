@@ -96,7 +96,7 @@ void FibVec::insert(int value, size_t index)
         throw std::out_of_range("Index out of bounds");
     }
 
-    // Resize the vector if necessary
+    // first check if we need to resize
     resize();
 
     // Shift the elements to the right to make room for the new value
@@ -107,6 +107,7 @@ void FibVec::insert(int value, size_t index)
 
     // Insert the new value at the specified index
     m_data[index] = value;
+    m_count++;
 }
 
 size_t FibVec::lookup(size_t index) const
