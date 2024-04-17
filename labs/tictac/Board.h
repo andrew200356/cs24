@@ -10,11 +10,10 @@ class Board
 {
     // Board class uses a 3 by 3 2d array to represent the board
     // -1 stands for O, 1 stands for X, and 0 stands for empty
-    int board[3][3];
+    int board[3][3] = {};
 
     // functions
 public:
-    Board();
     void make_move(const Move &move);
 };
 #endif

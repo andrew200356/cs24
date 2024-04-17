@@ -39,15 +39,15 @@ Move::Move(const std::string &input)
     }
 
     // player has to be X or O
-    player = std::toupper(parts[1]);
-    if (player != 'X' && player != 'O')
+    player = parts[1];
+    if (std::toupper(player) != 'X' && std::toupper(player) != 'O')
     {
         throw ParseError("Invalid player code");
     }
 
     // row has to be A, B, or C
-    row = std::toupper(parts[2]);
-    if (row != 'A' && row != 'B' && row != 'C')
+    row = parts[2];
+    if (std::toupper(row) != 'A' && std::toupper(row) != 'B' && std::toupper(row) != 'C')
     {
         throw ParseError("Invalid row code");
     }
@@ -70,6 +70,6 @@ Move::Move(const std::string &input)
 std::string Move::to_string() const
 {
     std::ostringstream oss;
-    oss << number << " " << player << " " << row << column;
+    oss << number << " " << player << " " << char(row) << column;
     return oss.str();
 }
