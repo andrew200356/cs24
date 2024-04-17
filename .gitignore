@@ -12,3 +12,5 @@ labs/welcome/code/censor
 # Executable files
 *.out
 labs/fibvec/test
+labs/tictac/game-check
+labs/tictac/move-check

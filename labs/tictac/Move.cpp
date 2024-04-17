@@ -23,30 +23,37 @@ Move::Move(const std::string &input)
 
     std::istringstream iss(input);
 
+    // Initialize a string array to store each part if iss
+    char parts[4];
     // whitespace represents by std::ws
-    iss >> number >> std::ws >> player >> std::ws >> row >> column;
-    player = std::toupper(player);
-    row = std::toupper(row);
+    iss >> parts[0] >> std::ws >> parts[1] >> std::ws >> parts[2] >> std::ws >> parts[3];
+    // iss >> number >> std::ws >> player >> std::ws >> row >> column;
+    // player = std::toupper(player);
+    // row = std::toupper(row);
 
     // number has to between 1 and 9
+    number = parts[0] - '0';
     if (number < 1 || number > 9)
     {
         throw ParseError("Invalid move number");
     }
 
     // player has to be X or O
+    player = std::toupper(parts[1]);
     if (player != 'X' && player != 'O')
     {
         throw ParseError("Invalid player code");
     }
 
     // row has to be A, B, or C
+    row = std::toupper(parts[2]);
     if (row != 'A' && row != 'B' && row != 'C')
     {
         throw ParseError("Invalid row code");
     }
 
     // column has to be 1, 2, or 3
+    column = parts[3] - '0';
     if (column < 1 || column > 3)
     {
         throw ParseError("Invalid column number");
