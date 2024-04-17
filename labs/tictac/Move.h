@@ -7,19 +7,22 @@
 // but you must print moves in the expected format.
 
 #include <string>
+#include <sstream>
 
-struct Move {
-  // Member Variables
-  int  number;
-  char player;
-  int  row;
-  int  column;
+struct Move
+{
+    // Member Variables
+    int number;
+    char player;
+    int row;
+    int column;
+    std::string comment; // To store optional comment
 
-  // The constructor parses a string.
-  Move(const std::string& input);
+    // The constructor parses a string.
+    Move(const std::string &input);
 
-  // Helper to render a Move as text.
-  std::string to_string() const;
+    // Helper to render a Move as text.
+    std::string to_string() const;
 };
 
 #endif
