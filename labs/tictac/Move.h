@@ -14,7 +14,7 @@ struct Move
     // Member Variables
     int number;
     char player;
-    int row;
+    char row;
     int column;
     std::string comment; // To store optional comment
 

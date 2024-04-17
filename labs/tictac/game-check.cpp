@@ -19,11 +19,24 @@ int main()
     Game over: Draw. If the game is over and neither player won.
     */
 
-    // Board board = Board();
-    // std::string line;
-    // while (std::getline(std::cin, line))
-    // {
-    //     // Process the line...
-    //     std::cout << "Read line: " << line << '\n';
-    // }
+    Board board = Board();
+    std::string line;
+    while (std::getline(std::cin, line))
+    {
+        try
+        {
+            Move move = Move(line);
+            board.make_move(move);
+        }
+        catch (const ParseError &e)
+        {
+            std::cout << "Parse error.\n";
+            return 1;
+        }
+        catch (const InvalidMove &e)
+        {
+            std::cout << "Invalid move.\n";
+            return 2;
+        }
+    }
 }
