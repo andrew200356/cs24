@@ -24,12 +24,22 @@ Move::Move(const std::string &input)
     std::istringstream iss(input);
 
     // Initialize a string array to store each part if iss
-    char parts[4];
-    // whitespace represents by std::ws
-    iss >> parts[0] >> std::ws >> parts[1] >> std::ws >> parts[2] >> std::ws >> parts[3];
+    char parts[7];
+    // whitespace represents by parts[5,6,7]
+    // iss >> parts[0] >> std::ws >> parts[2] >> std::ws >> parts[4] >> std::ws >> parts[6];
+    for (int i = 0; i < 7; i++)
+    {
+        iss >> parts[i];
+    }
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
     // player = std::toupper(player);
     // row = std::toupper(row);
+
+    // check white space
+    if (parts[1] != ' ' || parts[3] != ' ' || parts[5] != ' ')
+    {
+        throw ParseError("Invalid whitespace");
+    }
 
     // number has to between 1 and 9
     number = parts[0] - '0';
@@ -39,21 +49,21 @@ Move::Move(const std::string &input)
     }
 
     // player has to be X or O
-    player = std::toupper(parts[1]);
+    player = std::toupper(parts[2]);
     if (player != 'X' && player != 'O')
     {
         throw ParseError("Invalid player code");
     }
 
     // row has to be A, B, or C
-    row = std::toupper(parts[2]);
+    row = std::toupper(parts[4]);
     if (row != 'A' && row != 'B' && row != 'C')
     {
         throw ParseError("Invalid row code");
     }
 
     // column has to be 1, 2, or 3
-    column = parts[3] - '0';
+    column = parts[6] - '0';
     if (column < 1 || column > 3)
     {
         throw ParseError("Invalid column number");
