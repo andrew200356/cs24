@@ -28,6 +28,30 @@ Move::Move(const std::string &input)
     player = std::toupper(player);
     row = std::toupper(row);
 
+    // number has to between 1 and 9
+    if (number < 1 || number > 9)
+    {
+        throw ParseError("Invalid move number");
+    }
+
+    // player has to be X or O
+    if (player != 'X' && player != 'O')
+    {
+        throw ParseError("Invalid player code");
+    }
+
+    // row has to be A, B, or C
+    if (row != 'A' && row != 'B' && row != 'C')
+    {
+        throw ParseError("Invalid row code");
+    }
+
+    // column has to be 1, 2, or 3
+    if (column < 1 || column > 3)
+    {
+        throw ParseError("Invalid column number");
+    }
+
     // Check if there is more to read and a comment marker
     if (iss >> std::ws && iss.peek() == '#')
     {
@@ -40,9 +64,5 @@ std::string Move::to_string() const
 {
     std::ostringstream oss;
     oss << number << " " << player << " " << row << column;
-    if (!comment.empty())
-    {
-        oss << " " << comment;
-    }
     return oss.str();
 }
