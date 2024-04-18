@@ -48,7 +48,6 @@ int main()
     }
     else if (board.get_winner() == 0)
     {
-
         if (board.get_turn() == 1)
         {
             std::cout << "Game in progress: X's turn.\n";

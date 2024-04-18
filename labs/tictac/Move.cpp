@@ -83,6 +83,15 @@ Move::Move(const std::string &input)
     {
         throw ParseError("Invalid comment");
     }
+    else if (parts[6] == ' ')
+    {
+        if (isspace(parts[7]))
+        {
+            iss >> std::ws;
+        }
+        if (iss.get() != '#')
+            throw ParseError("Invalid comment");
+    }
 }
 
 // Convert Move object back to a string in the correct format
