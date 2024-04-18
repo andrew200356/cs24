@@ -24,12 +24,16 @@ Move::Move(const std::string &input)
     std::istringstream iss(input);
 
     // Initialize a string array to store each part if iss
-    char parts[6];
+    char parts[8];
     // whitespace represent by std::ws
     // iss >> parts[0] >> std::ws >> parts[2] >> std::ws >> parts[4] >> parts[5];
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 8; i++)
     {
         parts[i] = iss.get();
+        if (isspace(parts[i]))
+        {
+            iss >> std::ws;
+        }
         // std::cout << "parts" << i << "is" << parts[i] << " ";
     }
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
@@ -71,9 +75,13 @@ Move::Move(const std::string &input)
     }
 
     // Check if there is more to read and a comment marker
-    if (iss >> std::ws && iss.peek() == '#')
+    if (parts[6] == ' ' && parts[7] == '#')
     {
         std::getline(iss, comment); // Extract the comment
+    }
+    else
+    {
+        throw ParseError("Invalid comment");
     }
 }
 
