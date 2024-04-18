@@ -13,3 +13,13 @@ void Board::make_move(const Move &move)
     // Make the move
     board[move.row - 'A'][move.column - 1] = (move.player == 'X') ? 1 : -1;
 }
+
+int Board::get_winner()
+{
+    return winnder;
+}
+
+bool Board::is_empty()
+{
+    return move == 0;
+}

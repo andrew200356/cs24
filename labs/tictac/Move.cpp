@@ -1,6 +1,6 @@
 #include "Errors.h"
 #include "Move.h"
-
+#include <iostream>
 // Space for implementing Move functions.
 Move::Move(const std::string &input)
 {
@@ -24,19 +24,20 @@ Move::Move(const std::string &input)
     std::istringstream iss(input);
 
     // Initialize a string array to store each part if iss
-    char parts[7];
-    // whitespace represents by parts[5,6,7]
-    // iss >> parts[0] >> std::ws >> parts[2] >> std::ws >> parts[4] >> std::ws >> parts[6];
-    for (int i = 0; i < 7; i++)
+    char parts[6];
+    // whitespace represent by std::ws
+    // iss >> parts[0] >> std::ws >> parts[2] >> std::ws >> parts[4] >> parts[5];
+    for (int i = 0; i < 6; i++)
     {
-        iss >> parts[i];
+        parts[i] = iss.get();
+        // std::cout << "parts" << i << "is" << parts[i] << " ";
     }
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
     // player = std::toupper(player);
     // row = std::toupper(row);
 
     // check white space
-    if (parts[1] != ' ' || parts[3] != ' ' || parts[5] != ' ')
+    if (parts[1] != ' ' || parts[3] != ' ')
     {
         throw ParseError("Invalid whitespace");
     }
@@ -63,7 +64,7 @@ Move::Move(const std::string &input)
     }
 
     // column has to be 1, 2, or 3
-    column = parts[6] - '0';
+    column = parts[5] - '0';
     if (column < 1 || column > 3)
     {
         throw ParseError("Invalid column number");

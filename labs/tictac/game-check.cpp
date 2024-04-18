@@ -38,5 +38,46 @@ int main()
             std::cout << "Invalid move.\n";
             return 2;
         }
+        // Check if the game is in progress
+
+        if (board.is_empty())
+        {
+            std::cout << "Game in progress: New game.\n";
+        }
+        else if (board.get_winner() == 0)
+        {
+
+            if (true)
+            {
+                std::cout << "Game in progress: X's turn.\n";
+            }
+            else
+            {
+                std::cout << "Game in progress: O's turn.\n";
+            }
+        }
+        else if (board.get_winner() == 9)
+        {
+            std::cout << "Game over: Draw.\n";
+            return 0;
+        }
+
+        // Check if the game is over
+        if (board.get_winner() != 0)
+        {
+            if (board.get_winner() == 1)
+            {
+                std::cout << "Game over: X wins.\n";
+            }
+            else if (board.get_winner() == -1)
+            {
+                std::cout << "Game over: O wins.\n";
+            }
+            else
+            {
+                std::cout << "Game over: Draw.\n";
+            }
+            return 0;
+        }
     }
 }
