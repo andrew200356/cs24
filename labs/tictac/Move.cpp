@@ -79,7 +79,7 @@ Move::Move(const std::string &input)
     {
         std::getline(iss, comment); // Extract the comment
     }
-    else
+    else if (parts[6] != ' ' && parts[6] == '#')
     {
         throw ParseError("Invalid comment");
     }

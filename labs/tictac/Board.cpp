@@ -10,9 +10,14 @@ void Board::make_move(const Move &move)
         throw InvalidMove("Invalid move");
     }
 
+    // step is the number of moves made
+    step++;
+    if (step != move.number)
+    {
+        throw InvalidMove("Invalid move number");
+    }
     // Make the move
     board[move.row - 'A'][move.column - 1] = (move.player == 'X') ? 1 : -1;
-
     // Check if the game is over
     // if rows of cols or diagonals add up to 3 or -3, then there is a winner
     for (int i = 0; i < 3; i++)
