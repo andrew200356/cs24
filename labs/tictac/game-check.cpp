@@ -27,6 +27,7 @@ int main()
         {
             Move move = Move(line);
             board.make_move(move);
+            board.set_turn(move);
         }
         catch (const ParseError &e)
         {
@@ -47,7 +48,7 @@ int main()
         else if (board.get_winner() == 0)
         {
 
-            if (true)
+            if (board.get_turn() == 1)
             {
                 std::cout << "Game in progress: X's turn.\n";
             }
@@ -73,7 +74,7 @@ int main()
             {
                 std::cout << "Game over: O wins.\n";
             }
-            else
+            else if (board.get_winner() == 9)
             {
                 std::cout << "Game over: Draw.\n";
             }

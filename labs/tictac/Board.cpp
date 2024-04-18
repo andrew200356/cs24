@@ -12,6 +12,32 @@ void Board::make_move(const Move &move)
 
     // Make the move
     board[move.row - 'A'][move.column - 1] = (move.player == 'X') ? 1 : -1;
+
+    // Check if the game is over
+    // if rows of cols or diagonals add up to 3 or -3, then there is a winner
+    for (int i = 0; i < 3; i++)
+    {
+        if (board[i][0] + board[i][1] + board[i][2] == 3 || board[0][i] + board[1][i] + board[2][i] == 3)
+        {
+            winnder = 1;
+            return;
+        }
+        if (board[i][0] + board[i][1] + board[i][2] == -3 || board[0][i] + board[1][i] + board[2][i] == -3)
+        {
+            winnder = -1;
+            return;
+        }
+    }
+}
+
+void Board::set_turn(const Move &move)
+{
+    turn = (move.player == 'X') ? -1 : 1;
+}
+
+int Board::get_turn()
+{
+    return turn;
 }
 
 int Board::get_winner()
@@ -21,5 +47,5 @@ int Board::get_winner()
 
 bool Board::is_empty()
 {
-    return move == 0;
+    return step == 0;
 }

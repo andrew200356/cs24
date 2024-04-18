@@ -13,12 +13,14 @@ class Board
     int board[3][3] = {};
     int winnder = 0; // winder is 1 of -1 of 9 if draw
     int turn = 0;    // 1 for X, -1 for O
-    int move = 0;    // number of moves made
+    int step = 0;    // number of moves made
 
     // functions
 public:
     void make_move(const Move &move);
     int get_winner();
     bool is_empty();
+    void set_turn(const Move &move);
+    int get_turn();
 };
 #endif
