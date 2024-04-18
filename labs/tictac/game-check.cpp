@@ -46,13 +46,13 @@ int main()
     {
         std::cout << "Game in progress: New game.\n";
     }
-    else if (board.get_winner() == 0)
+    else if (board.get_winner() == 0) // if there is no winner
     {
-        if (board.get_turn() == 1)
+        if (board.get_turn() == 'X')
         {
             std::cout << "Game in progress: X's turn.\n";
         }
-        else
+        else if (board.get_turn() == 'O')
         {
             std::cout << "Game in progress: O's turn.\n";
         }

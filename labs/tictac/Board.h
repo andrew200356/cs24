@@ -12,10 +12,9 @@ class Board
     // -1 stands for O, 1 stands for X, and 0 stands for empty
     int board[3][3] = {};
     int winnder = 0; // winder is 1 of -1 of 9 if draw
-    char turn = 0;   // 1 for X, -1 for O
     int step = 0;    // number of moves made
+    char turn = 'A';   // X or O
 
-    // functions
 public:
     void make_move(const Move &move);
     int get_winner();

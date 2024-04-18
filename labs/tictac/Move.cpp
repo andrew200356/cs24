@@ -39,7 +39,7 @@ Move::Move(const std::string &input)
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
 
     // check white space
-    if (parts[1] != ' ' || parts[3] != ' ')
+    if ((isspace(parts[1]) + isspace(parts[3])) == 0)
     {
         throw ParseError("Invalid whitespace");
     }
@@ -75,18 +75,11 @@ Move::Move(const std::string &input)
     // Check if there is more to read and a comment marker
     std::string comment;
     std::getline(iss, comment);
-    if (!comment.empty() && (comment[0] != ' ' || comment[1] != '#'))
+    if (!comment.empty() && (isspace(comment[0]) || comment[1] != '#'))
     {
         throw ParseError("Invalid comment");
     }
 
-    // if (comment.size() > 0 && comment[0] == '#')
-    // {
-    // }
-    // else if (comment.size() > 0)
-    // {
-    //     throw ParseError("Invalid comment");
-    // }
 }
 
 // Convert Move object back to a string in the correct format

@@ -17,17 +17,17 @@ void Board::make_move(const Move &move)
         throw InvalidMove("Invalid move number");
     }
 
-    // make sure the player is dif with last one
+    // make sure the player is different with last one
     // check the player is X or O
-    char lastPlayer = (turn == 1) ? 'X' : 'O';
-    if (step > 1 && move.player == lastPlayer)
+    if (step > 1 && move.player == turn)
     {
         throw InvalidMove("Invalid player");
     }
 
     // Make the move
     board[move.row - 'A'][move.column - 1] = (move.player == 'X') ? 1 : -1;
-    // Check if the game is over
+
+    // Check if there is a winner
     // if rows of cols or diagonals add up to 3 or -3, then there is a winner
     for (int i = 0; i < 3; i++)
     {
@@ -46,7 +46,7 @@ void Board::make_move(const Move &move)
 
 void Board::set_turn(const Move &move)
 {
-    turn = (move.player == 'X') ? 1 : -1;
+    turn = move.player;
 }
 
 int Board::get_turn()
