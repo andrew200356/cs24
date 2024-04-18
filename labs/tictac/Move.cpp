@@ -24,10 +24,10 @@ Move::Move(const std::string &input)
     std::istringstream iss(input);
 
     // Initialize a string array to store each part if iss
-    char parts[8];
+    char parts[6];
     // whitespace represent by std::ws
     // iss >> parts[0] >> std::ws >> parts[2] >> std::ws >> parts[4] >> parts[5];
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 6; i++)
     {
         parts[i] = iss.get();
         if (isspace(parts[i]))
@@ -37,15 +37,12 @@ Move::Move(const std::string &input)
         // std::cout << "parts" << i << "is" << parts[i] << " ";
     }
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
-    // player = std::toupper(player);
-    // row = std::toupper(row);
 
     // check white space
-    if (parts[1] != ' ' || parts[3] != ' ')
+    if ((parts[1] != ' ' && parts[1] != '\t') || (parts[3] != ' ' && parts[3] != '\t'))
     {
         throw ParseError("Invalid whitespace");
     }
-
     // number has to between 1 and 9
     number = parts[0] - '0';
     if (number < 1 || number > 9)
@@ -75,23 +72,20 @@ Move::Move(const std::string &input)
     }
 
     // Check if there is more to read and a comment marker
-    if (parts[6] == ' ' && parts[7] == '#')
-    {
-        std::getline(iss, comment); // Extract the comment
-    }
-    else if (parts[6] != ' ' && parts[6] == '#')
+    std::string comment;
+    std::getline(iss, comment);
+    if (!comment.empty() && (comment[0] != ' ' || comment[1] != '#'))
     {
         throw ParseError("Invalid comment");
     }
-    else if (parts[6] == ' ')
-    {
-        if (isspace(parts[7]))
-        {
-            iss >> std::ws;
-        }
-        if (iss.get() != '#')
-            throw ParseError("Invalid comment");
-    }
+
+    // if (comment.size() > 0 && comment[0] == '#')
+    // {
+    // }
+    // else if (comment.size() > 0)
+    // {
+    //     throw ParseError("Invalid comment");
+    // }
 }
 
 // Convert Move object back to a string in the correct format

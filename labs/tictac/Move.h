@@ -16,7 +16,6 @@ struct Move
     char player;
     char row;
     int column;
-    std::string comment; // To store optional comment
 
     // The constructor parses a string.
     Move(const std::string &input);
