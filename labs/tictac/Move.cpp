@@ -39,10 +39,11 @@ Move::Move(const std::string &input)
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
 
     // check white space
-    if ((parts[1] != ' ' && parts[1] != '\t') || (parts[3] != ' ' && parts[3] != '\t'))
+    if (parts[1] != ' ' || parts[3] != ' ')
     {
         throw ParseError("Invalid whitespace");
     }
+
     // number has to between 1 and 9
     number = parts[0] - '0';
     if (number < 1 || number > 9)
