@@ -1,0 +1,17 @@
+1 X A1
+1 X A1 # This is a comment
+1   X   A1
+1   X   A1   # This is a comment
+1	X	A1
+1	X	A1	# This is a comment
+2 O B2 # Another comment
+2   O   B2
+2   O   B2   # Another comment
+2	O	B2
+2	O	B2	# Another comment
+3 X C3
+3 X C3 # Yet another comment
+3   X   C3
+3   X   C3   # Yet another comment
+3	X	C3
+3	X	C3	# Yet another comment
