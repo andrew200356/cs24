@@ -31,12 +31,12 @@ int main()
         }
         catch (const ParseError &e)
         {
-            std::cout << "Parse error.\n";
+            std::cout << "Parse error. " << e.what() << std::endl;
             return 1;
         }
         catch (const InvalidMove &e)
         {
-            std::cout << "Invalid move.\n";
+            std::cout << "Invalid move. " << e.what() << std::endl;
             return 2;
         }
     }

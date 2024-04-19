@@ -73,13 +73,39 @@ Move::Move(const std::string &input)
     }
 
     // Check if there is more to read and a comment marker
-    std::string comment;
-    std::getline(iss, comment);
-    if (!comment.empty() && (isspace(comment[0]) || comment[1] != '#'))
-    {
-        throw ParseError("Invalid comment");
-    }
+    /*
+        Optionally, whitespace.
+        Optionally, a comment.
+        This is any text beginning with the # character and extending to the end of the string.
+        If a comment is present, the preceding whitespace is required.
+    */
+    char next = iss.get();
+    if (next != EOF)
+    {                      // if there is more to read
+        if (isspace(next)) // if the first character is a whitespace, filter out the rest of the whitespace
+        {
+            iss >> std::ws;
 
+            // check if the next character is a comment marker
+            char comment = iss.get();
+            if (comment == '#') // if the next character is a comment marker
+            {
+                // we good
+            }
+            else if (comment == EOF)
+            {
+                // we good
+            }
+            else // if the next character is not a comment marker, throw error
+            {
+                throw ParseError("Invalid comment, no comment marker");
+            }
+        }
+        else // if the first character is not a whitespace, throw error
+        {
+            throw ParseError("Invalid comment");
+        }
+    }
 }
 
 // Convert Move object back to a string in the correct format
