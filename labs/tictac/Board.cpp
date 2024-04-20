@@ -29,26 +29,27 @@ void Board::make_move(const Move &move)
     // Make the move
     board[move.row - 'A'][move.column - 1] = (move.player == 'X') ? 1 : -1;
 
-    // Print the board
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if (board[i][j] == 1)
-            {
-                std::cout << 'X' << ' ';
-            }
-            else if (board[i][j] == -1)
-            {
-                std::cout << 'O' << ' ';
-            }
-            else
-            {
-                std::cout << '_' << ' ';
-            }
-        }
-        std::cout << '\n';
-    }
+    // // Print the board
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     for (int j = 0; j < 3; j++)
+    //     {
+    //         if (board[i][j] == 1)
+    //         {
+    //             std::cout << 'X' << ' ';
+    //         }
+    //         else if (board[i][j] == -1)
+    //         {
+    //             std::cout << 'O' << ' ';
+    //         }
+    //         else
+    //         {
+    //             std::cout << '_' << ' ';
+    //         }
+    //     }
+    //     std::cout << '\n';
+    // }
+
     // Check if there is a winner
     // if one rows of cols or diagonals add up to 3 or -3, then there is a winner
     for (int i = 0; i < 3; i++)
