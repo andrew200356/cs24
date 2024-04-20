@@ -1,5 +1,7 @@
 #include "Errors.h"
 #include "Board.h"
+#include "Move.h"
+#include <iostream>
 
 // Space for implementing Board functions.
 void Board::make_move(const Move &move)
@@ -27,8 +29,28 @@ void Board::make_move(const Move &move)
     // Make the move
     board[move.row - 'A'][move.column - 1] = (move.player == 'X') ? 1 : -1;
 
+    // Print the board
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (board[i][j] == 1)
+            {
+                std::cout << 'X' << ' ';
+            }
+            else if (board[i][j] == -1)
+            {
+                std::cout << 'O' << ' ';
+            }
+            else
+            {
+                std::cout << '_' << ' ';
+            }
+        }
+        std::cout << '\n';
+    }
     // Check if there is a winner
-    // if rows of cols or diagonals add up to 3 or -3, then there is a winner
+    // if one rows of cols or diagonals add up to 3 or -3, then there is a winner
     for (int i = 0; i < 3; i++)
     {
         if (board[i][0] + board[i][1] + board[i][2] == 3 || board[0][i] + board[1][i] + board[2][i] == 3 || board[0][0] + board[1][1] + board[2][2] == 3 || board[0][2] + board[1][1] + board[2][0] == 3)
@@ -41,6 +63,12 @@ void Board::make_move(const Move &move)
             winnder = -1;
             return;
         }
+    }
+
+    // Check if it is a draw
+    if (step == 9)
+    {
+        winnder = 9;
     }
 }
 

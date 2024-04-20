@@ -21,8 +21,14 @@ int main()
 
     Board board = Board();
     std::string line;
+    bool gameOver = false;
     while (std::getline(std::cin, line))
     {
+        if (gameOver)
+        {
+            std::cout << "Invalid move.\n";
+            return 2;
+        }
         try
         {
             Move move = Move(line);
@@ -61,6 +67,7 @@ int main()
     // Check if the game is over
     if (board.get_winner() != 0)
     {
+        gameOver = true;
         if (board.get_winner() == 1)
         {
             std::cout << "Game over: X wins.\n";
@@ -73,6 +80,6 @@ int main()
         {
             std::cout << "Game over: Draw.\n";
         }
-        return 0;
-    }
+        }
+    return 0;
 }
