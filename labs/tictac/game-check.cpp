@@ -56,11 +56,11 @@ int main()
     {
         if (board.get_turn() == 'X')
         {
-            std::cout << "Game in progress: X's turn.\n";
+            std::cout << "Game in progress: O's turn.\n";
         }
         else if (board.get_turn() == 'O')
         {
-            std::cout << "Game in progress: O's turn.\n";
+            std::cout << "Game in progress: X's turn.\n";
         }
     }
 
