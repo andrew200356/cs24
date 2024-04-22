@@ -1,11 +1,11 @@
-#include "FibVec.h"
 #include <iostream>
+
+#include "FibVec.h"
 
 // Use this file to test your FibVec class!
 // This file won't be graded - do whatever you want.
 
-int main()
-{
+int main() {
     FibVec fibvec;
 
     fibvec.insert(1, 0);

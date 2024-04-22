@@ -1,9 +1,10 @@
-#include "Errors.h"
 #include "Move.h"
+
 #include <iostream>
+
+#include "Errors.h"
 // Space for implementing Move functions.
-Move::Move(const std::string &input)
-{
+Move::Move(const std::string &input) {
     // Parse the input string to initialize the Move.
     // The input string will be in the format "number player square [comment]".
 
@@ -27,11 +28,9 @@ Move::Move(const std::string &input)
     char parts[6];
     // whitespace represent by std::ws
     // iss >> parts[0] >> std::ws >> parts[2] >> std::ws >> parts[4] >> parts[5];
-    for (int i = 0; i < 6; i++)
-    {
+    for (int i = 0; i < 6; i++) {
         parts[i] = iss.get();
-        if (isspace(parts[i]))
-        {
+        if (isspace(parts[i])) {
             iss >> std::ws;
         }
         // std::cout << "parts" << i << "is" << parts[i] << " ";
@@ -39,36 +38,31 @@ Move::Move(const std::string &input)
     // iss >> number >> std::ws >> player >> std::ws >> row >> column;
 
     // check white space
-    if ((isspace(parts[1]) + isspace(parts[3])) == 0)
-    {
+    if ((isspace(parts[1]) + isspace(parts[3])) == 0) {
         throw ParseError("Invalid whitespace");
     }
 
     // number has to between 1 and 9
     number = parts[0] - '0';
-    if (number < 1 || number > 9)
-    {
+    if (number < 1 || number > 9) {
         throw ParseError("Invalid move number");
     }
 
     // player has to be X or O
     player = std::toupper(parts[2]);
-    if (player != 'X' && player != 'O')
-    {
+    if (player != 'X' && player != 'O') {
         throw ParseError("Invalid player code");
     }
 
     // row has to be A, B, or C
     row = std::toupper(parts[4]);
-    if (row != 'A' && row != 'B' && row != 'C')
-    {
+    if (row != 'A' && row != 'B' && row != 'C') {
         throw ParseError("Invalid row code");
     }
 
     // column has to be 1, 2, or 3
     column = parts[5] - '0';
-    if (column < 1 || column > 3)
-    {
+    if (column < 1 || column > 3) {
         throw ParseError("Invalid column number");
     }
 
@@ -80,28 +74,23 @@ Move::Move(const std::string &input)
         If a comment is present, the preceding whitespace is required.
     */
     char next = iss.get();
-    if (next != EOF)
-    {                      // if there is more to read
-        if (isspace(next)) // if the first character is a whitespace, filter out the rest of the whitespace
+    if (next != EOF) {      // if there is more to read
+        if (isspace(next))  // if the first character is a whitespace, filter out the rest of the whitespace
         {
             iss >> std::ws;
 
             // check if the next character is a comment marker
             char comment = iss.get();
-            if (comment == '#') // if the next character is a comment marker
+            if (comment == '#')  // if the next character is a comment marker
             {
                 // we good
-            }
-            else if (comment == EOF)
-            {
+            } else if (comment == EOF) {
                 // we good
-            }
-            else // if the next character is not a comment marker, throw error
+            } else  // if the next character is not a comment marker, throw error
             {
                 throw ParseError("Invalid comment, no comment marker");
             }
-        }
-        else // if the first character is not a whitespace, throw error
+        } else  // if the first character is not a whitespace, throw error
         {
             throw ParseError("Invalid comment");
         }
@@ -109,8 +98,7 @@ Move::Move(const std::string &input)
 }
 
 // Convert Move object back to a string in the correct format
-std::string Move::to_string() const
-{
+std::string Move::to_string() const {
     std::ostringstream oss;
     oss << number << " " << player << " " << char(row) << column;
     return oss.str();

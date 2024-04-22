@@ -11,8 +11,7 @@ Your vector must obey the following rules:
     When inserting into a vector with capacity f(n): if there is no room for the item, the vector must resize its capacity to the next Fibonacci number (f(n+1)).
     When removing from a vector with capacity f(n): if the number of items drops below f(n-2), the vector must resize its capacity to f(n-1).
 */
-class FibVec
-{
+class FibVec {
     // Member Variables
     size_t m_count;
     size_t m_capacity;
@@ -24,7 +23,7 @@ class FibVec
     void resize();
     void downsize();
 
-public:
+   public:
     // Constructor and Destructor
     FibVec();
     ~FibVec();

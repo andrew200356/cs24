@@ -6,11 +6,10 @@
 // You're free to interpret the member variables as you wish,
 // but you must print moves in the expected format.
 
-#include <string>
 #include <sstream>
+#include <string>
 
-struct Move
-{
+struct Move {
     // Member Variables
     int number;
     char player;
