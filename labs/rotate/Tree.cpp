@@ -123,20 +123,20 @@ std::string Tree::nth_inorder(Node *n, size_t index, size_t wanted) const {
         return "";
 
     // first loop over the left subtree
-    std::string left = nth_inorder(n->left, index++, wanted);
+    std::string left = nth_inorder(n->left, index, wanted);
     if (left != "") {
         return left;
     }
 
-    // then check the midde
-    if (index == 0) {
+    // then check the middle
+    if (index == wanted) {
         return n->data;
     }
-    index--;
+    index++;
 
     // then loop over the right subtree
-    return nth_inorder(n->right, index);
-};
+    return nth_inorder(n->right, index, wanted);
+}
 
 void Tree::print() const {
     if (root == nullptr) {
