@@ -18,5 +18,12 @@ int main() {
 
     // print the tree
     tree.print();
+
+    // find the index of a value
+    std::cout << "Find index of 'c': " << tree.find("c") << std::endl;
+
+    // find the value at index
+    std::cout << "Look up for index 2: " << tree.lookup(2) << std::endl;
+
     return 0;
 }

@@ -139,8 +139,21 @@ std::string Tree::nth_inorder(Node *n, size_t index, size_t wanted) const {
 }
 
 void Tree::print() const {
+    /*
+    The tree notation for a leaf node is simply its value.
+    The tree notation for a non-existent node is a hyphen (-; ASCII value 45).
+    The tree notation for a non-leaf node is:
+    A left parenthesis, followed by
+    the tree notation for its left subtree, followed by
+    a space, followed by
+    the node's value, followed by
+    a space, followed by
+    the tree notation for its right subtree, followed by
+    a right parenthesis.
+    The tree notation for an empty tree is a hyphen.
+    */
     if (root == nullptr) {
-        std::cout << "Empty Tree" << std::endl;
+        std::cout << "-" << std::endl;
     } else {
         printInorder(root);
         std::cout << std::endl;
@@ -149,17 +162,22 @@ void Tree::print() const {
 
 // Function to print inorder traversal
 void Tree::printInorder(Node *node) const {
-    if (node == nullptr)
-        return;
-
-    // First recur on left subtree
-    printInorder(node->left);
-
-    // Now deal with the node
-    std::cout << node->data << " ";
-
-    // Then recur on right subtree
-    printInorder(node->right);
+    if (node == nullptr) {
+        // if the current subtree is null, return -
+        std::cout << "-";
+    } else if (this->weight == 1) {
+        // if the current subtree is just itself (since weight is 1), print the data
+        std::cout << node->data;
+    } else {
+        // if the current subtree is not null, print the left subtree
+        std::cout << "(";
+        printInorder(node->left);
+        // print the data
+        std::cout << " " << node->data << " ";
+        // print the right subtree
+        printInorder(node->right);
+        std::cout << ")";
+    }
 };
 
 void Tree::remove(size_t index) {
