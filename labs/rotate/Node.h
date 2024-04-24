@@ -4,7 +4,14 @@
 #include <string>
 
 struct Node {
-  // TODO!
+    // This is a Binary Search Tree Node
+    std::string data;
+    Node* left;
+    Node* right;
+
+    // Node Constructor
+    Node(const std::string& s);
+    Node(const std::string& s, Node* left, Node* right);
 };
 
 #endif
