@@ -7,6 +7,16 @@
 
 int main() {
     // Do tree things!
+    // create a tree
+    Tree tree;
+    // insert some values
+    tree.insert("a");
+    tree.insert("b");
+    tree.insert("c");
+    tree.insert("d");
+    tree.insert("e");
 
+    // print the tree
+    tree.print();
     return 0;
 }

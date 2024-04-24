@@ -16,6 +16,7 @@ class Tree {
     bool isBalanced(Node *root);                                                 // returns whether the tree is balanced with Recursion
     void clearRecursively(Node *n);                                              // removes all items from the tree with Recursion
     void printInorder(Node *n) const;                                            // prints the tree in tree notation with Recursion
+    void print_by_level(Node *n, size_t level) const;                            // prints the tree in tree notation by level with Recursion
     void removeRecursively(Node *n, size_t index);                               // removes the item at a given index with Recursion
     size_t f_inorder(Node *n, const std::string &s, size_t &index) const;        // returns the index of an item with Recursion
     std::string nth_inorder(struct Node *n, size_t index, size_t wanted) const;  // returns the item at a given index with Recursion
