@@ -1,10 +1,7 @@
 #include "Tree.h"
 
-#include <iostream>
-#include <stdexcept>
-
 // Tree Function Implementations
-Tree::Tree() : root(nullptr), list_size(0){};
+Tree::Tree() : root(nullptr), weight(0){};
 
 Tree::~Tree() {
     clear();
@@ -13,10 +10,10 @@ Tree::~Tree() {
 void Tree::clear() {
     clearRecursively(root);
     root = nullptr;
-    list_size = 0;
+    weight = 0;
 };
 
-void Tree::clearRecursively(Node* n) {
+void Tree::clearRecursively(Node *n) {
     if (n == nullptr) {
         return;
     }
@@ -26,38 +23,72 @@ void Tree::clearRecursively(Node* n) {
 };
 
 size_t Tree::count() const {
-    return list_size;
+    return weight;
 };
 
-bool Tree::contains(const std::string& s) const {
+size_t Tree::height(Node *n) const {
+    if (n == nullptr) {
+        return 0;
+    }
+    size_t l = 1 + height(root->left);
+    size_t r = 1 + height(root->right);
+    return std::max(l, r);
+};
+
+bool Tree::isBalanced(Node *root) {
+    if (root == NULL) {
+        return true;
+    }
+
+    int leftheight = height(root->left);
+    int rightheight = height(root->right);
+
+    if (abs(leftheight - rightheight) > 1) {
+        return false;
+    }
+
+    bool leftAns = isBalanced(root->left);
+    bool rightAns = isBalanced(root->right);
+
+    return (leftAns && rightAns);
+}
+
+bool Tree::contains(const std::string &s) const {
     size_t max_val = ~0;
     return find(s) != max_val;
 };
 
-size_t Tree::find(const std::string& s) const {
-    Node* current = root;
+size_t Tree::find(const std::string &s) const {
+    Node *current = root;
     size_t index = 0;
 
     // the code is triversal with in-order
-    while (current != nullptr) {
-        if (current->data == s) {
-            // if the current node's data is equal to s, return the index
-            // if there are multiple copies of the item, it returns the smallest index
-            return index;
-        } else if (current->data < s) {
-            current = current->right;
-        } else {
-            current = current->left;
-        }
-        index++;
-    }
-    return ~0;
+    return f_inorder(current, s, index);
 };
 
-void Tree::insert(const std::string& s) {
+size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
+    if (n == nullptr) {
+        // Item is not found (base case)
+        return ~0;
+    }
+    size_t foundIndex = f_inorder(n->left, s, index);  // Search the left subtree
+    size_t a = ~0;
+    if (foundIndex != a) {
+        // Item is found in the left subtree
+        return foundIndex;
+    }
+    if (s == n->data) {
+        // Item is equal to the n's data, item is found
+        return index;
+    }
+    index++;                               // Increment the index after visiting a node
+    return f_inorder(n->right, s, index);  // Search the right subtree
+}
+
+void Tree::insert(const std::string &s) {
     // do it with recursion
-    Node* current = root;
-    Node* parent = nullptr;
+    Node *current = root;
+    Node *parent = nullptr;
     while (current != nullptr) {
         parent = current;
         if (current->data < s) {
@@ -69,7 +100,7 @@ void Tree::insert(const std::string& s) {
     }
 
     // now we have the parent node
-    Node* newNode = new Node(s);
+    Node *newNode = new Node(s);
     if (parent == nullptr) {
         root = newNode;
     } else if (parent->data < s) {
@@ -77,24 +108,34 @@ void Tree::insert(const std::string& s) {
     } else {
         parent->left = newNode;
     }
+    weight++;
 };
 
 std::string Tree::lookup(size_t index) const {
-    if (index >= list_size) {
+    if (index >= weight) {
         throw std::out_of_range("Index out of range");
     }
-    Node* current = root;
-    size_t current_index = 0;
-    while (current != nullptr) {
-        if (current_index == index) {
-            return current->data;
-        } else if (current_index < index) {
-            current = current->right;
-        } else {
-            current = current->left;
-        }
+    return nth_inorder(root, 0, index);
+};
+
+std::string Tree::nth_inorder(Node *n, size_t index, size_t wanted) const {
+    if (n == nullptr)
+        return "";
+
+    // first loop over the left subtree
+    std::string left = nth_inorder(n->left, index++, wanted);
+    if (left != "") {
+        return left;
     }
-    return "";
+
+    // then check the midde
+    if (index == 0) {
+        return n->data;
+    }
+    index--;
+
+    // then loop over the right subtree
+    return nth_inorder(n->right, index);
 };
 
 void Tree::print() const {
@@ -107,8 +148,8 @@ void Tree::print() const {
 };
 
 // Function to print inorder traversal
-void Tree::printInorder(Node* node) const {
-    if (node == NULL)
+void Tree::printInorder(Node *node) const {
+    if (node == nullptr)
         return;
 
     // First recur on left subtree
@@ -119,14 +160,14 @@ void Tree::printInorder(Node* node) const {
 
     // Then recur on right subtree
     printInorder(node->right);
-}
+};
 
 void Tree::remove(size_t index) {
     if (index >= list_size) {
         throw std::out_of_range("Index out of range");
     }
-    Node* current = root;
-    Node* parent = nullptr;
+    Node *current = root;
+    Node *parent = nullptr;
     size_t current_index = 0;
     while (current != nullptr) {
         if (current_index == index) {
@@ -154,7 +195,7 @@ void Tree::remove(size_t index) {
         delete current;
     } else if (current->left == nullptr || current->right == nullptr) {
         // if the item to be removed is on a node with one child, that child takes the node's place.
-        Node* child = current->left == nullptr ? current->right : current->left;
+        Node *child = current->left == nullptr ? current->right : current->left;
         if (parent == nullptr) {
             root = child;
         } else if (parent->left == current) {
@@ -166,8 +207,8 @@ void Tree::remove(size_t index) {
     } else {
         // if the item is on a node with two children, find the node n that contains the item at the next greater index.
         // Swap the values of the two nodes and remove node n. Node n is guaranteed to have one or zero children.
-        Node* n = current->right;
-        Node* n_parent = current;
+        Node *n = current->right;
+        Node *n_parent = current;
         while (n->left != nullptr) {
             n_parent = n;
             n = n->left;
@@ -181,5 +222,3 @@ void Tree::remove(size_t index) {
         delete n;
     }
 };
-
-// remove with recursion
