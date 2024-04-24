@@ -6,8 +6,6 @@
 // It won't be graded - do whatever you want.
 
 int main() {
-    Tree tree;
-
     // Do tree things!
 
     return 0;

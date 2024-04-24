@@ -163,7 +163,7 @@ void Tree::printInorder(Node *node) const {
 };
 
 void Tree::remove(size_t index) {
-    if (index >= list_size) {
+    if (index >= weight) {
         throw std::out_of_range("Index out of range");
     }
     Node *current = root;

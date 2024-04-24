@@ -1,28 +1,19 @@
-CXXFLAGS = -g -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
-CXX      = g++
+CXX=g++
+CXXFLAGS=-g -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 
-.PHONY: all clean
-
-all: Tree test
-
-# Node
-Node.o: Node.cpp Node.h
-	${CXX} $(CXXFLAGS) -c -o $@ $<
-
-# Tree
-Tree.o: Tree.cpp Tree.h Node.h
-	${CXX} $(CXXFLAGS) -c -o $@ $<
-
-Tree: Tree.o Node.o
-	${CXX} $(CXXFLAGS) -o $@ $+
-
-# test
-test.o: test.cpp Tree.h Node.h
-	${CXX} $(CXXFLAGS) -c -o $@ $<
+all: test
 
 test: test.o Tree.o Node.o
 	${CXX} $(CXXFLAGS) -o $@ $+
 
+test.o: test.cpp
+	${CXX} $(CXXFLAGS) -c -o $@ $<
+
+Tree.o: Tree.cpp
+	${CXX} $(CXXFLAGS) -c -o $@ $<
+
+Node.o: Node.cpp
+	${CXX} $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f Node.o Tree.o Tree test.o test
+	rm -f *.o test
