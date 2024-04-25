@@ -59,12 +59,32 @@ size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
 
 void Tree::insert(const std::string &s) {
     // do it with recursion
-    insertRecursively(root, s);
+    Node *current = root;
+    Node *parent = nullptr;
+    while (current != nullptr) {
+        parent = current;
+        if (s > current->data) {
+            // if the item is greater than the current node, go to the right
+            current->addOne();
+            current = current->right;
+        } else {
+            // if the item is less than the current node, go to the left
+            // if the item is already present in the tree(same), go to the left
+            current->addOne();
+            current = current->left;
+        }
+    }
 
-};
-
-void Tree::insertRecursively(Node *n, const std::string &s) {
-    sad
+    // now we have the parent node
+    Node *newNode = new Node(s);
+    newNode->addOne();
+    if (parent == nullptr) {
+        root = newNode;
+    } else if (parent->data < s) {
+        parent->right = newNode;
+    } else {
+        parent->left = newNode;
+    }
 };
 
 std::string Tree::lookup(size_t index) const {
@@ -124,4 +144,17 @@ void Tree::printInorder(Node *node) const {
 
 void Tree::remove(size_t index){
 
+};
+
+Node* Tree::getRoot() const {
+    return root;
+};
+
+void Tree::getWeight(Node *n) {
+    if (n == nullptr) {
+        return;
+    }
+    getWeight(n->left);
+    std::cout << "Weight of " << n->data << ": " << n->weight << std::endl;
+    getWeight(n->right);
 };

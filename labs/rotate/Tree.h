@@ -12,10 +12,7 @@ class Tree {
     Node *root;
 
     // Private Helper Functions
-    size_t height(Node *n) const;                                          // returns the height of the tree with Recursion
-    bool isBalanced(Node *root);                                           // returns whether the tree is balanced with Recursion
     void clearRecursively(Node *n);                                        // removes all items from the tree with Recursion
-    void insertRecursively(Node *n, const std::string &s);                 // adds an item to the tree as a leaf node with Recursion
     void removeRecursively(Node *n, size_t index);                         // removes the item at a given index with Recursion
     void printInorder(Node *n) const;                                      // prints the tree in tree notation with Recursion
     size_t f_inorder(Node *n, const std::string &s, size_t &index) const;  // returns the index of an item with Recursion
@@ -26,6 +23,9 @@ class Tree {
     ~Tree();
 
     // Public Member Functions
+    void getWeight(Node *n);  // debug function, prints the weight of each node in the tree
+    Node *getRoot() const;    // debug function, return the root of the tree
+
     void clear();                               // removes all items from the tree
     size_t count() const;                       // reports the number of items in the tree.
     bool contains(const std::string &s) const;  // reports whether the tree contains the given string.

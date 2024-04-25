@@ -1,0 +1,68 @@
+
+size_t Tree::find(const std::string &s) const {
+    Node *current = root;
+    size_t index = 0;
+
+    // the code is triversal with in-order
+    return f_inorder(current, s, index);
+};
+
+size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
+    if (n == nullptr) {
+        // Item is not found (base case)
+        return ~0;
+    }
+    size_t foundIndex = f_inorder(n->left, s, index);  // Search the left subtree
+    size_t a = ~0;
+    if (foundIndex != a) {
+        // Item is found in the left subtree
+        return foundIndex;
+    }
+    if (s == n->data) {
+        // Item is equal to the n's data, item is found
+        return index;
+    }
+    index++;                               // Increment the index after visiting a node
+    return f_inorder(n->right, s, index);  // Search the right subtree
+}
+
+std::string Tree::lookup(size_t index) const {
+    if (index >= root->weight) {
+        throw std::out_of_range("Index out of range");
+    }
+    // althemetic trick to simply the calculation
+    // since the index of the root item is the weight of its left subtree
+    // we can simply the calculation by subtracting the weight of the left subtree
+    size_t rootIndex = root->left == nullptr ? 0 : root->left->weight;
+
+    if (index > rootIndex) {
+        // the item is in the right subtree
+        return nth_inorder(root->right, rootIndex + 1, index);
+    } else if (index < rootIndex) {
+        // the item is in the left subtree
+        return nth_inorder(root->left, 0, index);
+    } else {
+        // the item is the root
+        return root->data;
+    }
+};
+
+std::string Tree::nth_inorder(Node *n, size_t index, size_t wanted) const {
+    if (n == nullptr)
+        return "";
+
+    // first loop over the left subtree
+    std::string left = nth_inorder(n->left, index, wanted);
+    if (left != "") {
+        return left;
+    }
+
+    // then check the middle
+    if (index == wanted) {
+        return n->data;
+    }
+    index++;
+
+    // then loop over the right subtree
+    return nth_inorder(n->right, index, wanted);
+}
