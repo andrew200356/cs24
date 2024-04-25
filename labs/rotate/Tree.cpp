@@ -1,7 +1,7 @@
 #include "Tree.h"
 
 // Tree Function Implementations
-Tree::Tree() : root(nullptr), weight(0){};
+Tree::Tree() : root(nullptr){};
 
 Tree::~Tree() {
     clear();
@@ -10,7 +10,6 @@ Tree::~Tree() {
 void Tree::clear() {
     clearRecursively(root);
     root = nullptr;
-    weight = 0;
 };
 
 void Tree::clearRecursively(Node *n) {
@@ -23,35 +22,8 @@ void Tree::clearRecursively(Node *n) {
 };
 
 size_t Tree::count() const {
-    return weight;
+    return root->weight;
 };
-
-size_t Tree::height(Node *n) const {
-    if (n == nullptr) {
-        return 0;
-    }
-    size_t l = 1 + height(root->left);
-    size_t r = 1 + height(root->right);
-    return std::max(l, r);
-};
-
-bool Tree::isBalanced(Node *root) {
-    if (root == NULL) {
-        return true;
-    }
-
-    int leftheight = height(root->left);
-    int rightheight = height(root->right);
-
-    if (abs(leftheight - rightheight) > 1) {
-        return false;
-    }
-
-    bool leftAns = isBalanced(root->left);
-    bool rightAns = isBalanced(root->right);
-
-    return (leftAns && rightAns);
-}
 
 bool Tree::contains(const std::string &s) const {
     size_t max_val = ~0;
@@ -87,71 +59,41 @@ size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
 
 void Tree::insert(const std::string &s) {
     // do it with recursion
-    Node *current = root;
-    Node *parent = nullptr;
-    while (current != nullptr) {
-        parent = current;
-        if (current->data < s) {
-            current = current->right;
-        } else {
-            // if the item is already present in the tree, you will encounter it on your way down to a leaf node
-            current = current->left;
-        }
-    }
+    insertRecursively(root, s);
 
-    // now we have the parent node
-    Node *newNode = new Node(s);
-    if (parent == nullptr) {
-        root = newNode;
-    } else if (parent->data < s) {
-        parent->right = newNode;
-    } else {
-        parent->left = newNode;
-    }
-    weight++;
+};
+
+void Tree::insertRecursively(Node *n, const std::string &s) {
+    sad
 };
 
 std::string Tree::lookup(size_t index) const {
-    if (index >= weight) {
+    if (index >= root->weight) {
         throw std::out_of_range("Index out of range");
     }
-    return nth_inorder(root, 0, index);
+    return nth_inorder(root, index);
 };
 
-std::string Tree::nth_inorder(Node *n, size_t index, size_t wanted) const {
+std::string Tree::nth_inorder(Node *n, size_t wanted) const {
     if (n == nullptr)
         return "";
 
-    // first loop over the left subtree
-    std::string left = nth_inorder(n->left, index, wanted);
-    if (left != "") {
-        return left;
-    }
+    // get the weight of the left subtree which is also the index of the root
+    size_t leftWeight = n->left == nullptr ? 0 : n->left->weight;
 
-    // then check the middle
-    if (index == wanted) {
+    if (wanted < leftWeight) {
+        // the item is in the left subtree
+        return nth_inorder(n->left, wanted);
+    } else if (wanted > leftWeight) {
+        // the item is in the right subtree
+        return nth_inorder(n->right, wanted - leftWeight - 1);
+    } else {
+        // the item is the root
         return n->data;
     }
-    index++;
-
-    // then loop over the right subtree
-    return nth_inorder(n->right, index, wanted);
 }
 
 void Tree::print() const {
-    /*
-    The tree notation for a leaf node is simply its value.
-    The tree notation for a non-existent node is a hyphen (-; ASCII value 45).
-    The tree notation for a non-leaf node is:
-    A left parenthesis, followed by
-    the tree notation for its left subtree, followed by
-    a space, followed by
-    the node's value, followed by
-    a space, followed by
-    the tree notation for its right subtree, followed by
-    a right parenthesis.
-    The tree notation for an empty tree is a hyphen.
-    */
     if (root == nullptr) {
         std::cout << "-" << std::endl;
     } else {
@@ -165,7 +107,7 @@ void Tree::printInorder(Node *node) const {
     if (node == nullptr) {
         // if the current subtree is null, return -
         std::cout << "-";
-    } else if (this->weight == 1) {
+    } else if (node->weight == 1) {
         // if the current subtree is just itself (since weight is 1), print the data
         std::cout << node->data;
     } else {
@@ -180,63 +122,6 @@ void Tree::printInorder(Node *node) const {
     }
 };
 
-void Tree::remove(size_t index) {
-    if (index >= weight) {
-        throw std::out_of_range("Index out of range");
-    }
-    Node *current = root;
-    Node *parent = nullptr;
-    size_t current_index = 0;
-    while (current != nullptr) {
-        if (current_index == index) {
-            break;
-        } else if (current_index < index) {
-            parent = current;
-            current = current->right;
-        } else {
-            parent = current;
-            current = current->left;
-        }
-        current_index++;
-    }
+void Tree::remove(size_t index){
 
-    // now we have the current node
-    if (current->left == nullptr && current->right == nullptr) {
-        // if the item to be removed is on a leaf node, simply remove it.
-        if (parent == nullptr) {
-            root = nullptr;
-        } else if (parent->left == current) {
-            parent->left = nullptr;
-        } else {
-            parent->right = nullptr;
-        }
-        delete current;
-    } else if (current->left == nullptr || current->right == nullptr) {
-        // if the item to be removed is on a node with one child, that child takes the node's place.
-        Node *child = current->left == nullptr ? current->right : current->left;
-        if (parent == nullptr) {
-            root = child;
-        } else if (parent->left == current) {
-            parent->left = child;
-        } else {
-            parent->right = child;
-        }
-        delete current;
-    } else {
-        // if the item is on a node with two children, find the node n that contains the item at the next greater index.
-        // Swap the values of the two nodes and remove node n. Node n is guaranteed to have one or zero children.
-        Node *n = current->right;
-        Node *n_parent = current;
-        while (n->left != nullptr) {
-            n_parent = n;
-            n = n->left;
-        }
-        current->data = n->data;
-        if (n_parent->left == n) {
-            n_parent->left = n->right;
-        } else {
-            n_parent->right = n->right;
-        }
-        delete n;
-    }
 };

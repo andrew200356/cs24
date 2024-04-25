@@ -8,10 +8,17 @@ struct Node {
     std::string data;
     Node* left;
     Node* right;
+    size_t weight = 0;
 
     // Node Constructor
     Node(const std::string& s);
     Node(const std::string& s, Node* left, Node* right);
+
+    // Node helper functions
+    void addOne();
+    size_t height(Node* root) const;
+    bool isBalanced(Node* root);
+    void updateWeight();
 };
 
 #endif
