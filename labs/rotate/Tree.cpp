@@ -8,6 +8,10 @@ Tree::~Tree() {
 };
 
 void Tree::clear() {
+    // if the tree is empty, return
+    if (root == nullptr) {
+        return;
+    }
     clearRecursively(root);
     root = nullptr;
 };
@@ -22,6 +26,9 @@ void Tree::clearRecursively(Node *n) {
 };
 
 size_t Tree::count() const {
+    if (root == nullptr) {
+        return 0;
+    }
     return root->weight;
 };
 
@@ -88,7 +95,10 @@ void Tree::insert(const std::string &s) {
 };
 
 std::string Tree::lookup(size_t index) const {
-    if (index >= root->weight) {
+    // if the index is greater than the weight of the tree, throw an exception
+    if (root == nullptr) {
+        throw std::out_of_range("Index out of range");
+    } else if (index >= root->weight) {
         throw std::out_of_range("Index out of range");
     }
     return nth_inorder(root, index);
@@ -143,10 +153,16 @@ void Tree::printInorder(Node *node) const {
 };
 
 void Tree::remove(size_t index){
-
+    // if the index is greater than the weight of the tree, throw an exception
+    if (root == nullptr) {
+        throw std::out_of_range("Index out of range");
+    } else if (index >= root->weight) {
+        throw std::out_of_range("Index out of range");
+    }
+    // removeRecursively(root, index);
 };
 
-Node* Tree::getRoot() const {
+Node *Tree::getRoot() const {
     return root;
 };
 
