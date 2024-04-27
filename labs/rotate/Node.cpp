@@ -13,6 +13,10 @@ void Node::addOne() {
     weight++;
 };
 
+void Node::removeOne() {
+    weight--;
+};
+
 size_t Node::height(Node* root) const {
     if (root == nullptr) {
         return 0;

@@ -72,17 +72,17 @@ void Tree::insert(const std::string &s) {
         parent = current;
         if (s > current->data) {
             // if the item is greater than the current node, go to the right
-            current->addOne();
+            current->removeOne();
             current = current->right;
         } else {
             // if the item is less than the current node, go to the left
             // if the item is already present in the tree(same), go to the left
-            current->addOne();
+            current->removeOne();
             current = current->left;
         }
     }
 
-    // now we have the parent node
+    // now we have the parent node of node we want to insert
     Node *newNode = new Node(s);
     newNode->addOne();
     if (parent == nullptr) {
@@ -92,6 +92,26 @@ void Tree::insert(const std::string &s) {
     } else {
         parent->left = newNode;
     }
+
+    // balance the tree
+    if (!checkBalanced(root)) {
+        // rotate the tree
+    }
+};
+
+bool Tree::checkBalanced(Node *n) const {
+    if (n == nullptr) {
+        return true;
+    }
+    size_t left_weight = n->left == nullptr ? 0 : n->left->weight;
+    size_t right_weight = n->right == nullptr ? 0 : n->right->weight;
+
+    // check if the tree is balanced
+    if (abs(left_weight - right_weight) > 1) {
+        return false;
+    }
+
+    return true;
 };
 
 std::string Tree::lookup(size_t index) const {
@@ -152,14 +172,63 @@ void Tree::printInorder(Node *node) const {
     }
 };
 
-void Tree::remove(size_t index){
+void Tree::remove(size_t index) {
     // if the index is greater than the weight of the tree, throw an exception
     if (root == nullptr) {
         throw std::out_of_range("Index out of range");
     } else if (index >= root->weight) {
         throw std::out_of_range("Index out of range");
     }
-    // removeRecursively(root, index);
+    removeRecursively(root, index);
+};
+
+void Tree::removeRecursively(Node *n, size_t index) {
+    if (n == nullptr) {
+        return;
+    }
+
+    // get the weight of the left subtree which is also the index of the root
+    size_t leftWeight = n->left == nullptr ? 0 : n->left->weight;
+
+    if (index < leftWeight) {
+        // the item is in the left subtree
+        removeRecursively(n->left, index);
+        n->removeOne();
+    } else if (index > leftWeight) {
+        // the item is in the right subtree
+        removeRecursively(n->right, index - leftWeight - 1);
+        n->removeOne();
+    } else {
+        // the item is the root
+        if (n->left == nullptr && n->right == nullptr) {
+            // if the node is a leaf node, delete it
+            delete n;
+            n = nullptr;
+        } else if (n->left == nullptr) {
+            // if the node has only right child, replace the node with the right child
+            Node *temp = n;
+            n = n->right;
+            delete temp;
+        } else if (n->right == nullptr) {
+            // if the node has only left child, replace the node with the left child
+            Node *temp = n;
+            n = n->left;
+            delete temp;
+        } else {
+            // if the node has both left and right child
+            // find the node n that contains the item at the next greater index
+            Node *temp = n->right;
+            size_t new_index = index;
+            while (temp->left != nullptr) {
+                temp = temp->left;
+                new_index++;
+            }
+            // swap the values of the two nodes
+            n->data = temp->data;
+            // remove node n
+            removeRecursively(n->right, index + 1);
+        }
+    }
 };
 
 Node *Tree::getRoot() const {
