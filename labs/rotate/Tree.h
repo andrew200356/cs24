@@ -13,12 +13,13 @@ class Tree {
 
     // Private Helper Functions
     void clearRecursively(Node *n);                                        // removes all items from the tree with Recursion
-    void removeRecursively(Node*& n, size_t index);                         // removes the item at a given index with Recursion
+    void removeRecursively(Node *&n, size_t index);                        // removes the item at a given index with Recursion
     void printInorder(Node *n) const;                                      // prints the tree in tree notation with Recursion
     size_t f_inorder(Node *n, const std::string &s, size_t &index) const;  // returns the index of an item with Recursion
     std::string nth_inorder(struct Node *n, size_t wanted) const;          // returns the item at a given index with Recursion
-    bool checkBalanced(Node *n) const;                                     // checks if the tree is balanced with Recursion
-
+    bool rotate_left(Node *n) const;                                       // checks if the x yz tree need to rotate
+    bool rotate_right(Node *n) const;                                      // checks if the xy z tree need to rotate
+    void promotion(Node *&n, bool isLeft);                                         // rotate the tree
    public:
     Tree();
     ~Tree();
@@ -35,11 +36,6 @@ class Tree {
     std::string lookup(size_t index) const;     // returns the item at a given index. If the index is invalid, it throws a std::out_of_range exception.
     void print() const;                         // prints the tree in tree notation, as explained below, followed by a newline.
     void remove(size_t index);                  // removes the item at a given index. If the index is invalid, it throws a std::out_of_range exception.
-    /*
-    If the item to be removed is on a leaf node, simply remove it.
-    If the item to be removed is on a node with one child, that child takes the node's place.
-    If the item is on a node with two children, find the node n that contains the item at the next greater index. Swap the values of the two nodes and remove node n. Node n is guaranteed to have one or zero children.
-    */
 };
 
 #endif

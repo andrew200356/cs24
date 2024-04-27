@@ -65,7 +65,6 @@ size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
 }
 
 void Tree::insert(const std::string &s) {
-    // do it with recursion
     Node *current = root;
     Node *parent = nullptr;
     while (current != nullptr) {
@@ -92,26 +91,67 @@ void Tree::insert(const std::string &s) {
     } else {
         parent->left = newNode;
     }
-
-    // balance the tree
-    if (!checkBalanced(root)) {
-        // rotate the tree
-    }
 };
 
-bool Tree::checkBalanced(Node *n) const {
+void Tree::promotion(Node *&n, bool isLeft) {
+    if (n == nullptr) {
+        return;
+    }
+
+    if (isLeft) {
+        // Perform a right rotation
+        Node *temp = n->right;
+        if (temp == nullptr) {
+            return;
+        }
+
+        n->right = temp->left;
+        temp->left = n;
+        n = temp;
+
+    } else {
+        // Perform a left rotation
+        Node *temp = n->left;
+        if (temp == nullptr) {
+            return;
+        }
+
+        n->left = temp->right;
+        temp->right = n;
+        n = temp;
+    }
+}
+
+bool Tree::rotate_left(Node *n) const {
     if (n == nullptr) {
         return true;
     }
-    size_t left_weight = n->left == nullptr ? 0 : n->left->weight;
-    size_t right_weight = n->right == nullptr ? 0 : n->right->weight;
+    size_t left_weight = n->left == nullptr ? 0 : n->left->weight;              // x
+    size_t right_l_weight = n->right == nullptr ? 0 : n->right->left->weight;   // y
+    size_t right_r_weight = n->right == nullptr ? 0 : n->right->right->weight;  // z
 
-    // check if the tree is balanced
-    if (abs(left_weight - right_weight) > 1) {
+    // if abs(y+z+1-x) > abs(x+y+1-z), we need to rotate the tree
+    if (abs(right_l_weight + right_r_weight + 1 - left_weight) > abs(left_weight + right_l_weight + 1 - right_r_weight)) {
+        return true;
+    } else {
         return false;
     }
+};
 
-    return true;
+bool Tree::rotate_right(Node *n) const {
+    if (n == nullptr) {
+        return true;
+    }
+    size_t left_l_weight = n->left == nullptr ? 0 : n->left->left->weight;   // x
+    size_t left_r_weight = n->left == nullptr ? 0 : n->left->right->weight;  // y
+    size_t right_weight = n->right == nullptr ? 0 : n->right->weight;        // z
+
+    // if abs(x+y+1-z) > abs(y+z+1-x), we need to rotate the tree
+    if (abs(left_l_weight + left_r_weight + 1 - right_weight) > abs(left_r_weight + right_weight + 1 - left_l_weight)) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
 std::string Tree::lookup(size_t index) const {
@@ -182,7 +222,7 @@ void Tree::remove(size_t index) {
     removeRecursively(root, index);
 };
 
-void Tree::removeRecursively(Node*& n, size_t index) {
+void Tree::removeRecursively(Node *&n, size_t index) {
     if (n == nullptr) {
         return;
     }

@@ -21,10 +21,7 @@ void makeTree(Tree &tree) {
     tree.insert("h");
 }
 
-int main() {
-    // Create a tree
-    Tree tree;
-
+void testRemove(Tree &tree) {
     // Print the tree
     std::cout << "The tree after insert: " << std::endl;
     tree.print();
@@ -53,17 +50,74 @@ int main() {
     std::cout << "After removing the root node (f): " << std::endl;
     tree.print();
 
-    // Test 5: Try to remove a node that doesn't exist
-    makeTree(tree);
-    tree.remove(10);  // try to remove "z" (doesn't exist)
-    std::cout << "After trying to remove a node that doesn't exist (z): " << std::endl;
-    tree.print();
+    try {
+        // Test 5: Try to remove a node that doesn't exist
+        makeTree(tree);
+        tree.remove(10);  // try to remove "z" (doesn't exist)
+        std::cout << "After trying to remove a node that doesn't exist (z): " << std::endl;
+        tree.print();
+    } catch (const std::out_of_range& e) {
+        std::cout << "Caught exception: " << e.what() << std::endl;
+    }
 
-    // Test 6: Try to remove from an empty tree
-    Tree emptyTree;
-    emptyTree.remove(0);  // try to remove from an empty tree
-    std::cout << "After trying to remove from an empty tree: " << std::endl;
-    emptyTree.print();
+    try {
+        // Test 6: Try to remove from an empty tree
+        Tree emptyTree;
+        emptyTree.remove(0);  // try to remove from an empty tree
+        std::cout << "After trying to remove from an empty tree: " << std::endl;
+        emptyTree.print();
+    } catch (const std::out_of_range& e) {
+        std::cout << "Caught exception: " << e.what() << std::endl;
+    }
+}
+
+void testRotate(){
+        // Test 1: Insert nodes in ascending order
+    {
+        Tree tree;
+        for (char c = 'a'; c <= 'h'; ++c) {
+            tree.insert(std::string(1, c));
+        }
+        std::cout << "After inserting nodes in ascending order: " << std::endl;
+        tree.print();
+    }
+    
+    // Test 2: Insert nodes in descending order
+    {
+        Tree tree;
+        for (char c = 'h'; c >= 'a'; --c) {
+            tree.insert(std::string(1, c));
+        }
+        std::cout << "After inserting nodes in descending order: " << std::endl;
+        tree.print();
+    }
+
+    // Test 3: Insert nodes in a way that requires both left and right rotations
+    {
+        Tree tree;
+        tree.insert("f");
+        tree.insert("d");
+        tree.insert("j");
+        tree.insert("b");
+        tree.insert("e");
+        tree.insert("g");
+        tree.insert("k");
+        tree.insert("a");
+        tree.insert("c");
+        tree.insert("i");
+        tree.insert("h");
+        std::cout << "After inserting nodes in a way that requires both left and right rotations: " << std::endl;
+        tree.print();
+    }
+
+}
+int main() {
+    Tree tree;
+    // testRemove(tree);
+    tree.insert("sulfur");
+    tree.insert("tellurium");
+    tree.insert("sodium");
+    tree.print();
 
     return 0;
 }
