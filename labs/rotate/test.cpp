@@ -5,7 +5,7 @@
 // This file is for you to test your tree functions.
 // It won't be graded - do whatever you want.
 
-void makeTree(Tree &tree) {
+void makeTree(Tree& tree) {
     tree.clear();
     // Insert some values
     tree.insert("f");
@@ -21,7 +21,7 @@ void makeTree(Tree &tree) {
     tree.insert("h");
 }
 
-void testRemove(Tree &tree) {
+void testRemove(Tree& tree) {
     // Print the tree
     std::cout << "The tree after insert: " << std::endl;
     tree.print();
@@ -71,8 +71,8 @@ void testRemove(Tree &tree) {
     }
 }
 
-void testRotate(){
-        // Test 1: Insert nodes in ascending order
+void testRotate() {
+    // Test 1: Insert nodes in ascending order
     {
         Tree tree;
         for (char c = 'a'; c <= 'h'; ++c) {
@@ -81,7 +81,7 @@ void testRotate(){
         std::cout << "After inserting nodes in ascending order: " << std::endl;
         tree.print();
     }
-    
+
     // Test 2: Insert nodes in descending order
     {
         Tree tree;
@@ -109,15 +109,23 @@ void testRotate(){
         std::cout << "After inserting nodes in a way that requires both left and right rotations: " << std::endl;
         tree.print();
     }
-
 }
 int main() {
-    Tree tree;
-    // testRemove(tree);
-    tree.insert("sulfur");
-    tree.insert("tellurium");
-    tree.insert("sodium");
-    tree.print();
+    // Test: Insert nodes in a way that requires a series of left rotations
+    {
+        Tree tree;
+        tree.insert("tellurium");
+        tree.insert("sulfur");
+        tree.insert("selenium");
+        tree.insert("polonium");
+        tree.insert("oxygen");
+        tree.print();
+        tree.insert("livermorium");
+        tree.print();
+        tree.insert("a");
+        std::cout << "After inserting nodes in a way that requires a series of left rotations: " << std::endl;
+        tree.print();
+    }
 
     return 0;
 }
