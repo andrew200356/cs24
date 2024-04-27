@@ -16,6 +16,7 @@ struct Node {
 
     // Node helper functions
     void addOne();
+    void removeOne();
     size_t height(Node* root) const;
     bool isBalanced(Node* root);
     void updateWeight();

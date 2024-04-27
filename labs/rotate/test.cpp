@@ -5,38 +5,65 @@
 // This file is for you to test your tree functions.
 // It won't be graded - do whatever you want.
 
-int main() {
-    // Do tree things!
-    // create a tree
-    Tree tree;
-    // insert some values
-    tree.insert("a");
-    tree.insert("b");
-    tree.insert("c");
+void makeTree(Tree &tree) {
+    tree.clear();
+    // Insert some values
+    tree.insert("f");
     tree.insert("d");
+    tree.insert("j");
+    tree.insert("b");
     tree.insert("e");
+    tree.insert("g");
+    tree.insert("k");
+    tree.insert("a");
+    tree.insert("c");
+    tree.insert("i");
+    tree.insert("h");
+}
 
-    // print the tree
+int main() {
+    // Create a tree
+    Tree tree;
+
+    // Print the tree
+    std::cout << "The tree after insert: " << std::endl;
     tree.print();
 
-    // find the index of a value
-    std::cout << "Find index of 'c': " << tree.find("c") << std::endl;
-    std::cout << "Find index of 'e': " << tree.find("e") << std::endl;
-    std::cout << "Find index of 'x': " << tree.find("x") << std::endl;
+    // Test 1: Remove a leaf node
+    makeTree(tree);
+    tree.remove(0);  // remove "a"
+    std::cout << "After removing a leaf node (a): " << std::endl;
+    tree.print();
 
-    // find the value at index
-    std::cout << "Look up for index 2: " << tree.lookup(2) << std::endl;
-    std::cout << "Look up for index 4: " << tree.lookup(4) << std::endl;
-    // std::cout << "Look up for index 5: " << tree.lookup(5) << std::endl;
+    // Test 2: Remove a node with one child
+    makeTree(tree);
+    tree.remove(1);  // remove "b"
+    std::cout << "After removing a node with one child (b): " << std::endl;
+    tree.print();
 
-    // test contains
-    std::string containsB = tree.contains("b") ? "ture" : "false";
-    std::string containsX = tree.contains("x") ? "ture" : "false";
-    std::cout << "Contains 'b': " << containsB << std::endl;
-    std::cout << "Contains 'x': " << containsX << std::endl;
+    // Test 3: Remove a node with two children
+    makeTree(tree);
+    tree.remove(3);  // remove "d"
+    std::cout << "After removing a node with two children (d): " << std::endl;
+    tree.print();
 
-    // test weight of each node
-    tree.getWeight(tree.getRoot());
+    // Test 4: Remove the root node
+    makeTree(tree);
+    tree.remove(5);  // remove "f"
+    std::cout << "After removing the root node (f): " << std::endl;
+    tree.print();
+
+    // Test 5: Try to remove a node that doesn't exist
+    makeTree(tree);
+    tree.remove(10);  // try to remove "z" (doesn't exist)
+    std::cout << "After trying to remove a node that doesn't exist (z): " << std::endl;
+    tree.print();
+
+    // Test 6: Try to remove from an empty tree
+    Tree emptyTree;
+    emptyTree.remove(0);  // try to remove from an empty tree
+    std::cout << "After trying to remove from an empty tree: " << std::endl;
+    emptyTree.print();
 
     return 0;
 }

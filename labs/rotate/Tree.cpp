@@ -72,12 +72,12 @@ void Tree::insert(const std::string &s) {
         parent = current;
         if (s > current->data) {
             // if the item is greater than the current node, go to the right
-            current->removeOne();
+            current->addOne();
             current = current->right;
         } else {
             // if the item is less than the current node, go to the left
             // if the item is already present in the tree(same), go to the left
-            current->removeOne();
+            current->addOne();
             current = current->left;
         }
     }
@@ -182,7 +182,7 @@ void Tree::remove(size_t index) {
     removeRecursively(root, index);
 };
 
-void Tree::removeRecursively(Node *n, size_t index) {
+void Tree::removeRecursively(Node*& n, size_t index) {
     if (n == nullptr) {
         return;
     }
@@ -193,10 +193,12 @@ void Tree::removeRecursively(Node *n, size_t index) {
     if (index < leftWeight) {
         // the item is in the left subtree
         removeRecursively(n->left, index);
+        // update the weight of the current node, since the left subtree has item needs to be removed
         n->removeOne();
     } else if (index > leftWeight) {
         // the item is in the right subtree
         removeRecursively(n->right, index - leftWeight - 1);
+        // update the weight of the current node, since the right subtree has item needs to be removed
         n->removeOne();
     } else {
         // the item is the root
@@ -218,13 +220,13 @@ void Tree::removeRecursively(Node *n, size_t index) {
             // if the node has both left and right child
             // find the node n that contains the item at the next greater index
             Node *temp = n->right;
-            size_t new_index = index;
-            while (temp->left != nullptr) {
+            while (temp->left != nullptr) {  // find the leftmost node of the right subtree
+                temp->removeOne();
                 temp = temp->left;
-                new_index++;
             }
             // swap the values of the two nodes
             n->data = temp->data;
+            n->removeOne();
             // remove node n
             removeRecursively(n->right, index + 1);
         }
