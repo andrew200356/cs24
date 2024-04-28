@@ -42,15 +42,15 @@ size_t Tree::find(const std::string &s) const {
     size_t index = 0;
 
     // the code is triversal with in-order
-    return f_inorder(current, s, index);
+    return findRecursively(current, s, index);
 };
 
-size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
+size_t Tree::findRecursively(Node *n, const std::string &s, size_t &index) const {
     if (n == nullptr) {
         // Item is not found (base case)
         return ~0;
     }
-    size_t foundIndex = f_inorder(n->left, s, index);  // Search the left subtree
+    size_t foundIndex = findRecursively(n->left, s, index);  // Search the left subtree
     size_t a = ~0;
     if (foundIndex != a) {
         // Item is found in the left subtree
@@ -60,8 +60,8 @@ size_t Tree::f_inorder(Node *n, const std::string &s, size_t &index) const {
         // Item is equal to the n's data, item is found
         return index;
     }
-    index++;                               // Increment the index after visiting a node
-    return f_inorder(n->right, s, index);  // Search the right subtree
+    index++;                                     // Increment the index after visiting a node
+    return findRecursively(n->right, s, index);  // Search the right subtree
 }
 
 void Tree::insert(const std::string &s) {
@@ -104,92 +104,6 @@ Node *Tree::balanceAfterInsert(Node *node) {
     return node;
 }
 
-Node *Tree::rotateLeft(Node *x) {
-    Node *y = x->right;
-    x->right = y->left;
-    y->left = x;
-
-    // Update weights after rotation
-    x->updateWeight();
-    y->updateWeight();
-
-    return y;
-}
-
-Node *Tree::rotateRight(Node *y) {
-    Node *x = y->left;
-    y->left = x->right;
-    x->right = y;
-
-    // Update weights after rotation
-    y->updateWeight();
-    x->updateWeight();
-
-    return x;
-}
-
-void Tree::insertOld(const std::string &s) {
-    // do it with recursion
-    Node *current = root;
-    Node *parent = nullptr;
-    while (current != nullptr) {
-        parent = current;
-        if (s > current->data) {
-            // if the item is greater than the current node, go to the right
-            current->addOne();
-            current = current->right;
-        } else {
-            // if the item is less than the current node, go to the left
-            // if the item is already present in the tree(same), go to the left
-            current->addOne();
-            current = current->left;
-        }
-    }
-
-    // now we have the parent node of node we want to insert
-    Node *newNode = new Node(s);
-    newNode->addOne();
-    if (parent == nullptr) {
-        root = newNode;
-    } else if (parent->data < s) {
-        parent->right = newNode;
-    } else {
-        parent->left = newNode;
-    }
-};
-
-bool Tree::rotate_left(Node *n) const {
-    if (n == nullptr || n->right == nullptr) {
-        return false;  // No rotation needed if the node or its right child is null.
-    }
-    size_t left_weight = n->left ? n->left->weight : 0;                     // x
-    size_t right_l_weight = n->right->left ? n->right->left->weight : 0;    // y
-    size_t right_r_weight = n->right->right ? n->right->right->weight : 0;  // z
-
-    // Evaluate the balance before and after a left rotation.
-    int current_imbalance = std::abs((int)(left_weight - (right_l_weight + right_r_weight + 1)));
-    int new_imbalance = std::abs((int)((left_weight + right_l_weight + 1) - right_r_weight));
-
-    // Rotate left if the new imbalance is less than the current imbalance.
-    return new_imbalance < current_imbalance;
-};
-
-bool Tree::rotate_right(Node *n) const {
-    if (n == nullptr || n->left == nullptr) {
-        return false;  // No rotation needed if the node or its left child is null.
-    }
-    size_t left_l_weight = n->left->left ? n->left->left->weight : 0;    // x
-    size_t left_r_weight = n->left->right ? n->left->right->weight : 0;  // y
-    size_t right_weight = n->right ? n->right->weight : 0;               // z
-
-    // Evaluate the balance before and after a right rotation.
-    int current_imbalance = std::abs((int)((left_l_weight + left_r_weight + 1) - right_weight));
-    int new_imbalance = std::abs((int)(left_r_weight + 1 + right_weight - left_l_weight));
-
-    // Rotate right if the new imbalance is less than the current imbalance.
-    return new_imbalance < current_imbalance;
-};
-
 std::string Tree::lookup(size_t index) const {
     // if the index is greater than the weight of the tree, throw an exception
     if (root == nullptr) {
@@ -197,10 +111,10 @@ std::string Tree::lookup(size_t index) const {
     } else if (index >= root->weight) {
         throw std::out_of_range("Index out of range");
     }
-    return nth_inorder(root, index);
+    return lookupRecursively(root, index);
 };
 
-std::string Tree::nth_inorder(Node *n, size_t wanted) const {
+std::string Tree::lookupRecursively(Node *n, size_t wanted) const {
     if (n == nullptr)
         return "";
 
@@ -209,10 +123,10 @@ std::string Tree::nth_inorder(Node *n, size_t wanted) const {
 
     if (wanted < leftWeight) {
         // the item is in the left subtree
-        return nth_inorder(n->left, wanted);
+        return lookupRecursively(n->left, wanted);
     } else if (wanted > leftWeight) {
         // the item is in the right subtree
-        return nth_inorder(n->right, wanted - leftWeight - 1);
+        return lookupRecursively(n->right, wanted - leftWeight - 1);
     } else {
         // the item is the root
         return n->data;
@@ -246,19 +160,6 @@ void Tree::printInorder(Node *node) const {
         printInorder(node->right);
         std::cout << ")";
     }
-};
-
-Node *Tree::getRoot() const {
-    return root;
-};
-
-void Tree::getWeight(Node *n) {
-    if (n == nullptr) {
-        return;
-    }
-    getWeight(n->left);
-    std::cout << "Weight of " << n->data << ": " << n->weight << std::endl;
-    getWeight(n->right);
 };
 
 void Tree::remove(size_t index) {
@@ -331,3 +232,59 @@ Node *Tree::findMinNode(Node *node) {
     }
     return current;
 }
+
+Node *Tree::rotateLeft(Node *x) {
+    Node *y = x->right;
+    x->right = y->left;
+    y->left = x;
+
+    // Update weights after rotation
+    x->updateWeight();
+    y->updateWeight();
+
+    return y;
+}
+
+Node *Tree::rotateRight(Node *y) {
+    Node *x = y->left;
+    y->left = x->right;
+    x->right = y;
+
+    // Update weights after rotation
+    y->updateWeight();
+    x->updateWeight();
+
+    return x;
+}
+
+bool Tree::rotate_left(Node *n) const {
+    if (n == nullptr || n->right == nullptr) {
+        return false;  // No rotation needed if the node or its right child is null.
+    }
+    size_t left_weight = n->left ? n->left->weight : 0;                     // x
+    size_t right_l_weight = n->right->left ? n->right->left->weight : 0;    // y
+    size_t right_r_weight = n->right->right ? n->right->right->weight : 0;  // z
+
+    // Evaluate the balance before and after a left rotation.
+    int current_imbalance = std::abs((int)(left_weight - (right_l_weight + right_r_weight + 1)));
+    int new_imbalance = std::abs((int)((left_weight + right_l_weight + 1) - right_r_weight));
+
+    // Rotate left if the new imbalance is less than the current imbalance.
+    return new_imbalance < current_imbalance;
+};
+
+bool Tree::rotate_right(Node *n) const {
+    if (n == nullptr || n->left == nullptr) {
+        return false;  // No rotation needed if the node or its left child is null.
+    }
+    size_t left_l_weight = n->left->left ? n->left->left->weight : 0;    // x
+    size_t left_r_weight = n->left->right ? n->left->right->weight : 0;  // y
+    size_t right_weight = n->right ? n->right->weight : 0;               // z
+
+    // Evaluate the balance before and after a right rotation.
+    int current_imbalance = std::abs((int)((left_l_weight + left_r_weight + 1) - right_weight));
+    int new_imbalance = std::abs((int)(left_r_weight + 1 + right_weight - left_l_weight));
+
+    // Rotate right if the new imbalance is less than the current imbalance.
+    return new_imbalance < current_imbalance;
+};

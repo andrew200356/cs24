@@ -12,29 +12,26 @@ class Tree {
     Node *root;
 
     // Private Helper Functions
-    void clearRecursively(Node *n);                                        // removes all items from the tree with Recursion
-    Node *insertRecursively(Node *node, const std::string &s);             // adds an item to the tree as a leaf node with Recursion
-    Node* removeRecursively(Node* node, size_t index);                        // removes the item at a given index with Recursion
-    void printInorder(Node *n) const;                                      // prints the tree in tree notation with Recursion
-    size_t f_inorder(Node *n, const std::string &s, size_t &index) const;  // returns the index of an item with Recursion
-    std::string nth_inorder(struct Node *n, size_t wanted) const;          // returns the item at a given index with Recursion
+    void clearRecursively(Node *n);                                              // removes all items from the tree with Recursion
+    Node *insertRecursively(Node *node, const std::string &s);                   // adds an item to the tree as a leaf node with Recursion
+    Node *removeRecursively(Node *node, size_t index);                           // removes the item at a given index with Recursion
+    size_t findRecursively(Node *n, const std::string &s, size_t &index) const;  // returns the index of an item with Recursion
+    std::string lookupRecursively(struct Node *n, size_t wanted) const;          // returns the item at a given index with Recursion
+    void printInorder(Node *n) const;                                            // prints the tree in tree notation with Recursion
 
-    bool rotate_left(Node *n) const;        // checks if the x yz tree need to rotate
-    bool rotate_right(Node *n) const;       // checks if the xy z tree need to rotate
+    bool rotate_left(Node *n) const;   // checks if the x yz tree need to rotate
+    bool rotate_right(Node *n) const;  // checks if the xy z tree need to rotate
     Node *balanceAfterInsert(Node *node);
-    Node* balanceAfterRemove(Node* node);
+    Node *balanceAfterRemove(Node *node);
     Node *rotateLeft(Node *x);
     Node *rotateRight(Node *x);
-    Node* findMinNode(Node* node);
+    Node *findMinNode(Node *node);
 
    public:
     Tree();
     ~Tree();
 
     // Public Member Functions
-    void getWeight(Node *n);  // debug function, prints the weight of each node in the tree
-    Node *getRoot() const;    // debug function, return the root of the tree
-
     void clear();                               // removes all items from the tree
     size_t count() const;                       // reports the number of items in the tree.
     bool contains(const std::string &s) const;  // reports whether the tree contains the given string.
