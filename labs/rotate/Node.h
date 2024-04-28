@@ -8,7 +8,7 @@ struct Node {
     std::string data;
     Node* left;
     Node* right;
-    size_t weight = 0;
+    size_t weight;
 
     // Node Constructor
     Node(const std::string& s);

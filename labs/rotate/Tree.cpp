@@ -68,10 +68,9 @@ void Tree::insert(const std::string &s) {
     root = insertRecursively(root, s);
 }
 
-Node *Tree::insertRecursively(Node *node, const std::string &item) {
+Node* Tree::insertRecursively(Node* node, const std::string& item) {
     if (!node) {
         // Create a new node if the spot is found
-        std::cout << "Inserting: " << item << std::endl;
         return new Node(item);
     }
 
@@ -90,47 +89,45 @@ Node *Tree::insertRecursively(Node *node, const std::string &item) {
     return balanceAfterInsert(node);
 }
 
-Node *Tree::balanceAfterInsert(Node *node) {
-    // Return if the node is null
+Node* Tree::balanceAfterInsert(Node* node) {
     if (!node) return node;
-    std::cout << "Balancing: " << node->data << std::endl;
+
     // Check if we need a left rotation
     if (rotate_left(node)) {
-        std::cout << "Rotating left at: " << node->data << std::endl;
         node = rotateLeft(node);
     }
     // Check if we need a right rotation
     else if (rotate_right(node)) {
-        std::cout << "Rotating right at: " << node->data << std::endl;
         node = rotateRight(node);
     }
 
     return node;
 }
 
-Node *Tree::rotateLeft(Node *x) {
-    Node *y = x->right;
+Node* Tree::rotateLeft(Node* x) {
+    Node* y = x->right;
     x->right = y->left;
     y->left = x;
-
+    
     // Update weights after rotation
     x->updateWeight();
     y->updateWeight();
-
+    
     return y;
 }
 
-Node *Tree::rotateRight(Node *y) {
-    Node *x = y->left;
+Node* Tree::rotateRight(Node* y) {
+    Node* x = y->left;
     y->left = x->right;
     x->right = y;
-
+    
     // Update weights after rotation
     y->updateWeight();
     x->updateWeight();
-
+    
     return x;
 }
+
 
 void Tree::insertOld(const std::string &s) {
     // do it with recursion
@@ -161,6 +158,7 @@ void Tree::insertOld(const std::string &s) {
         parent->left = newNode;
     }
 };
+
 
 bool Tree::rotate_left(Node *n) const {
     if (n == nullptr || n->right == nullptr) {

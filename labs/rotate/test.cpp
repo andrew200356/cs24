@@ -111,7 +111,16 @@ void testRotate() {
     }
 }
 int main() {
-    // Test: Insert nodes in a way that requires a series of left rotations
+
+    // print one
+    {
+        Tree tree;
+        tree.insert("Texas");
+        tree.getWeight(tree.getRoot());
+        tree.print();
+    }
+
+     // Test: Insert nodes in a way that requires a series of left rotations
     {
         Tree tree;
         tree.insert("tellurium");
@@ -119,13 +128,10 @@ int main() {
         tree.insert("selenium");
         tree.insert("polonium");
         tree.insert("oxygen");
-        tree.print();
         tree.insert("livermorium");
-        tree.print();
-        tree.insert("a");
         std::cout << "After inserting nodes in a way that requires a series of left rotations: " << std::endl;
         tree.print();
-    }
+    } 
 
     return 0;
 }
