@@ -1,0 +1,80 @@
+void Tree::insertOld(const std::string &s) {
+    // do it with recursion
+    Node *current = root;
+    Node *parent = nullptr;
+    while (current != nullptr) {
+        parent = current;
+        if (s > current->data) {
+            // if the item is greater than the current node, go to the right
+            current->addOne();
+            current = current->right;
+        } else {
+            // if the item is less than the current node, go to the left
+            // if the item is already present in the tree(same), go to the left
+            current->addOne();
+            current = current->left;
+        }
+    }
+
+    // now we have the parent node of node we want to insert
+    Node *newNode = new Node(s);
+    newNode->addOne();
+    if (parent == nullptr) {
+        root = newNode;
+    } else if (parent->data < s) {
+        parent->right = newNode;
+    } else {
+        parent->left = newNode;
+    }
+};
+
+void Tree::removeRecursively(Node *&n, size_t index) {
+    if (n == nullptr) {
+        return;
+    }
+
+    // get the weight of the left subtree which is also the index of the root
+    size_t leftWeight = n->left == nullptr ? 0 : n->left->weight;
+
+    if (index < leftWeight) {
+        // the item is in the left subtree
+        removeRecursively(n->left, index);
+        // update the weight of the current node, since the left subtree has item needs to be removed
+        n->removeOne();
+    } else if (index > leftWeight) {
+        // the item is in the right subtree
+        removeRecursively(n->right, index - leftWeight - 1);
+        // update the weight of the current node, since the right subtree has item needs to be removed
+        n->removeOne();
+    } else {
+        // the item is the root
+        if (n->left == nullptr && n->right == nullptr) {
+            // if the node is a leaf node, delete it
+            delete n;
+            n = nullptr;
+        } else if (n->left == nullptr) {
+            // if the node has only right child, replace the node with the right child
+            Node *temp = n;
+            n = n->right;
+            delete temp;
+        } else if (n->right == nullptr) {
+            // if the node has only left child, replace the node with the left child
+            Node *temp = n;
+            n = n->left;
+            delete temp;
+        } else {
+            // if the node has both left and right child
+            // find the node n that contains the item at the next greater index
+            Node *temp = n->right;
+            while (temp->left != nullptr) {  // find the leftmost node of the right subtree
+                temp->removeOne();
+                temp = temp->left;
+            }
+            // swap the values of the two nodes
+            n->data = temp->data;
+            n->removeOne();
+            // remove node n
+            removeRecursively(n->right, index + 1);
+        }
+    }
+};
