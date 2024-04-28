@@ -74,11 +74,11 @@ Node *Tree::insertRecursively(Node *node, const std::string &item) {
         return new Node(item);
     }
 
-    if (item < node->data) {
-        // Recur to the left if the item is less than the current node's data
+    if (item <= node->data) {
+        // Recur to the left if the item is less than or equal to the current node's data (handle duplicates)
         node->left = insertRecursively(node->left, item);
     } else {
-        // Recur to the right if the item is more or equal (handle duplicates as specified)
+        // Recur to the right if the item is more
         node->right = insertRecursively(node->right, item);
     }
 
