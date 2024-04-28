@@ -12,19 +12,20 @@ class Tree {
     Node *root;
 
     // Private Helper Functions
-    Node *insertRecursively(Node *node, const std::string &s);             // adds an item to the tree as a leaf node with Recursion
     void clearRecursively(Node *n);                                        // removes all items from the tree with Recursion
-    void removeRecursively(Node *&n, size_t index);                        // removes the item at a given index with Recursion
+    Node *insertRecursively(Node *node, const std::string &s);             // adds an item to the tree as a leaf node with Recursion
+    Node* removeRecursively(Node* node, size_t index);                        // removes the item at a given index with Recursion
     void printInorder(Node *n) const;                                      // prints the tree in tree notation with Recursion
     size_t f_inorder(Node *n, const std::string &s, size_t &index) const;  // returns the index of an item with Recursion
     std::string nth_inorder(struct Node *n, size_t wanted) const;          // returns the item at a given index with Recursion
 
     bool rotate_left(Node *n) const;        // checks if the x yz tree need to rotate
     bool rotate_right(Node *n) const;       // checks if the xy z tree need to rotate
-    void promotion(Node *&n, bool isLeft);  // rotate the tree
     Node *balanceAfterInsert(Node *node);
+    Node* balanceAfterRemove(Node* node);
     Node *rotateLeft(Node *x);
     Node *rotateRight(Node *x);
+    Node* findMinNode(Node* node);
 
    public:
     Tree();

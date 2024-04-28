@@ -68,7 +68,7 @@ void Tree::insert(const std::string &s) {
     root = insertRecursively(root, s);
 }
 
-Node* Tree::insertRecursively(Node* node, const std::string& item) {
+Node *Tree::insertRecursively(Node *node, const std::string &item) {
     if (!node) {
         // Create a new node if the spot is found
         return new Node(item);
@@ -89,7 +89,7 @@ Node* Tree::insertRecursively(Node* node, const std::string& item) {
     return balanceAfterInsert(node);
 }
 
-Node* Tree::balanceAfterInsert(Node* node) {
+Node *Tree::balanceAfterInsert(Node *node) {
     if (!node) return node;
 
     // Check if we need a left rotation
@@ -104,30 +104,29 @@ Node* Tree::balanceAfterInsert(Node* node) {
     return node;
 }
 
-Node* Tree::rotateLeft(Node* x) {
-    Node* y = x->right;
+Node *Tree::rotateLeft(Node *x) {
+    Node *y = x->right;
     x->right = y->left;
     y->left = x;
-    
+
     // Update weights after rotation
     x->updateWeight();
     y->updateWeight();
-    
+
     return y;
 }
 
-Node* Tree::rotateRight(Node* y) {
-    Node* x = y->left;
+Node *Tree::rotateRight(Node *y) {
+    Node *x = y->left;
     y->left = x->right;
     x->right = y;
-    
+
     // Update weights after rotation
     y->updateWeight();
     x->updateWeight();
-    
+
     return x;
 }
-
 
 void Tree::insertOld(const std::string &s) {
     // do it with recursion
@@ -158,7 +157,6 @@ void Tree::insertOld(const std::string &s) {
         parent->left = newNode;
     }
 };
-
 
 bool Tree::rotate_left(Node *n) const {
     if (n == nullptr || n->right == nullptr) {
@@ -250,67 +248,6 @@ void Tree::printInorder(Node *node) const {
     }
 };
 
-void Tree::remove(size_t index) {
-    // if the index is greater than the weight of the tree, throw an exception
-    if (root == nullptr) {
-        throw std::out_of_range("Index out of range");
-    } else if (index >= root->weight) {
-        throw std::out_of_range("Index out of range");
-    }
-    removeRecursively(root, index);
-};
-
-void Tree::removeRecursively(Node *&n, size_t index) {
-    if (n == nullptr) {
-        return;
-    }
-
-    // get the weight of the left subtree which is also the index of the root
-    size_t leftWeight = n->left == nullptr ? 0 : n->left->weight;
-
-    if (index < leftWeight) {
-        // the item is in the left subtree
-        removeRecursively(n->left, index);
-        // update the weight of the current node, since the left subtree has item needs to be removed
-        n->removeOne();
-    } else if (index > leftWeight) {
-        // the item is in the right subtree
-        removeRecursively(n->right, index - leftWeight - 1);
-        // update the weight of the current node, since the right subtree has item needs to be removed
-        n->removeOne();
-    } else {
-        // the item is the root
-        if (n->left == nullptr && n->right == nullptr) {
-            // if the node is a leaf node, delete it
-            delete n;
-            n = nullptr;
-        } else if (n->left == nullptr) {
-            // if the node has only right child, replace the node with the right child
-            Node *temp = n;
-            n = n->right;
-            delete temp;
-        } else if (n->right == nullptr) {
-            // if the node has only left child, replace the node with the left child
-            Node *temp = n;
-            n = n->left;
-            delete temp;
-        } else {
-            // if the node has both left and right child
-            // find the node n that contains the item at the next greater index
-            Node *temp = n->right;
-            while (temp->left != nullptr) {  // find the leftmost node of the right subtree
-                temp->removeOne();
-                temp = temp->left;
-            }
-            // swap the values of the two nodes
-            n->data = temp->data;
-            n->removeOne();
-            // remove node n
-            removeRecursively(n->right, index + 1);
-        }
-    }
-};
-
 Node *Tree::getRoot() const {
     return root;
 };
@@ -323,3 +260,74 @@ void Tree::getWeight(Node *n) {
     std::cout << "Weight of " << n->data << ": " << n->weight << std::endl;
     getWeight(n->right);
 };
+
+void Tree::remove(size_t index) {
+    // if the index is greater than the weight of the tree, throw an exception
+    if (root == nullptr) {
+        throw std::out_of_range("Index out of range");
+    } else if (index >= root->weight) {
+        throw std::out_of_range("Index out of range");
+    }
+    root = removeRecursively(root, index);
+}
+
+Node *Tree::removeRecursively(Node *node, size_t index) {
+    if (!node) {
+        return nullptr;
+    }
+
+    size_t leftWeight = node->left ? node->left->weight : 0;
+
+    if (index < leftWeight) {
+        // The item is in the left subtree
+        node->left = removeRecursively(node->left, index);
+    } else if (index > leftWeight) {
+        // The item is in the right subtree
+        node->right = removeRecursively(node->right, index - leftWeight - 1);
+    } else {
+        // The item is the current node
+        if (node->left == nullptr || node->right == nullptr) {
+            // Node with only one child or no child
+            Node *temp = node->left ? node->left : node->right;
+            delete node;
+            node = temp;  // This might be nullptr if it was a leaf node
+        } else {
+            // Node with two children
+            Node *temp = findMinNode(node->right);
+            node->data = temp->data;
+            node->right = removeRecursively(node->right, 0);  // Remove in-order successor
+        }
+    }
+
+    if (node == nullptr) return node;  // This happens if the subtree had only one node which was removed
+
+    // Update the weight and rebalance
+    node->updateWeight();
+    return balanceAfterRemove(node);
+}
+
+Node *Tree::balanceAfterRemove(Node *node) {
+    if (!node) return node;  // If the node is null, no need to balance
+
+    // Update weight for current node
+    node->updateWeight();
+
+    // Check if we need a left rotation
+    if (rotate_left(node)) {
+        node = rotateLeft(node);
+    }
+    // Check if we need a right rotation
+    else if (rotate_right(node)) {
+        node = rotateRight(node);
+    }
+
+    return node;  // Return the possibly rotated node
+}
+
+Node *Tree::findMinNode(Node *node) {
+    Node *current = node;
+    while (current && current->left != nullptr) {
+        current = current->left;
+    }
+    return current;
+}
