@@ -18,15 +18,40 @@ class Number : public AST {
 };
 
 class BinaryOp : public AST {
-    char op;
+   public:
     AST* left;
     AST* right;
-
-   public:
-    BinaryOp(char op, AST* left, AST* right);
-
     std::string prefix() const;
     std::string postfix() const;
+};
+
+class Add : public BinaryOp {
+   public:
+    Add(AST* left, AST* right);
+    double value() const;
+};
+
+class Subtract : public BinaryOp {
+   public:
+    Subtract(AST* left, AST* right);
+    double value() const;
+};
+
+class Multiply : public BinaryOp {
+   public:
+    Multiply(AST* left, AST* right);
+    double value() const;
+};
+
+class Divide : public BinaryOp {
+   public:
+    Divide(AST* left, AST* right);
+    double value() const;
+};
+
+class Modulo : public BinaryOp {
+   public:
+    Modulo(AST* left, AST* right);
     double value() const;
 };
 
@@ -40,5 +65,4 @@ class Negate : public AST {
     std::string postfix() const;
     double value() const;
 };
-
 #endif
