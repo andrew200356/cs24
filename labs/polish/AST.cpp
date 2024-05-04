@@ -18,11 +18,7 @@ AST* AST::parse(const std::string& expression) {
         // then we can pop the ASTs from the stack and combine them into a single AST
         // this is a common way to parse RPN
 
-        if (token.find_first_not_of("0123456789.") == std::string::npos) {
-            // start with checking if token that is number
-            // if it is a number, create a Number object and push it onto the stack
-            stack.push(new Number(std::stod(token)));
-        } else if (token == "~") {
+        if (token == "~") {
             // if the token is a negate operator, pop the top AST from the stack
             AST* arg = stack.pop();
             // create a Negate object with the top AST as its argument
@@ -55,8 +51,8 @@ AST* AST::parse(const std::string& expression) {
             // create a BinaryOp object with the top two ASTs as its arguments
             stack.push(new BinaryOp('%', left, right));
         } else {
-            // If you encounter an invalid token, say Invalid token: XXX, where XXX is the invalid token.
-            throw std::runtime_error("Invalid token: " + token);
+            // if the token is a number, create a Number object and push it onto the stack
+            stack.push(new Number(parse_double(token)));
         }
 
         // if the token is a number, create a Number object and push it onto the stack
@@ -68,12 +64,41 @@ AST* AST::parse(const std::string& expression) {
 
     if (stack.is_empty()) {
         // If there is nothing on the stack at the end of parsing, say No input.
-        throw std::runtime_error("No input");
+
+        throw std::runtime_error("No input.");
     } else if (!stack.only_one()) {
         // If there are multiple nodes on the stack at the end of parsing, say Too many operands.
-        throw std::runtime_error("Too many operands");
+
+        throw std::runtime_error("Too many operands.");
     }
     return stack.pop();
 };
 
-// notes for the parse function:
+// parse helper function
+// this function is used to parse the string into a double
+double parse_double(const std::string& token) {
+    try {
+        size_t len = 0;
+        double number =  std::stod(token);
+        if (len == token.length()) {
+            return number;
+        }
+    } catch (const std::invalid_argument& e) {
+        throw std::runtime_error("Invalid token: " + token);
+    } catch (const std::out_of_range& e) {
+        throw std::runtime_error("Invalid token: " + token);
+    }
+    throw std::runtime_error("Invalid token: " + token);
+}
+
+AST* parse_prefix(const std::string& calculation) {
+    std::istringstream tokens(calculation);
+    AST* ast = parse_prefix(tokens);
+
+    std::string junk;
+    if (tokens >> junk) {
+        delete ast;
+        throw std::runtime_error("Extra junk at end of input");
+    }
+    return ast;
+}

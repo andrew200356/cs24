@@ -6,10 +6,11 @@
 Stack ::Stack() : m_top(nullptr) {}
 
 Stack ::~Stack() {
-    while (m_top != nullptr) {
+    Node* current = m_top;
+    while (current) {
         // increment the top pointer
-        Node* temp = m_top;
-        m_top = m_top->next;
+        Node* temp = current;
+        current = current->next;
 
         // delete the AST object and the Node object
         delete temp->ast;
@@ -19,19 +20,15 @@ Stack ::~Stack() {
 
 void Stack ::push(AST* ast) {
     // create a new node
-    Node* newNode = new Node;
-    newNode->ast = ast;
-    newNode->next = m_top;
-
     // set the top pointer to the new node
-    m_top = newNode;
+    m_top = new Node{ast, m_top};
 }
 
 AST* Stack ::pop() {
     // check if the stack is empty
     if (m_top == nullptr) {
         // when you try to pop from an empty stack, the parsing must took too much
-        throw std::runtime_error("Too many operands");
+        throw std::runtime_error("Not enough operands.");
         return nullptr;
     }
 
