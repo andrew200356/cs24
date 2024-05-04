@@ -52,7 +52,13 @@ double BinaryOp ::value() const {
     } else if (op == '*') {
         return left->value() * right->value();
     } else if (op == '/') {
-        return left->value() / right->value();
+        if (right->value() == 0) {
+            throw std::runtime_error("Division by zero.");
+        } else {
+            // return the remainder of the division of the left operand by the right operand
+            return left->value() / right->value();
+        }
+
     } else if (op == '%') {
         // throw a std::runtime_error with the message Division by zero when the right operand is zero
         if (right->value() == 0) {

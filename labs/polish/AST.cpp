@@ -80,9 +80,6 @@ AST* AST::parse(const std::string& expression) {
             if (stack.is_empty()) {  // if the stack is empty, there is no left operand so throw an error
                 delete right;
                 throw std::runtime_error("Not enough operands.");
-            } else if (right->value() == 0) {
-                delete right;
-                throw std::runtime_error("Division by zero.");
             }
             AST* left = stack.pop();
 
