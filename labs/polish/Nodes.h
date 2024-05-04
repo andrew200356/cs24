@@ -17,6 +17,17 @@ class Number : public AST {
     double value() const;
 };
 
+class Negate : public AST {
+    AST* operand;
+
+   public:
+    Negate(AST* operand);
+
+    std::string prefix() const;
+    std::string postfix() const;
+    double value() const;
+};
+
 class BinaryOp : public AST {
     char op;
     AST* left;
@@ -24,18 +35,6 @@ class BinaryOp : public AST {
 
    public:
     BinaryOp(char op, AST* left, AST* right);
-
-    std::string prefix() const;
-    std::string postfix() const;
-    double value() const;
-};
-
-class Negate : public AST {
-    AST* operand;
-
-   public:
-    Negate(AST* operand);
-
     std::string prefix() const;
     std::string postfix() const;
     double value() const;

@@ -1,9 +1,12 @@
 CXX=g++
 CXXFLAGS=-g -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 
-all: test
+all: test main
 
-test: test.o AST.o main.o Node.o Stack.o
+test: test.o AST.o Node.o Stack.o
+	${CXX} $(CXXFLAGS) -o $@ $+
+
+main: main.o AST.o Node.o Stack.o
 	${CXX} $(CXXFLAGS) -o $@ $+
 
 test.o: test.cpp
@@ -15,7 +18,7 @@ AST.o: AST.cpp
 main.o: main.cpp
 	${CXX} $(CXXFLAGS) -c -o $@ $<
 
-Node.o: Node.cpp
+Node.o: Nodes.cpp
 	${CXX} $(CXXFLAGS) -c -o $@ $<
 
 Stack.o: Stack.cpp

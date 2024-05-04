@@ -1,5 +1,7 @@
 #include "Stack.h"
 
+#include <stdexcept>
+
 // Implement your Stack member functions here.
 Stack ::Stack() : m_top(nullptr) {}
 
@@ -28,6 +30,8 @@ void Stack ::push(AST* ast) {
 AST* Stack ::pop() {
     // check if the stack is empty
     if (m_top == nullptr) {
+        // when you try to pop from an empty stack, the parsing must took too much
+        throw std::runtime_error("Too many operands");
         return nullptr;
     }
 
@@ -55,4 +59,8 @@ AST* Stack ::top() const {
 
 bool Stack ::is_empty() const {
     return m_top == nullptr;
+}
+
+bool Stack ::only_one() const {
+    return m_top != nullptr && m_top->next == nullptr;
 }

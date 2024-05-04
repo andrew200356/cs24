@@ -23,5 +23,6 @@ class Stack {
     AST* pop();
     AST* top() const;
     bool is_empty() const;
+    bool only_one() const;
 };
 #endif
