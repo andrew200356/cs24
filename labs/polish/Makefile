@@ -25,4 +25,4 @@ Stack.o: Stack.cpp
 	${CXX} $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o test
+	rm -f *.o test main
