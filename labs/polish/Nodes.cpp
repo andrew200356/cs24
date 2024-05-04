@@ -1,6 +1,7 @@
 #include "Nodes.h"
 
 #include <cmath>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -51,11 +52,12 @@ double BinaryOp ::value() const {
     } else if (op == '*') {
         return left->value() * right->value();
     } else if (op == '/') {
-        // throw a std::runtime_error with the message Division by zero when the right operand is zero
-        if (right->value() == 0)
-            throw std::runtime_error("Division by zero.");
         return left->value() / right->value();
     } else if (op == '%') {
+        // throw a std::runtime_error with the message Division by zero when the right operand is zero
+        if (right->value() == 0) {
+            throw std::runtime_error("Division by zero.");
+        }
         return fmod(left->value(), right->value());
     }
     return 0;
