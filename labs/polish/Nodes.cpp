@@ -57,8 +57,10 @@ double BinaryOp ::value() const {
         // throw a std::runtime_error with the message Division by zero when the right operand is zero
         if (right->value() == 0) {
             throw std::runtime_error("Division by zero.");
+        } else {
+            // return the remainder of the division of the left operand by the right operand
+            return fmod(left->value(), right->value());
         }
-        return fmod(left->value(), right->value());
     }
     return 0;
 }
