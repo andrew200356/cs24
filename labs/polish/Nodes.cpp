@@ -28,6 +28,11 @@ double Number ::value() const {
 
 BinaryOp ::BinaryOp(char op, AST* left, AST* right) : op(op), left(left), right(right) {}
 
+BinaryOp ::~BinaryOp() {
+    delete left;
+    delete right;
+}
+
 std::string BinaryOp ::prefix() const {
     // AST::prefix() returns a string representation of the subtree rooted at the node. This string is in Polish notation, with tokens separated by single spaces.
     return std::string(1, op) + " " + left->prefix() + " " + right->prefix();
@@ -48,7 +53,7 @@ double BinaryOp ::value() const {
     } else if (op == '/') {
         // throw a std::runtime_error with the message Division by zero when the right operand is zero
         if (right->value() == 0)
-            throw std::runtime_error("Division by zero");
+            throw std::runtime_error("Division by zero.");
         return left->value() / right->value();
     } else if (op == '%') {
         return fmod(left->value(), right->value());
@@ -57,6 +62,10 @@ double BinaryOp ::value() const {
 }
 
 Negate ::Negate(AST* operand) : operand(operand) {}
+
+Negate ::~Negate() {
+    delete operand;
+}
 
 std::string Negate ::prefix() const {
     return "~ " + operand->prefix();

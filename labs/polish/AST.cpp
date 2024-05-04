@@ -1,10 +1,28 @@
 #include "AST.h"
 
 #include <sstream>
-#include <string>
 
 #include "Nodes.h"
 #include "Stack.h"
+
+// parse helper function
+// this function is used to parse the string into a double
+double parse_double(const std::string& token) {
+    try {
+        size_t len = 0;
+        double number = std::stod(token, &len); // now len is the length of the number
+        if (len == token.length()) {            // if the length of the number is the same as the length of the token
+            return number;
+        }
+    } catch (const std::invalid_argument& error) {
+        //     throw std::runtime_error("Invalid token: " + token);
+        // } catch (const std::out_of_range& error) {
+        //     throw std::runtime_error("Invalid token: " + token);
+    }
+
+    // If the token is not a number, throw a std::runtime_error with the message Invalid token: followed by the token.
+    throw std::runtime_error("Invalid token: " + token);
+}
 
 AST* AST::parse(const std::string& expression) {
     Stack stack;
@@ -54,8 +72,6 @@ AST* AST::parse(const std::string& expression) {
             // if the token is a number, create a Number object and push it onto the stack
             stack.push(new Number(parse_double(token)));
         }
-
-        // if the token is a number, create a Number object and push it onto the stack
     }
 
     // When it reaches the end of the string, there should be exactly one AST node on the stack: this is the root of the final AST.
@@ -73,32 +89,3 @@ AST* AST::parse(const std::string& expression) {
     }
     return stack.pop();
 };
-
-// parse helper function
-// this function is used to parse the string into a double
-double parse_double(const std::string& token) {
-    try {
-        size_t len = 0;
-        double number =  std::stod(token);
-        if (len == token.length()) {
-            return number;
-        }
-    } catch (const std::invalid_argument& e) {
-        throw std::runtime_error("Invalid token: " + token);
-    } catch (const std::out_of_range& e) {
-        throw std::runtime_error("Invalid token: " + token);
-    }
-    throw std::runtime_error("Invalid token: " + token);
-}
-
-AST* parse_prefix(const std::string& calculation) {
-    std::istringstream tokens(calculation);
-    AST* ast = parse_prefix(tokens);
-
-    std::string junk;
-    if (tokens >> junk) {
-        delete ast;
-        throw std::runtime_error("Extra junk at end of input");
-    }
-    return ast;
-}

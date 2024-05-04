@@ -22,6 +22,7 @@ class Negate : public AST {
 
    public:
     Negate(AST* operand);
+    ~Negate();
 
     std::string prefix() const;
     std::string postfix() const;
@@ -35,6 +36,7 @@ class BinaryOp : public AST {
 
    public:
     BinaryOp(char op, AST* left, AST* right);
+    ~BinaryOp();
     std::string prefix() const;
     std::string postfix() const;
     double value() const;
