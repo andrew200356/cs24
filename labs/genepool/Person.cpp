@@ -76,21 +76,31 @@ std::set<Person*> Person::aunts(PMod pmod, SMod smod) {
     // Your half aunts your parents' half sisters.
 
     std::set<Person*> result;
-    if (mMother != nullptr) {
-        std::set<Person*> motherSiblings = mMother->siblings(pmod, smod);
-        result.insert(motherSiblings.begin(), motherSiblings.end());
+
+    // first check maternal aunts
+    if (pmod == PMod::MATERNAL || pmod == PMod::ANY) {
+        if (mMother != nullptr) {
+            // get mother's siblings
+            std::set<Person*> motherSiblings = mMother->siblings(PMod::ANY, smod);
+            for (Person* aunt : motherSiblings) {
+                if (aunt->gender() == Gender::FEMALE) {
+                    result.insert(aunt);
+                }
+            }
+        }
     }
 
-    else if (mFather != nullptr) {
-        std::set<Person*> fatherSiblings = mFather->siblings(pmod, smod);
-        result.insert(fatherSiblings.begin(), fatherSiblings.end());
-    }
-
-    else if (mMother != nullptr && mFather != nullptr) {
-        std::set<Person*> motherSiblings = mMother->siblings(pmod, smod);
-        result.insert(motherSiblings.begin(), motherSiblings.end());
-        std::set<Person*> fatherSiblings = mFather->siblings(pmod, smod);
-        result.insert(fatherSiblings.begin(), fatherSiblings.end());
+    // then check paternal aunts
+    if (pmod == PMod::PATERNAL || pmod == PMod::ANY) {
+        if (mFather != nullptr) {
+            // get father's siblings
+            std::set<Person*> fatherSiblings = mFather->siblings(PMod::ANY, smod);
+            for (Person* aunt : fatherSiblings) {
+                if (aunt->gender() == Gender::FEMALE) {
+                    result.insert(aunt);
+                }
+            }
+        }
     }
 
     return result;
@@ -123,19 +133,37 @@ std::set<Person*> Person::cousins(PMod pmod, SMod smod) {
     // Your half cousins are the children of your parents' half siblings.
 
     std::set<Person*> result;
-    if (mMother != nullptr) {
-        std::set<Person*> motherSiblings = mMother->siblings(pmod, smod);
-        for (Person* aunt : motherSiblings) {
-            std::set<Person*> auntChildren = aunt->children();
-            result.insert(auntChildren.begin(), auntChildren.end());
+    // first check maternal cousins, which is the children of maternal aunts and uncles
+    if (pmod == PMod::MATERNAL || pmod == PMod::ANY) {
+        if (mMother != nullptr) {
+            // get maternal aunts and uncles
+            std::set<Person*> maternalAunts = mMother->aunts(PMod::ANY, smod);
+            std::set<Person*> maternalUncles = mMother->uncles(PMod::ANY, smod);
+            for (Person* maternalAunt : maternalAunts) {
+                std::set<Person*> maternalAuntChildren = maternalAunt->children();
+                result.insert(maternalAuntChildren.begin(), maternalAuntChildren.end());
+            }
+            for (Person* maternalUncle : maternalUncles) {
+                std::set<Person*> maternalUncleChildren = maternalUncle->children();
+                result.insert(maternalUncleChildren.begin(), maternalUncleChildren.end());
+            }
         }
     }
 
-    if (mFather != nullptr) {
-        std::set<Person*> fatherSiblings = mFather->siblings(pmod, smod);
-        for (Person* uncle : fatherSiblings) {
-            std::set<Person*> uncleChildren = uncle->children();
-            result.insert(uncleChildren.begin(), uncleChildren.end());
+    // then check paternal cousins, which is the children of paternal aunts and uncles
+    if (pmod == PMod::PATERNAL || pmod == PMod::ANY) {
+        if (mFather != nullptr) {
+            // get paternal aunts and uncles
+            std::set<Person*> paternalAunts = mFather->aunts(PMod::ANY, smod);
+            std::set<Person*> paternalUncles = mFather->uncles(PMod::ANY, smod);
+            for (Person* paternalAunt : paternalAunts) {
+                std::set<Person*> paternalAuntChildren = paternalAunt->children();
+                result.insert(paternalAuntChildren.begin(), paternalAuntChildren.end());
+            }
+            for (Person* paternalUncle : paternalUncles) {
+                std::set<Person*> paternalUncleChildren = paternalUncle->children();
+                result.insert(paternalUncleChildren.begin(), paternalUncleChildren.end());
+            }
         }
     }
 
@@ -422,14 +450,31 @@ std::set<Person*> Person::uncles(PMod pmod, SMod smod) {
     // Your half uncles are your parents' half brothers.
 
     std::set<Person*> result;
-    if (mMother != nullptr) {
-        std::set<Person*> motherSiblings = mMother->siblings(pmod, smod);
-        result.insert(motherSiblings.begin(), motherSiblings.end());
+
+    // first check maternal uncles
+    if (pmod == PMod::MATERNAL || pmod == PMod::ANY) {
+        if (mMother != nullptr) {
+            // get mother's siblings
+            std::set<Person*> motherSiblings = mMother->siblings(PMod::ANY, smod);
+            for (Person* uncle : motherSiblings) {
+                if (uncle->gender() == Gender::MALE) {
+                    result.insert(uncle);
+                }
+            }
+        }
     }
 
-    if (mFather != nullptr) {
-        std::set<Person*> fatherSiblings = mFather->siblings(pmod, smod);
-        result.insert(fatherSiblings.begin(), fatherSiblings.end());
+    // then check paternal uncles
+    if (pmod == PMod::PATERNAL || pmod == PMod::ANY) {
+        if (mFather != nullptr) {
+            // get father's siblings
+            std::set<Person*> fatherSiblings = mFather->siblings(PMod::ANY, smod);
+            for (Person* uncle : fatherSiblings) {
+                if (uncle->gender() == Gender::MALE) {
+                    result.insert(uncle);
+                }
+            }
+        }
     }
 
     return result;
