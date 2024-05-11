@@ -1,35 +1,38 @@
 #ifndef GENEPOOL_H
 #define GENEPOOL_H
 
-#include "Person.h"
-
 #include <istream>
+#include <map>
 #include <set>
 #include <string>
-#include <map>
+
+#include "Person.h"
 
 // This is the database class you need to implement.
 // It stores a collection of people and supports lookup by name.
 // It reads people from a TSV-like file in the constructor.
 
 class GenePool {
-  // Member Variables
+    // Member Variables
+    size_t mSize;
+    std::map<std::string, Person*> tree;
+    // Helper Functions
 
-  // Helper Functions
+    Person* findPerent(const std::string& name) const;
 
-public:
-  // Build a database of people from a TSV file.
-  GenePool(std::istream& stream);
+   public:
+    // Build a database of people from a TSV file.
+    GenePool(std::istream& stream);
 
-  // Clean it up.
-  ~GenePool();
+    // Clean it up.
+    ~GenePool();
 
-  // List all the people in the database.
-  std::set<Person*> everyone() const;
+    // List all the people in the database.
+    std::set<Person*> everyone() const;
 
-  // Find a person in the database by name.
-  // Return nullptr if there is no such person.
-  Person* find(const std::string& name) const;
+    // Find a person in the database by name.
+    // Return nullptr if there is no such person.
+    Person* find(const std::string& name) const;
 };
 
 #endif

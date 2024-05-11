@@ -48,6 +48,8 @@
     "concepts": "cpp",
     "numbers": "cpp",
     "cstring": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "map": "cpp",
+    "set": "cpp"
   }
 }
