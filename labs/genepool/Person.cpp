@@ -298,19 +298,104 @@ std::set<Person*> Person::parents(PMod pmod) {
     return result;
 }
 
+// std::set<Person*> Person::siblings(PMod pmod, SMod smod) {
+//     // Your siblings are people who share a parent with you, but are not you.
+//     // Your maternal siblings have the same mother as you.
+//     // Your paternal siblings have the same father as you.
+//     // Your full siblings have the same mother and father as you.
+//     // Your half siblings share only one parent with you.
+//     std::set<Person*> result;
+
+//     // determine which parent to return
+//     if (pmod == PMod::MATERNAL) {
+//         // Add maternal siblings
+//         if (mMother != nullptr) {
+//             for (Person* sibling : mMother->children()) {
+//                 if (sibling != this) {
+//                     if (smod == SMod::FULL) {
+//                         if (sibling->father() == mFather) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::HALF) {
+//                         if (sibling->father() != mFather) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::ANY) {
+//                         result.insert(sibling);
+//                     }
+//                 }
+//             }
+//         }
+//     } else if (pmod == PMod::PATERNAL) {
+//         // Add paternal siblings
+//         if (mFather != nullptr) {
+//             for (Person* sibling : mFather->children()) {
+//                 if (sibling != this) {
+//                     if (smod == SMod::FULL) {
+//                         if (sibling->mother() == mMother) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::HALF) {
+//                         if (sibling->mother() != mMother) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::ANY) {
+//                         result.insert(sibling);
+//                     }
+//                 }
+//             }
+//         }
+//     } else if (pmod == PMod::ANY) {
+//         // Add maternal siblings
+//         if (mMother != nullptr) {
+//             for (Person* sibling : mMother->children()) {
+//                 if (sibling != this && result.find(sibling) == result.end()) {
+//                     if (smod == SMod::FULL) {
+//                         if (sibling->father() == mFather) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::HALF) {
+//                         if (sibling->father() != mFather) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::ANY) {
+//                         result.insert(sibling);
+//                     }
+//                 }
+//             }
+//         }
+
+//         // Add paternal siblings
+//         if (mFather != nullptr) {
+//             for (Person* sibling : mFather->children()) {
+//                 if (sibling != this && result.find(sibling) == result.end()) {
+//                     if (smod == SMod::FULL) {
+//                         if (sibling->mother() == mMother) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::HALF) {
+//                         if (sibling->mother() != mMother) {
+//                             result.insert(sibling);
+//                         }
+//                     } else if (smod == SMod::ANY) {
+//                         result.insert(sibling);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     return result;
+// }
+
 std::set<Person*> Person::siblings(PMod pmod, SMod smod) {
-    // Your siblings are people who share a parent with you, but are not you.
-    // Your maternal siblings have the same mother as you.
-    // Your paternal siblings have the same father as you.
-    // Your full siblings have the same mother and father as you.
-    // Your half siblings share only one parent with you.
     std::set<Person*> siblings;
 
     // If pmod is MATERNAL or ANY, add the person's maternal siblings
     if (pmod == PMod::MATERNAL || pmod == PMod::ANY) {
         if (mMother != nullptr) {
             for (Person* sibling : mMother->children()) {
-                if (sibling != this && sibling->mFather == mFather) {
+                if (sibling != this && (smod == SMod::ANY || sibling->mFather == mFather)) {
                     siblings.insert(sibling);
                 }
             }
@@ -321,7 +406,7 @@ std::set<Person*> Person::siblings(PMod pmod, SMod smod) {
     if (pmod == PMod::PATERNAL || pmod == PMod::ANY) {
         if (mFather != nullptr) {
             for (Person* sibling : mFather->children()) {
-                if (sibling != this && sibling->mMother == mMother) {
+                if (sibling != this && (smod == SMod::ANY || sibling->mMother == mMother)) {
                     siblings.insert(sibling);
                 }
             }
