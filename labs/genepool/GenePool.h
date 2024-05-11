@@ -18,8 +18,6 @@ class GenePool {
     std::map<std::string, Person*> tree;
     // Helper Functions
 
-    Person* findPerent(const std::string& name) const;
-
    public:
     // Build a database of people from a TSV file.
     GenePool(std::istream& stream);

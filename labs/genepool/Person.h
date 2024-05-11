@@ -17,8 +17,9 @@ class Person {
     Gender mGender;
     Person* mMother;
     Person* mFather;
+    std::set<Person*> mChildren;
     // Helper Functions
-
+    
    public:
     // Constructor
     Person(const std::string& name, Gender gender, Person* mother = nullptr, Person* father = nullptr);
