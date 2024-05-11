@@ -19,8 +19,7 @@ class Person {
     Person* mFather;
     std::set<Person*> mChildren;
     // Helper Functions
-    std::set<Person*> addSiblings(Person* father, Person* mother, SMod smod);
-    
+
    public:
     // Constructor
     Person(const std::string& name, Gender gender, Person* mother = nullptr, Person* father = nullptr);
