@@ -14,7 +14,6 @@
 
 class GenePool {
     // Member Variables
-    size_t mSize;
     std::map<std::string, Person*> tree;
     // Helper Functions
 

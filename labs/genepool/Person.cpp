@@ -137,8 +137,8 @@ std::set<Person*> Person::cousins(PMod pmod, SMod smod) {
     if (pmod == PMod::MATERNAL || pmod == PMod::ANY) {
         if (mMother != nullptr) {
             // get maternal aunts and uncles
-            std::set<Person*> maternalAunts = mMother->aunts(PMod::ANY, smod);
-            std::set<Person*> maternalUncles = mMother->uncles(PMod::ANY, smod);
+            std::set<Person*> maternalAunts = mMother->siblings(PMod::ANY, smod);
+            std::set<Person*> maternalUncles = mMother->siblings(PMod::ANY, smod);
             for (Person* maternalAunt : maternalAunts) {
                 std::set<Person*> maternalAuntChildren = maternalAunt->children();
                 result.insert(maternalAuntChildren.begin(), maternalAuntChildren.end());
@@ -154,8 +154,8 @@ std::set<Person*> Person::cousins(PMod pmod, SMod smod) {
     if (pmod == PMod::PATERNAL || pmod == PMod::ANY) {
         if (mFather != nullptr) {
             // get paternal aunts and uncles
-            std::set<Person*> paternalAunts = mFather->aunts(PMod::ANY, smod);
-            std::set<Person*> paternalUncles = mFather->uncles(PMod::ANY, smod);
+            std::set<Person*> paternalAunts = mFather->siblings(PMod::ANY, smod);
+            std::set<Person*> paternalUncles = mFather->siblings(PMod::ANY, smod);
             for (Person* paternalAunt : paternalAunts) {
                 std::set<Person*> paternalAuntChildren = paternalAunt->children();
                 result.insert(paternalAuntChildren.begin(), paternalAuntChildren.end());
