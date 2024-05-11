@@ -304,91 +304,42 @@ std::set<Person*> Person::siblings(PMod pmod, SMod smod) {
     // Your paternal siblings have the same father as you.
     // Your full siblings have the same mother and father as you.
     // Your half siblings share only one parent with you.
-    std::set<Person*> result;
+    std::set<Person*> siblings;
 
-    // determine which parent to return
-    if (pmod == PMod::MATERNAL) {
-        // Add maternal siblings
+    // If pmod is MATERNAL or ANY, add the person's maternal siblings
+    if (pmod == PMod::MATERNAL || pmod == PMod::ANY) {
         if (mMother != nullptr) {
             for (Person* sibling : mMother->children()) {
-                if (sibling != this) {
-                    if (smod == SMod::FULL) {
-                        if (sibling->father() == mFather) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::HALF) {
-                        if (sibling->father() != mFather) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::ANY) {
-                        result.insert(sibling);
-                    }
-                }
-            }
-        }
-    } else if (pmod == PMod::PATERNAL) {
-        // Add paternal siblings
-        if (mFather != nullptr) {
-            for (Person* sibling : mFather->children()) {
-                if (sibling != this) {
-                    if (smod == SMod::FULL) {
-                        if (sibling->mother() == mMother) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::HALF) {
-                        if (sibling->mother() != mMother) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::ANY) {
-                        result.insert(sibling);
-                    }
-                }
-            }
-        }
-    } else if (pmod == PMod::ANY) {
-        // Add maternal siblings
-        if (mMother != nullptr) {
-            for (Person* sibling : mMother->children()) {
-                if (sibling != this && result.find(sibling) == result.end()) {
-                    if (smod == SMod::FULL) {
-                        if (sibling->father() == mFather) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::HALF) {
-                        if (sibling->father() != mFather) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::ANY) {
-                        result.insert(sibling);
-                    }
-                }
-            }
-        }
-
-        // Add paternal siblings
-        if (mFather != nullptr) {
-            for (Person* sibling : mFather->children()) {
-                if (sibling != this && result.find(sibling) == result.end()) {
-                    if (smod == SMod::FULL) {
-                        if (sibling->mother() == mMother) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::HALF) {
-                        if (sibling->mother() != mMother) {
-                            result.insert(sibling);
-                        }
-                    } else if (smod == SMod::ANY) {
-                        result.insert(sibling);
-                    }
+                if (sibling != this && sibling->mFather == mFather) {
+                    siblings.insert(sibling);
                 }
             }
         }
     }
 
-    // Remove the current person from the set of siblings
-    result.erase(this);
+    // If pmod is PATERNAL or ANY, add the person's paternal siblings
+    if (pmod == PMod::PATERNAL || pmod == PMod::ANY) {
+        if (mFather != nullptr) {
+            for (Person* sibling : mFather->children()) {
+                if (sibling != this && sibling->mMother == mMother) {
+                    siblings.insert(sibling);
+                }
+            }
+        }
+    }
 
-    return result;
+    // If smod is HALF, remove full siblings
+    if (smod == SMod::HALF) {
+        for (auto it = siblings.begin(); it != siblings.end();) {
+            if ((*it)->mMother == mMother && (*it)->mFather == mFather) {
+                it = siblings.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    return siblings;
 }
 
 std::set<Person*> Person::sisters(PMod pmod, SMod smod) {
