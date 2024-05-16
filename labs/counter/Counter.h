@@ -12,13 +12,18 @@
 
 class Counter {
     // Member Variables
-    List* list = new List();
+    List* list = new List();    // Declare the List for the Counter
+    Index* index = new Index(); // Declare the Index for the Counter
 
    public:
     class Iterator {
         // Member Variables
+        List::Node* current;
 
        public:
+        // Constructor
+        Iterator(List::Node* current);
+
         const std::string& key() const;
         int value() const;
 
@@ -45,6 +50,7 @@ class Counter {
     void del(const std::string& key);
     int get(const std::string& key) const;
     void set(const std::string& key, int count);
+    void print() const; // debug print
 
     Iterator begin() const;
     Iterator end() const;

@@ -39,11 +39,20 @@ List::Node* List::begin() const {
 void List::insert(const std::string& key, int value) {
     // Create a new node and insert it at the tail
     Node* newNode = new Node(key, value, nullptr, tail);
+
+    // Update the head
+    if (head == nullptr) {
+        head = newNode;
+    }
+    
+    // Update the tail
     if (tail != nullptr) {
         tail->next = newNode;
     } else {
         tail = newNode;
     }
+    
+    size++;
 }
 
 List::Node* List::remove(const std::string& key) {
@@ -65,6 +74,7 @@ List::Node* List::remove(const std::string& key) {
         tail = node->prev;
     }
 
+    size--;
     return node;
 }
 

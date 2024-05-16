@@ -1,5 +1,7 @@
 #include "Counter.h"
 
+#include <iostream>
+
 // Counter Member Functions
 Counter::Counter() {
     // The default constructor creates an empty Counter.
@@ -26,15 +28,20 @@ size_t Counter::count() const {
 void Counter::inc(const std::string& key, int by) {
     // inc(k, d) increments a count by a given value (default one).
 
+    // debug message
+    std::cout << "Incrementing " << key << " by " << by << '\n';
+
     // first find the key
     List::Node* keynode = list->find(key);  // Declare the Node class
 
     // if key is not found, add it to the list
     if (keynode == nullptr) {
         list->insert(key, by);
+        std::cout << "Key not found, adding " << key << " with value " << by << '\n';
     } else {
         // if key is found, increment the value by by
         keynode->value += by;
+        std::cout << "Key found, incrementing " << key << " by " << by << '\n';
     }
 }
 
@@ -83,3 +90,14 @@ int Counter::total() const {
 
 // The inc(), dec(), and set() functions will add keys to the counter if they are not already present.
 // The del() function is the only function that removes keys; setting a value to zero does not remove the corresponding key.
+
+void Counter::print() const {
+    // bebug print function
+    std::cout << "Printing counter...\n";
+    List::Node* node = list->begin();
+
+    while (node != nullptr) {
+        std::cout << node->key << ": " << node->value << '\n';
+        node = node->next;
+    }
+}
