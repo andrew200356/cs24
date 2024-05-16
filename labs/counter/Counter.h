@@ -4,10 +4,16 @@
 #include <cstddef>
 #include <string>
 
+#include "Index.h"
+#include "List.h"
+
 // This is the Counter class you need to implement.
 // It includes the Counter::Iterator as a nested class.
 
 class Counter {
+    // Member Variables
+    List* list = new List();
+
    public:
     class Iterator {
         // Member Variables
