@@ -4,8 +4,6 @@ CXXFLAGS=-g -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 OPTFLAGS=-O3 -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 # OPTFLAGS support for -O3 optimization level which is required for the lab
 
-# just change the $(OPTFLAGS) to $(CXXFLAGS) to compile with debugging flags
-
 all: main wordc charc
 
 main: main.o Counter.o List.o Index.o Iterator.o
