@@ -8,7 +8,7 @@ OPTFLAGS=-O3 -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 
 all: main
 
-main: main.o Counter.o List.o
+main: main.o Counter.o List.o Index.o Iterator.o
 	$(CXX) $(OPTFLAGS) -o $@ $^
 
 main.o: main.cpp Counter.h List.h
@@ -18,6 +18,12 @@ Counter.o: Counter.cpp Counter.h
 	$(CXX) $(OPTFLAGS) -c -o $@ $<
 
 List.o: List.cpp List.h
+	$(CXX) $(OPTFLAGS) -c -o $@ $<
+
+Index.o: Index.cpp Index.h
+	$(CXX) $(OPTFLAGS) -c -o $@ $<
+
+Iterator.o: Iterator.cpp
 	$(CXX) $(OPTFLAGS) -c -o $@ $<
 
 clean:

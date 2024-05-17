@@ -39,6 +39,7 @@ class List {
     // Member Functions
     Node* find(const std::string& key) const;
     Node* begin() const;
+    Node* end() const;
     void insert(const std::string& key, int value);
     Node* remove(const std::string& key);
     size_t getSize();

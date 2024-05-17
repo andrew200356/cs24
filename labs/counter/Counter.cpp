@@ -1,7 +1,5 @@
 #include "Counter.h"
 
-#include <iostream>
-
 // Counter Member Functions
 Counter::Counter() {
     // The default constructor creates an empty Counter.
@@ -15,33 +13,22 @@ Counter::~Counter() {
     // delete index;
 }
 
-Counter::Iterator Counter::begin() const {
-    // The begin() function should return an iterator to the first-inserted item in the counter.
-    return Iterator();
-}
-
 size_t Counter::count() const {
     // The count() function should return the number of keys stored in the counter.
     return list->getSize();
 }
 
 void Counter::inc(const std::string& key, int by) {
-    // inc(k, d) increments a count by a given value (default one).
-
-    // debug message
-    std::cout << "Incrementing " << key << " by " << by << '\n';
-
-    // first find the key
     List::Node* keynode = list->find(key);  // Declare the Node class
 
     // if key is not found, add it to the list
     if (keynode == nullptr) {
         list->insert(key, by);
-        std::cout << "Key not found, adding " << key << " with value " << by << '\n';
+        // std::cout << "Key not found, adding " << key << " with value " << by << '\n';
     } else {
         // if key is found, increment the value by by
         keynode->value += by;
-        std::cout << "Key found, incrementing " << key << " by " << by << '\n';
+        // std::cout << "Key found, incrementing " << key << " by " << by << '\n';
     }
 }
 
@@ -65,11 +52,6 @@ void Counter::del(const std::string& key) {
     delete removed;
 }
 
-Counter::Iterator Counter::end() const {
-    // The end() function should return an iterator to the "end" of the counter.
-    return Iterator();
-}
-
 int Counter::get(const std::string& key) const {
     // get(k) looks up a count by key. If the key isn't present, it returns zero.
     List::Node* keynode = list->find(key);
@@ -80,6 +62,10 @@ int Counter::get(const std::string& key) const {
 void Counter::set(const std::string& key, int count) {
     // set(k, v) sets a count by key.
     List::Node* keynode = list->find(key);
+    if (keynode == nullptr) {
+        list->insert(key, count);
+        return;
+    }
     keynode->value = count;
 }
 
@@ -93,11 +79,21 @@ int Counter::total() const {
 
 void Counter::print() const {
     // bebug print function
-    std::cout << "Printing counter...\n";
-    List::Node* node = list->begin();
+
+    List::Node* node = list->head;
 
     while (node != nullptr) {
         std::cout << node->key << ": " << node->value << '\n';
         node = node->next;
     }
+}
+
+Counter::Iterator Counter::begin() const {
+    // The begin() function should return an iterator to the first-inserted item in the counter.
+    return Iterator(list->head);
+}
+
+Counter::Iterator Counter::end() const {
+    // The end() function should return an iterator to the "end" of the counter.
+    return Iterator(nullptr);
 }

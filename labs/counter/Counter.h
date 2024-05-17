@@ -2,6 +2,7 @@
 #define COUNTER_H
 
 #include <cstddef>
+#include <iostream>
 #include <string>
 
 #include "Index.h"
@@ -12,8 +13,7 @@
 
 class Counter {
     // Member Variables
-    List* list = new List();    // Declare the List for the Counter
-    Index* index = new Index(); // Declare the Index for the Counter
+    List* list = new List();  // Declare the List for the Counter
 
    public:
     class Iterator {
@@ -50,7 +50,7 @@ class Counter {
     void del(const std::string& key);
     int get(const std::string& key) const;
     void set(const std::string& key, int count);
-    void print() const; // debug print
+    void print() const;  // debug print
 
     Iterator begin() const;
     Iterator end() const;
