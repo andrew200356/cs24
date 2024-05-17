@@ -26,5 +26,8 @@ Index.o: Index.cpp Index.h
 Iterator.o: Iterator.cpp
 	$(CXX) $(OPTFLAGS) -c -o $@ $<
 
+valgrind: main 
+	valgrind --leak-check=full ./main
+
 clean:
 	rm -f main *.o

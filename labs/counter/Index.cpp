@@ -15,16 +15,14 @@ Index::~Index() {
 
 // Member Functions
 
-size_t Index::hashFunction1(const std::string& key) const {
-    std::hash<std::string> hasher;
-    size_t hash = hasher(key);
-    return hash % capacity;
+int Index::hashFunction1(const std::string& key) const {
+    // Make sure the index is within the bounds of the array
+    return std::hash<std::string>{}(key) % capacity;
 }
 
-size_t Index::hashFunction2(const std::string& key) const {
-    std::hash<std::string> hasher;
-    size_t hash = hasher(key);
-    return (capacity - 1) - (hash % (capacity - 1));
+int Index::hashFunction2(const std::string& key) const {
+    // Make sure the step size is a positive number less than the capacity
+    return 1 + (std::hash<std::string>{}(key) % (capacity - 1));
 }
 
 void Index::resizeAndRehash() {
@@ -41,9 +39,9 @@ void Index::resizeAndRehash() {
     // Rehash all keys from the old table into the new one
     for (int i = 0; i < oldCapacity; i++) {
         if (oldTable[i] != nullptr) {
-            size_t index = hashFunction1(oldTable[i]->key);
+            int index = hashFunction1(oldTable[i]->key);
             if (table[index] != nullptr) {  // If collision
-                size_t step = hashFunction2(oldTable[i]->key);
+                int step = hashFunction2(oldTable[i]->key);
                 do {
                     index = (index + step) % capacity;
                 } while (table[index] != nullptr);
@@ -60,14 +58,16 @@ void Index::insert_index(const std::string& key, int value, List* list) {
         resizeAndRehash();
     }
 
-    size_t index = hashFunction1(key);
+    // Insert the key into the table
+    int index = hashFunction1(key);
     if (table[index] != nullptr && table[index]->key != key) {  // If collision
-        size_t step = hashFunction2(key);
+        int step = hashFunction2(key);
         do {
             index = (index + step) % capacity;
         } while (table[index] != nullptr && table[index]->key != key);
     }
 
+    // If the index is empty, increment the count
     if (table[index] == nullptr) {
         count++;
     }
@@ -75,11 +75,11 @@ void Index::insert_index(const std::string& key, int value, List* list) {
 }
 
 List::Node* Index::find(const std::string& key) const {
-    size_t index = hashFunction1(key);
+    int index = hashFunction1(key);
     if (table[index] == nullptr || table[index]->key == key) {
         return table[index];
     } else {
-        size_t step = hashFunction2(key);
+        int step = hashFunction2(key);
         do {
             index = (index + step) % capacity;
         } while (table[index] != nullptr && table[index]->key != key);
@@ -88,7 +88,7 @@ List::Node* Index::find(const std::string& key) const {
 }
 
 List::Node* Index::remove_index(const std::string& key, List* list) {
-    size_t index = hashFunction1(key);
+    int index = hashFunction1(key);
     if (table[index] == nullptr) {
         return nullptr;
     } else if (table[index]->key == key) {
@@ -97,7 +97,7 @@ List::Node* Index::remove_index(const std::string& key, List* list) {
         count--;
         return node;
     } else {
-        size_t step = hashFunction2(key);
+        int step = hashFunction2(key);
         do {
             index = (index + step) % capacity;
         } while (table[index] != nullptr && table[index]->key != key);
