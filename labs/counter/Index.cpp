@@ -112,6 +112,32 @@ List::Node* Index::remove_index(const std::string& key, List* list) {
     }
 }
 
+void Index::remove_i(const std::string& key, List* list) {
+    int index = hashFunction1(key);
+    if (table[index] == nullptr) {
+        // If the key is not found, do nothing
+        return;
+    } else if (table[index]->key == key) { // If the key is found
+        List::Node* node = table[index];
+        table[index] = nullptr;
+        count--;
+        list->remove(node);
+    } else {
+        // If the key is not found, search for it
+        int step = hashFunction2(key);
+        do {
+            index = (index + step) % capacity;
+        } while (table[index] != nullptr && table[index]->key != key);
+        if (table[index] == nullptr) {
+            return;
+        } else {
+            List::Node* node = table[index];
+            table[index] = nullptr;
+            count--;
+            list->remove(node);
+        }
+    }
+}
 
 // Helper Functions
 int Index::hashFunction1(const std::string& key) const {

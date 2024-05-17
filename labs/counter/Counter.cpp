@@ -20,7 +20,7 @@ size_t Counter::count() const {
 
 int Counter::total() const {
     // total() returns the sum of all counts in the counter.
-    return list->getTotal();
+    return index->getTotal();
 }
 
 void Counter::inc(const std::string& key, int by) {
@@ -33,7 +33,7 @@ void Counter::dec(const std::string& key, int by) {
 
 void Counter::del(const std::string& key) {
     // del(k) removes a key from the counter, setting its count to (implicit) zero.
-    list->remove(index->remove_index(key, list));
+    index->remove_i(key, list);
 }
 
 int Counter::get(const std::string& key) const {

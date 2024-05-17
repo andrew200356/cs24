@@ -23,7 +23,6 @@ bool Counter::Iterator::operator==(const Iterator& other) const {
     if (current == nullptr || other.current == nullptr) {
         return current == other.current;
     }
-
     return current->key == other.current->key;
 }
 

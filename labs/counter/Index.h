@@ -23,6 +23,7 @@ class Index {
     void insert_i(const std::string& key, int value, List* list);
     List::Node* find(const std::string& key) const;
     List::Node* remove_index(const std::string& key, List* list);
+    void remove_i(const std::string& key, List* list);
     int getCount();
     int getTotal();
 
