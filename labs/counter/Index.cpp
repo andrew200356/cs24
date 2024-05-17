@@ -14,43 +14,18 @@ Index::~Index() {
 }
 
 // Member Functions
-
-int Index::hashFunction1(const std::string& key) const {
-    // Make sure the index is within the bounds of the array
-    return std::hash<std::string>{}(key) % capacity;
+int Index::getCount(){
+    return count;
 }
 
-int Index::hashFunction2(const std::string& key) const {
-    // Make sure the step size is a positive number less than the capacity
-    return 1 + (std::hash<std::string>{}(key) % (capacity - 1));
-}
-
-void Index::resizeAndRehash() {
-    int oldCapacity = capacity;
-    List::Node** oldTable = table;
-
-    // Double the capacity
-    capacity = (count + 1) * 2;
-    table = new List::Node*[capacity];
+int Index::getTotal(){
+    int total = 0;
     for (int i = 0; i < capacity; i++) {
-        table[i] = nullptr;
-    }
-
-    // Rehash all keys from the old table into the new one
-    for (int i = 0; i < oldCapacity; i++) {
-        if (oldTable[i] != nullptr) {
-            int index = hashFunction1(oldTable[i]->key);
-            if (table[index] != nullptr) {  // If collision
-                int step = hashFunction2(oldTable[i]->key);
-                do {
-                    index = (index + step) % capacity;
-                } while (table[index] != nullptr);
-            }
-            table[index] = oldTable[i];
+        if (table[i] != nullptr) {
+            total += table[i]->value;
         }
     }
-
-    delete[] oldTable;
+    return total;
 }
 
 void Index::insert_index(const std::string& key, int value, List* list) {
@@ -135,4 +110,44 @@ List::Node* Index::remove_index(const std::string& key, List* list) {
             return node;
         }
     }
+}
+
+
+// Helper Functions
+int Index::hashFunction1(const std::string& key) const {
+    // Make sure the index is within the bounds of the array
+    return std::hash<std::string>{}(key) % capacity;
+}
+
+int Index::hashFunction2(const std::string& key) const {
+    // Make sure the step size is a positive number less than the capacity
+    return 1 + (std::hash<std::string>{}(key) % (capacity - 1));
+}
+
+void Index::resizeAndRehash() {
+    int oldCapacity = capacity;
+    List::Node** oldTable = table;
+
+    // Double the capacity
+    capacity = (count + 1) * 2;
+    table = new List::Node*[capacity];
+    for (int i = 0; i < capacity; i++) {
+        table[i] = nullptr;
+    }
+
+    // Rehash all keys from the old table into the new one
+    for (int i = 0; i < oldCapacity; i++) {
+        if (oldTable[i] != nullptr) {
+            int index = hashFunction1(oldTable[i]->key);
+            if (table[index] != nullptr) {  // If collision
+                int step = hashFunction2(oldTable[i]->key);
+                do {
+                    index = (index + step) % capacity;
+                } while (table[index] != nullptr);
+            }
+            table[index] = oldTable[i];
+        }
+    }
+
+    delete[] oldTable;
 }

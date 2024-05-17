@@ -28,7 +28,6 @@ class List {
     // Member Variables
     Node* head;
     Node* tail;
-    size_t size;
 
     // Constructor
     List();

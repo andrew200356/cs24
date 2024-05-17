@@ -15,7 +15,7 @@ Counter::~Counter() {
 
 size_t Counter::count() const {
     // The count() function should return the number of keys stored in the counter.
-    return list->size;
+    return index->getCount();
 }
 
 int Counter::total() const {

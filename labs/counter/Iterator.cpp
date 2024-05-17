@@ -20,14 +20,10 @@ void Counter::Iterator::operator++() {
 
 bool Counter::Iterator::operator==(const Iterator& other) const {
     // The operator==() function should compare two iterators for equality.
+    if (current == nullptr || other.current == nullptr) {
+        return current == other.current;
+    }
 
-    // If the current node is nullptr, then the iterators are equal if the other iterator's current node is also nullptr.
-    if (current == nullptr) {
-        return other.current == nullptr;
-    }
-    if (other.current == nullptr) {
-        return false;
-    }
     return current->key == other.current->key;
 }
 

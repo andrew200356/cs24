@@ -8,7 +8,6 @@
 List::List() {
     head = nullptr;
     tail = nullptr;
-    size = 0;
 }
 
 // Destructor
@@ -54,7 +53,6 @@ List::Node* List::insert(const std::string& key, int value) {
     }
     tail = newNode;
 
-    size++;
     return newNode;
 }
 
@@ -74,10 +72,10 @@ void List::remove(List::Node* node) {
     }
 
     delete node;
-    size--;
 }
 
 int List::getTotal() {
+    // return the sum of all values in the list using iterators
     int total = 0;
     Node* current = head;
     while (current != nullptr) {
