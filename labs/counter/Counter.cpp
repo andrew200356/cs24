@@ -27,7 +27,7 @@ void Counter::inc(const std::string& key, int by) {
 
     // if key is not found, add it to the list
     if (keynode == nullptr) {
-        list->insert(key, by);
+        index.insert_index(key, by, list);
         // std::cout << "Key not found, adding " << key << " with value " << by << '\n';
     } else {
         // if key is found, increment the value by by
@@ -43,7 +43,7 @@ void Counter::dec(const std::string& key, int by) {
     List::Node* keynode = index.find(key);
 
     if (keynode == nullptr) {
-        list->insert(key, -by);
+        index.insert_index(key, -by, list);
     } else {
         keynode->value -= by;
     }
