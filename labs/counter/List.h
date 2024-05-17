@@ -41,7 +41,7 @@ class List {
     Node* begin() const;
     Node* end() const;
     Node* insert(const std::string& key, int value);
-    Node* remove(Node* node);
+    void remove(Node* node);
     int getTotal();
 };
 

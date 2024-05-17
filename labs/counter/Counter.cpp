@@ -24,37 +24,16 @@ int Counter::total() const {
 }
 
 void Counter::inc(const std::string& key, int by) {
-    List::Node* keynode = index->find(key);  // Declare the Node class
-
-    // if key is not found, add it to the list
-    if (keynode == nullptr) {
-        index->insert_index(key, by, list);
-        // std::cout << "Key not found, adding " << key << " with value " << by << '\n';
-    } else {
-        // if key is found, increment the value by by
-        keynode->value += by;
-        // std::cout << "Key found, incrementing " << key << " by " << by << '\n';
-    }
+    index->insert_i(key, by, list);
 }
 
 void Counter::dec(const std::string& key, int by) {
-    // dec(k, d) decrements a count by a given value (default one).
-
-    // same as inc, but decrement
-    List::Node* keynode = index->find(key);
-
-    if (keynode == nullptr) {
-        index->insert_index(key, -by, list);
-    } else {
-        keynode->value -= by;
-    }
+    index->insert_i(key, -by, list);
 }
 
 void Counter::del(const std::string& key) {
     // del(k) removes a key from the counter, setting its count to (implicit) zero.
-    List::Node* removed = index->remove_index(key, list);
-    removed->value = 0;
-    delete removed;
+    list->remove(index->remove_index(key, list));
 }
 
 int Counter::get(const std::string& key) const {

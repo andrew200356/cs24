@@ -89,11 +89,14 @@ void Index::insert_i(const std::string& key, int value, List* list) {
         } while (table[index] != nullptr && table[index]->key != key);
     }
 
-    // If the index is empty, increment the count
+    // If the index is empty, increment the count and insert the key
     if (table[index] == nullptr) {
         count++;
+        table[index] = list->insert(key, value);
+    }else{
+        // If the index is not empty, increment the value
+        table[index]->value += value;
     }
-    table[index] = list->insert(key, value);  // list insert will insert and return the new node
 }
 
 List::Node* Index::find(const std::string& key) const {
