@@ -37,11 +37,14 @@ List::Node* List::find(const std::string& key) const {
 }
 
 // Member Functions
-void List::insert(const std::string& key, int value) {
+List::Node* List::insert(const std::string& key, int value) {
+    // insert a new node with the given key and value, and return the new node
+
     // Create a new node and insert it at the tail
     Node* newNode = new Node(key, value, nullptr, tail);
 
     // std::cout << "Inserting " << key << " with value " << value << '\n';
+
     // Update the head
     if (head == nullptr) {
         head = newNode;
@@ -55,14 +58,11 @@ void List::insert(const std::string& key, int value) {
     tail = newNode;
 
     size++;
+    return newNode;
 }
 
-List::Node* List::remove(const std::string& key) {
-    // remove and return the node with the given key
-    Node* node = find(key);
-    if (node == nullptr) {
-        return node;
-    }
+List::Node* List::remove(List::Node* node) {
+    // remove the given node from the list and return it
 
     if (node->prev != nullptr) {
         node->prev->next = node->next;
@@ -78,10 +78,6 @@ List::Node* List::remove(const std::string& key) {
 
     size--;
     return node;
-}
-
-size_t List::getSize() {
-    return size;
 }
 
 int List::getTotal() {
