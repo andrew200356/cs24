@@ -74,6 +74,28 @@ void Index::insert_index(const std::string& key, int value, List* list) {
     table[index] = list->insert(key, value);  // list insert will insert and return the new node
 }
 
+
+void Index::insert_i(const std::string& key, int value, List* list) {
+    if (count == capacity) {
+        resizeAndRehash();
+    }
+
+    // Insert the key into the table
+    int index = hashFunction1(key);
+    if (table[index] != nullptr && table[index]->key != key) {  // If collision
+        int step = hashFunction2(key);
+        do {
+            index = (index + step) % capacity;
+        } while (table[index] != nullptr && table[index]->key != key);
+    }
+
+    // If the index is empty, increment the count
+    if (table[index] == nullptr) {
+        count++;
+    }
+    table[index] = list->insert(key, value);  // list insert will insert and return the new node
+}
+
 List::Node* Index::find(const std::string& key) const {
     int index = hashFunction1(key);
     if (table[index] == nullptr || table[index]->key == key) {

@@ -6,7 +6,7 @@ OPTFLAGS=-O3 -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 
 # just change the $(OPTFLAGS) to $(CXXFLAGS) to compile with debugging flags
 
-all: main
+all: main wordc charc
 
 main: main.o Counter.o List.o Index.o Iterator.o
 	$(CXX) $(OPTFLAGS) -o $@ $^
@@ -26,8 +26,20 @@ Index.o: Index.cpp Index.h
 Iterator.o: Iterator.cpp
 	$(CXX) $(OPTFLAGS) -c -o $@ $<
 
-valgrind: main 
+valgrind: main
 	valgrind --leak-check=full ./main
 
+word-count.o: word-count.cpp
+	$(CXX) $(OPTFLAGS) -c -o $@ $<
+
+wordc: word-count.o Counter.o List.o Index.o Iterator.o
+	$(CXX) $(OPTFLAGS) -o $@ $^
+
+char-count.o: char-count.cpp
+	$(CXX) $(OPTFLAGS) -c -o $@ $<
+
+charc: char-count.o Counter.o List.o Index.o Iterator.o
+	$(CXX) $(OPTFLAGS) -o $@ $^
+
 clean:
-	rm -f main *.o
+	rm -f *.o main wordc charc
