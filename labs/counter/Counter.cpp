@@ -4,7 +4,7 @@
 Counter::Counter() {
     // The constructor should initialize any member variables.
     list = new List();
-    index = Index();
+    index = Index(10);
 }
 
 Counter::~Counter() {
@@ -67,7 +67,7 @@ void Counter::set(const std::string& key, int count) {
     // set(k, v) sets a count by key.
     List::Node* keynode = index.find(key);
     if (keynode == nullptr) {
-        list->insert(key, count);
+        index.insert_index(key, count, list);
         return;
     }
     keynode->value = count;
