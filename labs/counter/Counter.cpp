@@ -4,7 +4,7 @@
 Counter::Counter() {
     // The constructor should initialize any member variables.
     list = new List();
-    index = new Index(200);
+    index = new Index(10);
 }
 
 Counter::~Counter() {
