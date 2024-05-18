@@ -15,7 +15,7 @@ class Index {
     List::Node** table;  // hash table storing the pointer to the list nodes
 
    public:
-    Index(int capacity = 1000);
+    Index(int capacity = 100);
     ~Index();
 
     // Member Functions

@@ -4,7 +4,7 @@
 Counter::Counter() {
     // The constructor should initialize any member variables.
     list = new List();
-    index = new Index(10);
+    index = new Index(50);
 }
 
 Counter::~Counter() {
@@ -38,8 +38,17 @@ void Counter::del(const std::string& key) {
 
 int Counter::get(const std::string& key) const {
     // get(k) looks up a count by key. If the key isn't present, it returns zero.
+
+    // std::cout << "counter getter trying to get: " << key << '\n';
+
     List::Node* keynode = index->find(key);
 
+    // if (keynode == nullptr)
+    // {
+    //     std::cout << "counter getter not found: " << key << '\n';
+    // }else{
+    //     std::cout << "counter getter found: " << keynode->key << '\n';
+    // }
     return keynode == nullptr ? 0 : keynode->value;
 }
 

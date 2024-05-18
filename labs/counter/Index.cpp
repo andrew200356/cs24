@@ -76,13 +76,19 @@ void Index::insert_i(const std::string& key, int value, List* list) {
 
 List::Node* Index::find(const std::string& key) const {
     int index = hashFunction1(key);
+    int startIndex = index; // Remember the start index
+
     if (table[index] == nullptr || table[index]->key == key) {
         return table[index];
     } else {
         int step = hashFunction2(key);
         do {
             index = (index + step) % capacity;
+            if (index == startIndex) { // If we've checked all slots
+                break; // Break the loop
+            }
         } while (table[index] != nullptr && table[index]->key != key);
+
         return table[index];
     }
 }
