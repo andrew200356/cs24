@@ -8,6 +8,7 @@
 List::List() {
     head = nullptr;
     tail = nullptr;
+    size = 0;
 }
 
 // Destructor
@@ -53,6 +54,7 @@ List::Node* List::insert(const std::string& key, int value) {
     }
     tail = newNode;
 
+    size++;
     return newNode;
 }
 
@@ -71,6 +73,7 @@ void List::remove(List::Node* node) {
         tail = node->prev;
     }
 
+    size--;
     delete node;
 }
 
@@ -83,4 +86,8 @@ int List::getTotal() {
         current = current->next;
     }
     return total;
+}
+
+size_t List::getSize() {
+    return size;
 }

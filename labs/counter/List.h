@@ -28,6 +28,7 @@ class List {
     // Member Variables
     Node* head;
     Node* tail;
+    size_t size;
 
     // Constructor
     List();
@@ -40,6 +41,7 @@ class List {
     Node* insert(const std::string& key, int value);
     void remove(Node* node);
     int getTotal();
+    size_t getSize();
 };
 
 #endif

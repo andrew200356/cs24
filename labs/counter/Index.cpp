@@ -14,11 +14,11 @@ Index::~Index() {
 }
 
 // Member Functions
-int Index::getCount(){
+int Index::getCount() {
     return count;
 }
 
-int Index::getTotal(){
+int Index::getTotal() {
     int total = 0;
     for (int i = 0; i < capacity; i++) {
         if (table[i] != nullptr) {
@@ -49,7 +49,6 @@ void Index::insert_index(const std::string& key, int value, List* list) {
     table[index] = list->insert(key, value);  // list insert will insert and return the new node
 }
 
-
 void Index::insert_i(const std::string& key, int value, List* list) {
     if (count == capacity) {
         resizeAndRehash();
@@ -68,7 +67,7 @@ void Index::insert_i(const std::string& key, int value, List* list) {
     if (table[index] == nullptr) {
         count++;
         table[index] = list->insert(key, value);
-    }else{
+    } else {
         // If the index is not empty, increment the value
         table[index]->value += value;
     }
@@ -76,7 +75,7 @@ void Index::insert_i(const std::string& key, int value, List* list) {
 
 List::Node* Index::find(const std::string& key) const {
     int index = hashFunction1(key);
-    int startIndex = index; // Remember the start index
+    int startIndex = index;  // Remember the start index
 
     if (table[index] == nullptr || table[index]->key == key) {
         return table[index];
@@ -84,8 +83,8 @@ List::Node* Index::find(const std::string& key) const {
         int step = hashFunction2(key);
         do {
             index = (index + step) % capacity;
-            if (index == startIndex) { // If we've checked all slots
-                break; // Break the loop
+            if (index == startIndex) {  // If we've checked all slots
+                break;                  // Break the loop
             }
         } while (table[index] != nullptr && table[index]->key != key);
 
@@ -123,7 +122,7 @@ void Index::remove_i(const std::string& key, List* list) {
     if (table[index] == nullptr) {
         // If the key is not found, do nothing
         return;
-    } else if (table[index]->key == key) { // If the key is found
+    } else if (table[index]->key == key) {  // If the key is found
         List::Node* node = table[index];
         table[index] = nullptr;
         count--;

@@ -15,7 +15,7 @@ Counter::~Counter() {
 
 size_t Counter::count() const {
     // The count() function should return the number of keys stored in the counter.
-    return index->getCount();
+    return list->getSize();
 }
 
 int Counter::total() const {
@@ -33,6 +33,13 @@ void Counter::dec(const std::string& key, int by) {
 
 void Counter::del(const std::string& key) {
     // del(k) removes a key from the counter, setting its count to (implicit) zero.
+    
+    if(list->find(key))
+        std::cout << "found: " << key << " in the list" <<'\n';
+
+    if(index->find(key))
+        std::cout << "found: " << key << " in the index" <<'\n';
+
     index->remove_i(key, list);
 }
 
