@@ -56,7 +56,7 @@ List::Node* Index::find(const std::string& key) const {
     int startIndex = index;
     // std::cout << "finding key " << key << "out side while" << std::endl;
     //  if the index is not null and the key is not the same as the key we are looking for
-    while (table[index] == nullptr || table[index]->key != key) {
+     while (table[index] != nullptr && table[index]->key != key) {
         // std::cout << "finding key " << key << " at index " << index << std::endl;
         index = (index + 1) % capacity;
         if (index == startIndex) {  // Full loop, key not found
@@ -70,7 +70,7 @@ List::Node* Index::remove_i(const std::string& key, List* list) {
     int index = hashFunction(key);
     int startIndex = index;
 
-    while (table[index] == nullptr || table[index]->key != key) {
+    while (table[index] != nullptr && table[index]->key != key) {
         // std::cout << "finding key " << key << " at index " << index << std::endl;
         index = (index + 1) % capacity;
         if (index == startIndex) {  // Full loop, key not found
