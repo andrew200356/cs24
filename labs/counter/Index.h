@@ -3,15 +3,16 @@
 
 #include <cstddef>
 #include <string>
+
 #include "List.h"
 
 class Index {
-private:
+   private:
     int count;
     int capacity;
     List::Node** table;
 
-public:
+   public:
     Index(int capacity = 1000);
     ~Index();
     void resizeAndRehash();
@@ -19,8 +20,10 @@ public:
     void insert_i(const std::string& key, int value, List* list);
     List::Node* find(const std::string& key) const;
     List::Node* remove_i(const std::string& key, List* list);
+    void remove(int index, List* list);
     int getCount();
     int getTotal();
+    void debugPrint() const;
 };
 
 #endif

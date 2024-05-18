@@ -1,4 +1,5 @@
 #include "Index.h"
+
 #include <functional>
 #include <iostream>
 
@@ -53,24 +54,26 @@ void Index::insert_i(const std::string& key, int value, List* list) {
 List::Node* Index::find(const std::string& key) const {
     int index = hashFunction(key);
     int startIndex = index;
-
-    while (table[index] != nullptr && table[index]->key != key) {
+    // std::cout << "finding key " << key << "out side while" << std::endl;
+    //  if the index is not null and the key is not the same as the key we are looking for
+    while (table[index] == nullptr || table[index]->key != key) {
+        // std::cout << "finding key " << key << " at index " << index << std::endl;
         index = (index + 1) % capacity;
-        if (index == startIndex) { // Full loop, key not found
+        if (index == startIndex) {  // Full loop, key not found
             return nullptr;
         }
     }
 
     return table[index];
 }
-
 List::Node* Index::remove_i(const std::string& key, List* list) {
     int index = hashFunction(key);
     int startIndex = index;
 
-    while (table[index] != nullptr && table[index]->key != key) {
+    while (table[index] == nullptr || table[index]->key != key) {
+        // std::cout << "finding key " << key << " at index " << index << std::endl;
         index = (index + 1) % capacity;
-        if (index == startIndex) { // Full loop, key not found
+        if (index == startIndex) {  // Full loop, key not found
             return nullptr;
         }
     }
@@ -83,6 +86,16 @@ List::Node* Index::remove_i(const std::string& key, List* list) {
         count--;
         list->remove(node);
         return node;
+    }
+}
+
+void Index::remove(int index, List* list) {
+    // remove the node at given index
+    if (table[index] != nullptr) {
+        List::Node* node = table[index];
+        list->remove(node);
+        table[index] = nullptr;
+        count--;
     }
 }
 
@@ -107,4 +120,13 @@ void Index::resizeAndRehash() {
     }
 
     delete[] oldTable;
+}
+
+// function to print every node in the table
+void Index::debugPrint() const {
+    for (int i = 0; i < capacity; i++) {
+        if (table[i] != nullptr) {
+            std::cout << "Index: " << i << ", Key: " << table[i]->key << ", Value: " << table[i]->value << std::endl;
+        }
+    }
 }

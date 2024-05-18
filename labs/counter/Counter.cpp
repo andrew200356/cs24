@@ -4,7 +4,7 @@
 Counter::Counter() {
     // The constructor should initialize any member variables.
     list = new List();
-    index = new Index(50);
+    index = new Index(200);
 }
 
 Counter::~Counter() {
@@ -34,11 +34,11 @@ void Counter::dec(const std::string& key, int by) {
 void Counter::del(const std::string& key) {
     // del(k) removes a key from the counter, setting its count to (implicit) zero.
 
-    // if(list->find(key))
-    //     std::cout << "found: " << key << " in the list" <<'\n';
+    // if (list->find(key))
+    //     std::cout << "found: " << key << " in the list" << '\n';
 
-    // if(index->find(key))
-    //     std::cout << "found: " << key << " in the index" <<'\n';
+    // if (index->find(key))
+    //     std::cout << "found: " << key << " in the index" << '\n';
 
     index->remove_i(key, list);
 }
@@ -71,13 +71,12 @@ void Counter::set(const std::string& key, int count) {
 
 void Counter::print() const {
     // bebug print function
+    index->debugPrint();
+}
 
-    List::Node* node = list->head;
-
-    while (node != nullptr) {
-        std::cout << node->key << ": " << node->value << '\n';
-        node = node->next;
-    }
+void Counter::dellist(int i) const {
+    // remove some keys
+    index->remove(i, list);
 }
 
 Counter::Iterator Counter::begin() const {
