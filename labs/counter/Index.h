@@ -6,16 +6,12 @@
 
 #include "List.h"
 
-class Index {
-    struct Bucket {
-        List::Node* node;
-        bool isDirty;
+extern List::Node* const DIRTY;
 
-        Bucket() : node(nullptr), isDirty(false) {}
-    };
+class Index {
     int count;
     int capacity;
-    Bucket* table;
+    List::Node** table;
 
    public:
     Index(int capacity = 1000);

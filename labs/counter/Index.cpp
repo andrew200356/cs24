@@ -3,11 +3,14 @@
 #include <functional>
 #include <iostream>
 
+// Dirty node
+List::Node* const DIRTY = reinterpret_cast<List::Node*>(1);  // c++ style of (List::Node*) 1
+
 // Index Member Functions
 Index::Index(int capacity) : count(0), capacity(capacity) {
-    table = new Bucket[capacity];
+    table = new List::Node*[capacity];
     for (int i = 0; i < capacity; i++) {
-        table[i] = Bucket();
+        table[i] = nullptr;
     }
 }
 
@@ -22,8 +25,8 @@ int Index::getCount() {
 int Index::getTotal() {
     int total = 0;
     for (int i = 0; i < capacity; i++) {
-        if (table[i].node != nullptr) {
-            total += table[i].node->value;
+        if (table[i] != nullptr && table[i] != DIRTY) {
+            total += table[i]->value;
         }
     }
     return total;
@@ -39,84 +42,92 @@ void Index::insert_i(const std::string& key, int value, List* list) {
     }
 
     int index = hashFunction(key);
-    while (table[index].node != nullptr && table[index].node->key != key) {
+    int firstDirtyIndex = -1;
+    while (table[index] != nullptr && table[index]->key != key) {
+        if (firstDirtyIndex == -1 && table[index] == DIRTY) {
+            firstDirtyIndex = index;
+        }
         index = (index + 1) % capacity;
     }
 
-    if (table[index].node == nullptr) {
+    if (table[index] == nullptr) {
         count++;
-        table[index].node = list->insert(key, value);
-        table[index].isDirty = false;
-    } else {
-        table[index].node->value += value;
+        if (firstDirtyIndex != -1) {
+            index = firstDirtyIndex;  // Fill in the first DIRTY slot we found
+        }
+        table[index] = list->insert(key, value);
+    } else if (table[index]->key == key) {
+        table[index]->value += value;
     }
 }
 
 List::Node* Index::find(const std::string& key) const {
     int index = hashFunction(key);
     int startIndex = index;
-
-    while (table[index].node != nullptr || table[index].isDirty) {
-        if (table[index].node != nullptr && table[index].node->key == key) {
-            return table[index].node;
-        }
+    // std::cout << "finding key " << key << "out side while" << std::endl;
+    //  if the index is not null and the key is not the same as the key we are looking for
+    while (table[index] != nullptr && table[index] != DIRTY && table[index]->key != key) {
+        // std::cout << "finding key " << key << " at index " << index << std::endl;
         index = (index + 1) % capacity;
         if (index == startIndex) {  // Full loop, key not found
             return nullptr;
         }
     }
 
-    return nullptr;
+    return table[index];
 }
 
 List::Node* Index::remove_i(const std::string& key, List* list) {
     int index = hashFunction(key);
     int startIndex = index;
 
-    while (table[index].node != nullptr || table[index].isDirty) {
-        if (table[index].node != nullptr && table[index].node->key == key) {
-            List::Node* node = table[index].node;
-            list->remove(node);
-            table[index].node = nullptr;
-            table[index].isDirty = true;
-            return node;
-        }
+    while (table[index] != nullptr && table[index] != DIRTY && table[index]->key != key) {
         index = (index + 1) % capacity;
         if (index == startIndex) {  // Full loop, key not found
             return nullptr;
         }
     }
 
-    return nullptr;
+    if (table[index] == nullptr || table[index] == DIRTY) {
+        return nullptr;
+    }
+
+    List::Node* node = table[index];
+    table[index] = DIRTY;
+    count--;
+    if (node != DIRTY) {
+        list->remove(node);
+    }
+    return node;
 }
 
 void Index::remove(int index, List* list) {
     // remove the node at given index
-    if (table[index].node != nullptr) {
-        List::Node* node = table[index].node;
+    if (table[index] != nullptr) {
+        List::Node* node = table[index];
         list->remove(node);
-        table[index].node = nullptr;
+        table[index] = nullptr;
         count--;
     }
 }
 
 void Index::resizeAndRehash() {
     int oldCapacity = capacity;
-    Bucket* oldTable = table;
+    List::Node** oldTable = table;
 
     capacity = (count + 1) * 2;
-    table = new Bucket[capacity];
+    table = new List::Node*[capacity];
     for (int i = 0; i < capacity; i++) {
-        table[i] = Bucket();
+        table[i] = nullptr;
     }
 
     for (int i = 0; i < oldCapacity; i++) {
-        if (oldTable[i].node != nullptr) {
-            int index = hashFunction(oldTable[i].node->key);
-            while (table[index].node != nullptr) {
+        if (oldTable[i] != nullptr && oldTable[i] != DIRTY) {
+            int index = hashFunction(oldTable[i]->key);
+            while (table[index] != nullptr) {
                 index = (index + 1) % capacity;
             }
-            table[index].node = oldTable[i].node;
+            table[index] = oldTable[i];
         }
     }
 
@@ -126,8 +137,12 @@ void Index::resizeAndRehash() {
 // function to print every node in the table
 void Index::debugPrint() const {
     for (int i = 0; i < capacity; i++) {
-        if (table[i].node != nullptr) {
-            std::cout << "Index: " << i << ", Key: " << table[i].node->key << ", Value: " << table[i].node->value << std::endl;
+        if (table[i] == nullptr) {
+            // Handle null nodes
+        } else if (table[i] == DIRTY) {
+            // Handle dirty nodes
+        } else {
+            std::cout << "Index: " << i << ", Key: " << table[i]->key << ", Value: " << table[i]->value << std::endl;
         }
     }
 }
