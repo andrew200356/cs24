@@ -61,6 +61,8 @@ void Index::insert_i(const std::string& key, int value, List* list) {
     }
 }
 
+
+
 List::Node* Index::find(const std::string& key) const {
     int index = hashFunction(key);
     int startIndex = index;
