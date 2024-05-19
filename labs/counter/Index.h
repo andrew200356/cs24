@@ -7,10 +7,15 @@
 #include "List.h"
 
 class Index {
-   private:
+    struct Bucket {
+        List::Node* node;
+        bool isDirty;
+
+        Bucket() : node(nullptr), isDirty(false) {}
+    };
     int count;
     int capacity;
-    List::Node** table;
+    Bucket* table;
 
    public:
     Index(int capacity = 1000);
