@@ -61,12 +61,7 @@ int Counter::get(const std::string& key) const {
 
 void Counter::set(const std::string& key, int count) {
     // set(k, v) sets a count by key.
-    List::Node* keynode = index->find(key);
-    if (keynode == nullptr) {
-        index->insert_i(key, count, list);
-        return;
-    }
-    keynode->value = count;
+    index->set_i(key, count, list);
 }
 
 void Counter::print() const {

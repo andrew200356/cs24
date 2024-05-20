@@ -23,3 +23,4 @@ labs/counter/main
 labs/counter/charc
 labs/counter/wordc
 labs/counter/wordc1
+labs/counter/data/*/*.txt

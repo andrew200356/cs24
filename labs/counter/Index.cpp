@@ -61,6 +61,31 @@ void Index::insert_i(const std::string& key, int value, List* list) {
     }
 }
 
+void Index::set_i(const std::string& key, int value, List* list) {
+    if (count == capacity) {
+        resizeAndRehash();
+    }
+
+    int index = hashFunction(key);
+    int firstDirtyIndex = -1;
+    while (table[index] != nullptr && table[index]->key != key) {
+        if (firstDirtyIndex == -1 && table[index] == DIRTY) {
+            firstDirtyIndex = index;
+        }
+        index = (index + 1) % capacity;
+    }
+
+    if (table[index] == nullptr) {
+        count++;
+        if (firstDirtyIndex != -1) {
+            index = firstDirtyIndex;  // Fill in the first DIRTY slot we found
+        }
+        table[index] = list->insert(key, value);
+    } else if (table[index]->key == key) {
+        table[index]->value = value;
+    }
+}
+
 
 
 List::Node* Index::find(const std::string& key) const {
