@@ -1,3 +1,4 @@
+#include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -13,14 +14,11 @@
 
 std::string sanitize(const std::string& word) {
     std::string result;
-    std::cout << "Sanitizing word: " << word << '\n';  // Debug line
     for (char c : word) {
-        // std::cout << "Sanitizing character: " << c << '\n';  // Debug line
         if (isalpha(c)) {
             result += toupper(c);
         }
     }
-
     return result;
 }
 
@@ -41,16 +39,16 @@ void print_results(const char* filename, const Counter& counter) {
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << "USAGE: " << argv[0] << "[filename] [...]\n";
+        std::cerr << "USAGE: " << argv[0] << " [filename] [...]\n";
         return 1;
     }
+
+    auto start_time = std::chrono::high_resolution_clock::now(); // Start timing
 
     Counter totals;
 
     print_header();
     for (int i = 1; i < argc; ++i) {
-        std::cout << "Processing file: " << argv[i] << '\n';  // Debug line
-
         std::ifstream stream(argv[i]);
         if (stream.fail()) {
             std::cerr << "ERROR: Could not open file: " << argv[i] << '\n';
@@ -61,17 +59,14 @@ int main(int argc, char** argv) {
         std::string token;
 
         while (stream >> token) {
-            std::cout << "Processing token: " << token << '\n';  // Debug line
             counter.inc("[tokens]");
 
             std::string word = sanitize(token);
             if (word.length() == 0) {
                 continue;
             }
-            std::cout << "before get: " << word << '\n';  // Debug line
 
             int count = counter.get(word);
-            std::cout << "Count of " << word << " is " << count << '\n';  // Debug line
             counter.set(word, count + 1);
         }
 
@@ -82,5 +77,10 @@ int main(int argc, char** argv) {
     }
 
     print_results("TOTAL", totals);
+
+    auto end_time = std::chrono::high_resolution_clock::now(); // End timing
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    std::cout << "Total runtime: " << duration.count() << " milliseconds" << std::endl;
+
     return 0;
 }
