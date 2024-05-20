@@ -1,3 +1,4 @@
+
 #include <chrono>
 #include <fstream>
 #include <iomanip>
@@ -43,7 +44,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    auto start_time = std::chrono::high_resolution_clock::now(); // Start timing
+    auto start_time = std::chrono::high_resolution_clock::now();  // Start timing
 
     Counter totals;
 
@@ -78,7 +79,7 @@ int main(int argc, char** argv) {
 
     print_results("TOTAL", totals);
 
-    auto end_time = std::chrono::high_resolution_clock::now(); // End timing
+    auto end_time = std::chrono::high_resolution_clock::now();  // End timing
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
     std::cout << "Total runtime: " << duration.count() << " milliseconds" << std::endl;
 
