@@ -1,19 +1,19 @@
+// Index.h
+
 #ifndef INDEX_H
 #define INDEX_H
 
 #include <cstddef>
 #include <string>
-
 #include "List.h"
 
-extern List::Node* const DIRTY;
-
 class Index {
+   public:
     int count;
     int capacity;
-    List::Node** table;
+    List::Node** table;  // hash table for the index
+    static List::Node* const DIRTY;  // Sentinel for dirty nodes
 
-   public:
     Index(int capacity = 1000);
     ~Index();
     void resizeAndRehash();
@@ -21,8 +21,7 @@ class Index {
     void insert_i(const std::string& key, int value, List* list);
     void set_i(const std::string& key, int value, List* list);
     List::Node* find(const std::string& key) const;
-    List::Node* remove_i(const std::string& key, List* list);
-    void remove(int index, List* list);
+    void remove_i(const std::string& key, List* list);
     int getCount();
     int getTotal();
     void debugPrint() const;

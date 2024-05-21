@@ -52,7 +52,6 @@ class Counter {
     int get(const std::string& key) const;
     void set(const std::string& key, int count);
     void print() const;  // debug print
-    void dellist(int index) const;  // debug print
 
     Iterator begin() const;
     Iterator end() const;

@@ -69,11 +69,6 @@ void Counter::print() const {
     index->debugPrint();
 }
 
-void Counter::dellist(int i) const {
-    // remove some keys
-    index->remove(i, list);
-}
-
 Counter::Iterator Counter::begin() const {
     // The begin() function should return an iterator to the first-inserted item in the counter.
     return Iterator(list->head);

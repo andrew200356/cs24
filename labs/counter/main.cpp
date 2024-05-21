@@ -93,9 +93,6 @@ int main(int argc, char** argv) {
             } else if (command == "printl" || command == "pl") {
                 // debug print
                 counter.print();
-            } else if (command == "dell" || command == "rl") {
-                int index = read_value(stream);
-                counter.dellist(index);
             } else if (command == "exit" || command == "x") {
                 break;
             } else if (command == "inc" || command == "i") {
