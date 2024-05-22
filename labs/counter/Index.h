@@ -10,8 +10,8 @@
 
 class Index {
    public:
-    int count;
-    int capacity;
+    size_t count;
+    size_t capacity;
     List::Node** table;              // hash table for the index
     static List::Node* const DIRTY;  // Sentinel for dirty nodes
 

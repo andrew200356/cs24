@@ -71,7 +71,7 @@ int Index::hashFunction(const std::string& key) const {
 }
 
 Index::Index(int capacity) : count(0), capacity(capacity) {
-    table = new List::Node*[capacity];  // Initialize the array of List::Node pointers
+    table = new List::Node*[capacity]();  // Initialize the array of List::Node pointers
 
     // initiailize the table with nullptr
     for (int i = 0; i < capacity; i++) {
@@ -89,7 +89,7 @@ int Index::getCount() {
 
 int Index::getTotal() {
     int total = 0;
-    for (int i = 0; i < capacity; i++) {
+    for (size_t i = 0; i < capacity; i++) {
         if (table[i] != nullptr && table[i] != DIRTY) {
             total += table[i]->value;
         }
@@ -102,7 +102,7 @@ void Index::insert_i(const std::string& key, int value, List* list) {
         resizeAndRehash();
     }
 
-    int index = hashFunction(key) % capacity;
+    size_t index = hashFunction(key) % capacity;
     int i = 1;
 
     while (table[index] != nullptr && table[index] != DIRTY && table[index]->key != key) {
@@ -175,21 +175,21 @@ void Index::remove_i(const std::string& key, List* list) {
 
 void Index::resizeAndRehash() {
     // std::cout << "resized\n";
-    int oldCapacity = capacity;
+    size_t oldCapacity = capacity;
     List::Node** oldTable = table;
 
     capacity = (count + 1) * 2;
     table = new List::Node*[capacity];
 
     // initiailize the table with nullptr
-    for (int i = 0; i < capacity; i++) {
+    for (size_t i = 0; i < capacity; i++) {
         table[i] = nullptr;
     }
 
-    for (int i = 0; i < oldCapacity; i++) {
+    for (size_t i = 0; i < oldCapacity; i++) {
         if (oldTable[i] != nullptr && oldTable[i] != DIRTY) {
-            int index = hashFunction(oldTable[i]->key) % capacity;
-            int j = 1;
+            size_t index = hashFunction(oldTable[i]->key) % capacity;
+            size_t j = 1;
             while (table[index] != nullptr) {
                 index = (index + j * j) % capacity;
                 j++;
@@ -202,7 +202,7 @@ void Index::resizeAndRehash() {
 }
 
 void Index::debugPrint() const {
-    for (int i = 0; i < capacity; i++) {
+    for (size_t i = 0; i < capacity; i++) {
         if (table[i] != nullptr && table[i] != DIRTY) {
             std::cout << "Index: " << i << ", Key: " << table[i]->key << ", Value: " << table[i]->value << std::endl;
         }
