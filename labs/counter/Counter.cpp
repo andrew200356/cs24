@@ -32,30 +32,11 @@ void Counter::dec(const std::string& key, int by) {
 }
 
 void Counter::del(const std::string& key) {
-    // del(k) removes a key from the counter, setting its count to (implicit) zero.
-
-    // if (list->find(key))
-    //     std::cout << "found: " << key << " in the list" << '\n';
-
-    // if (index->find(key))
-    //     std::cout << "found: " << key << " in the index" << '\n';
-
     index->remove_i(key, list);
 }
 
 int Counter::get(const std::string& key) const {
-    // get(k) looks up a count by key. If the key isn't present, it returns zero.
-
-    // std::cout << "counter getter trying to get: " << key << '\n';
-
     List::Node* keynode = index->find(key);
-
-    // if (keynode == nullptr)
-    // {
-    //     std::cout << "counter getter not found: " << key << '\n';
-    // }else{
-    //     std::cout << "counter getter found: " << keynode->key << '\n';
-    // }
     return keynode == nullptr ? 0 : keynode->value;
 }
 

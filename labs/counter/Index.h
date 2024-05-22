@@ -14,6 +14,7 @@ class Index {
     size_t capacity;
     List::Node** table;              // hash table for the index
     static List::Node* const DIRTY;  // Sentinel for dirty nodes
+    mutable List::Node* wanted;      // Cache for the last found node
 
     Index(int capacity = 1000);
     ~Index();
