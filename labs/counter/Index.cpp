@@ -1,6 +1,7 @@
 // Index.cpp
 
 #include "Index.h"
+
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -60,11 +61,17 @@ uint32_t MurmurHash3(const char* key, uint32_t len, uint32_t seed = 42) {
 }
 
 int Index::hashFunction(const std::string& key) const {
-    return MurmurHash3(key.c_str(), key.size()) % capacity;
+    size_t hash = 5381;
+    for (char c : key) {
+        hash = 33 * hash + c;
+    }
+    return hash;
+
+    // return MurmurHash3(key.c_str(), key.size()) % capacity;
 }
 
 Index::Index(int capacity) : count(0), capacity(capacity) {
-    table = new List::Node*[capacity](); // Initialize the array of List::Node pointers
+    table = new List::Node*[capacity]();  // Initialize the array of List::Node pointers
 }
 
 Index::~Index() {
@@ -90,7 +97,7 @@ void Index::insert_i(const std::string& key, int value, List* list) {
         resizeAndRehash();
     }
 
-    int index = hashFunction(key);
+    int index = hashFunction(key) % capacity;
     int i = 1;
 
     while (table[index] != nullptr && table[index] != DIRTY && table[index]->key != key) {
@@ -110,15 +117,18 @@ void Index::set_i(const std::string& key, int value, List* list) {
     if (static_cast<double>(count) / capacity > 0.7) {  // Resize and rehash if load factor > 0.7
         resizeAndRehash();
     }
-
-    int index = hashFunction(key);
+    // std::cout << "right after resize" << std::endl;
+    int index = hashFunction(key) % capacity;
+    // std::cout << "lol\n";
     int i = 1;
 
     while (table[index] != nullptr && table[index] != DIRTY && table[index]->key != key) {
+        // std::cout << "inside the while loop \n";
         index = (index + i * i) % capacity;
         i++;
     }
 
+    // std::cout << "after the while loop \n";
     if (table[index] == nullptr || table[index] == DIRTY) {
         count++;
         table[index] = list->insert(key, value);
@@ -128,7 +138,7 @@ void Index::set_i(const std::string& key, int value, List* list) {
 }
 
 List::Node* Index::find(const std::string& key) const {
-    int index = hashFunction(key);
+    int index = hashFunction(key) % capacity;
     int i = 1;
 
     while (table[index] != nullptr) {
@@ -143,7 +153,7 @@ List::Node* Index::find(const std::string& key) const {
 }
 
 void Index::remove_i(const std::string& key, List* list) {
-    int index = hashFunction(key);
+    int index = hashFunction(key) % capacity;
     int i = 1;
 
     while (table[index] != nullptr) {
@@ -159,6 +169,7 @@ void Index::remove_i(const std::string& key, List* list) {
 }
 
 void Index::resizeAndRehash() {
+    // std::cout << "resized\n";
     int oldCapacity = capacity;
     List::Node** oldTable = table;
 
@@ -167,7 +178,7 @@ void Index::resizeAndRehash() {
 
     for (int i = 0; i < oldCapacity; i++) {
         if (oldTable[i] != nullptr && oldTable[i] != DIRTY) {
-            int index = hashFunction(oldTable[i]->key);
+            int index = hashFunction(oldTable[i]->key) % capacity;
             int j = 1;
             while (table[index] != nullptr) {
                 index = (index + j * j) % capacity;

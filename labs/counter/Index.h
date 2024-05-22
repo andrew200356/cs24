@@ -5,13 +5,14 @@
 
 #include <cstddef>
 #include <string>
+
 #include "List.h"
 
 class Index {
    public:
     int count;
     int capacity;
-    List::Node** table;  // hash table for the index
+    List::Node** table;              // hash table for the index
     static List::Node* const DIRTY;  // Sentinel for dirty nodes
 
     Index(int capacity = 1000);
