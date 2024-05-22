@@ -85,7 +85,6 @@ int main(int argc, char** argv) {
         }
 
         print_results(argv[i], counter);
-        totals.print();
     }
 
     print_results("TOTAL", totals);

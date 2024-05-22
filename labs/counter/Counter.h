@@ -15,6 +15,7 @@ class Counter {
     // Member Variables
     List* list;    // Declare the List for the Counter
     Index* index;  // Declare the Index for the Counter
+    int mTotal;
 
    public:
     class Iterator {
@@ -32,12 +33,6 @@ class Counter {
         bool operator==(const Iterator& other) const;
         bool operator!=(const Iterator& other) const;
     };
-
-   private:
-    // Member Variables
-
-   private:
-    // Helper Functions
 
    public:
     Counter();

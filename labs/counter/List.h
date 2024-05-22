@@ -1,12 +1,7 @@
+// List.h
+
 #ifndef LIST_H
 #define LIST_H
-
-// Double Linked List that stores a key and a value
-// (std::string, int) pairs
-// The list should support insertion at the tail,
-// finding the node that contains a given string,
-// and removal of any node.
-// this is the header file for the List class
 
 #include <string>
 
@@ -21,27 +16,25 @@ class List {
         Node* prev;
 
         // Constructor
-        Node(const std::string& key, int value, Node* next, Node* prev)
+        Node(const std::string& key, int value, Node* next = nullptr, Node* prev = nullptr)
             : key(key), value(value), next(next), prev(prev) {}
     };
 
-    // Member Variables
     Node* head;
     Node* tail;
     size_t size;
-
+    
     // Constructor
     List();
-
     // Destructor
     ~List();
 
     // Member Functions
     Node* find(const std::string& key) const;
-    Node* insert(const std::string& key, int value);
+    Node* push(const std::string& key, int value);
     void remove(Node* node);
-    int getTotal();
-    size_t getSize();
+    int getTotal() const;
+    size_t getSize() const;
 };
 
 #endif

@@ -20,19 +20,35 @@ size_t Counter::count() const {
 
 int Counter::total() const {
     // total() returns the sum of all counts in the counter.
-    return index->getTotal();
+    return list->getTotal();
 }
 
 void Counter::inc(const std::string& key, int by) {
-    index->insert_i(key, by, list);
+    List::Node* node = index->find(key);
+    if (node) {
+        node->value += by;
+    } else {
+        node = list->push(key, by);
+        index->push(key, node);
+    }
 }
 
 void Counter::dec(const std::string& key, int by) {
-    index->insert_i(key, -by, list);
+    List::Node* node = index->find(key);
+    if (node) {
+        node->value -= by;
+    } else {
+        node = list->push(key, -by);
+        index->push(key, node);
+    }
 }
 
 void Counter::del(const std::string& key) {
-    index->remove_i(key, list);
+    List::Node* node = index->find(key);
+    if (node) {
+        index->remove(key);
+        list->remove(node);
+    }
 }
 
 int Counter::get(const std::string& key) const {
@@ -41,13 +57,13 @@ int Counter::get(const std::string& key) const {
 }
 
 void Counter::set(const std::string& key, int count) {
-    // set(k, v) sets a count by key.
-    index->set_i(key, count, list);
-}
-
-void Counter::print() const {
-    // bebug print function
-    index->debugPrint();
+    List::Node* node = index->find(key);
+    if (node) {
+        node->value = count;
+    } else {
+        node = list->push(key, count);
+        index->push(key, node);
+    }
 }
 
 Counter::Iterator Counter::begin() const {

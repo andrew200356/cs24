@@ -5,28 +5,26 @@
 
 #include <cstddef>
 #include <string>
-
 #include "List.h"
 
 class Index {
-   public:
-    size_t count;
-    size_t capacity;
-    List::Node** table;              // hash table for the index
-    static List::Node* const DIRTY;  // Sentinel for dirty nodes
-    mutable List::Node* wanted;      // Cache for the last found node
+public:
+    static List::Node* const DIRTY; // Sentinel for dirty nodes
 
     Index(int capacity = 85000);
     ~Index();
-    void resizeAndRehash();
-    int hashFunction(const std::string& key) const;
-    void insert_i(const std::string& key, int value, List* list);
-    void set_i(const std::string& key, int value, List* list);
+    
+    void push(const std::string& key, List::Node* node);
     List::Node* find(const std::string& key) const;
-    void remove_i(const std::string& key, List* list);
-    int getCount();
-    int getTotal();
-    void debugPrint() const;
+    void remove(const std::string& key);
+
+private:
+    size_t count;
+    size_t capacity;
+    List::Node** table;
+
+    int hashFunction(const std::string& key) const;
+    void resizeAndRehash();
 };
 
 #endif
