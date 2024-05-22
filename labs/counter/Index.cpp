@@ -25,11 +25,6 @@ int Index::hashFunction(const std::string& key) const {
 
 Index::Index(int capacity) : count(0), capacity(capacity) {
     table = new List::Node*[capacity]();  // Initialize the array of List::Node pointers
-
-    // initiailize the table with nullptr
-    for (int i = 0; i < capacity; i++) {
-        table[i] = nullptr;
-    }
 }
 
 Index::~Index() {
@@ -132,12 +127,7 @@ void Index::resizeAndRehash() {
     List::Node** oldTable = table;
 
     capacity = (count + 1) * 2;
-    table = new List::Node*[capacity];
-
-    // initiailize the table with nullptr
-    for (size_t i = 0; i < capacity; i++) {
-        table[i] = nullptr;
-    }
+    table = new List::Node*[capacity]();
 
     for (size_t i = 0; i < oldCapacity; i++) {
         if (oldTable[i] != nullptr && oldTable[i] != DIRTY) {

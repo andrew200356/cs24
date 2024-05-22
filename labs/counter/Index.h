@@ -16,7 +16,7 @@ class Index {
     static List::Node* const DIRTY;  // Sentinel for dirty nodes
     mutable List::Node* wanted;      // Cache for the last found node
 
-    Index(int capacity = 1000);
+    Index(int capacity = 85000);
     ~Index();
     void resizeAndRehash();
     int hashFunction(const std::string& key) const;
