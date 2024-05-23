@@ -87,13 +87,13 @@ void Index::resizeAndRehash() {
     size_t oldCapacity = capacity;
     List::Node** oldTable = table;
 
-    capacity = (count + 1) * 2;
+    capacity = count * 2;
     table = new List::Node*[capacity]();
 
     for (size_t i = 0; i < oldCapacity; ++i) {
         if (oldTable[i] && oldTable[i] != DIRTY) {
-            int index = hashFunction(oldTable[i]->key) % capacity;
-            int j = 1;
+            size_t index = hashFunction(oldTable[i]->key) % capacity;
+            size_t j = 1;
             while (table[index]) {
                 index = (index + j * j) % capacity;
                 ++j;
