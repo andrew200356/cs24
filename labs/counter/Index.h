@@ -26,7 +26,6 @@ class Index {
     mutable List::Node* wanted = nullptr;
 
     int hashFunction(const std::string& key) const;
-    int secondaryHashFunction(const std::string& key) const;
     void resizeAndRehash();
 };
 
