@@ -21,10 +21,14 @@ uint32_t JenkinsOneAtATimeHash(const std::string& key) {
 // Primary hash function (FNV-1a)
 int Index::hashFunction(const std::string& key) const {
     // return static_cast<int>(JenkinsOneAtATimeHash(key));
-    uint32_t hash = FNV_32_OFFSET_BASIS;
+    // uint32_t hash = FNV_32_OFFSET_BASIS;
+    // for (char c : key) {
+    //     hash ^= static_cast<uint32_t>(c);
+    //     hash *= FNV_32_PRIME;
+    // }
+    uint32_t hash = 5381;
     for (char c : key) {
-        hash ^= static_cast<uint32_t>(c);
-        hash *= FNV_32_PRIME;
+        hash = ((hash << 5) + hash) + static_cast<uint8_t>(c);  // hash * 33 + c
     }
     return static_cast<int>(hash);
 }
