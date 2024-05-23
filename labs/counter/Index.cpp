@@ -47,8 +47,8 @@ Index::~Index() {
 
 List::Node* Index::find(const std::string& key) const {
     if (key.size() == 1) {
-        char upperKey = std::toupper(key[0]);
-        int charIndex = getCharIndex(upperKey);
+        char k = key[0];
+        int charIndex = getCharIndex(k);
         if (charIndex != -1) {
             return charTable[charIndex];
         }
@@ -67,8 +67,8 @@ List::Node* Index::find(const std::string& key) const {
 
 void Index::push(const std::string& key, List::Node* node) {
     if (key.size() == 1) {
-        char upperKey = std::toupper(key[0]);
-        int charIndex = getCharIndex(upperKey);
+        char k = key[0];
+        int charIndex = getCharIndex(k);
         if (charIndex != -1) {
             charTable[charIndex] = node;
             return;
@@ -88,8 +88,8 @@ void Index::push(const std::string& key, List::Node* node) {
 
 void Index::remove(const std::string& key) {
     if (key.size() == 1) {
-        char upperKey = std::toupper(key[0]);
-        int charIndex = getCharIndex(upperKey);
+        char k = key[0];
+        int charIndex = getCharIndex(k);
         if (charIndex != -1) {
             charTable[charIndex] = nullptr;
             return;
