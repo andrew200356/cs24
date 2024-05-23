@@ -23,10 +23,12 @@ class Index {
     size_t count;
     size_t capacity;
     List::Node** table;
+    List::Node** charTable;  // Table for storing nodes of 'a'-'z' and 'A'-'Z'
     mutable List::Node* wanted = nullptr;
 
     int hashFunction(const std::string& key) const;
     void resizeAndRehash();
+    int getCharIndex(char c) const;
 };
 
 #endif
