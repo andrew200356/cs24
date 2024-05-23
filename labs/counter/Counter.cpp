@@ -1,7 +1,7 @@
 #include "Counter.h"
 
 // Counter Member Functions
-Counter::Counter() {
+Counter::Counter() : mtotal(0) {
     // The constructor should initialize any member variables.
     list = new List();
     index = new Index();
@@ -20,7 +20,7 @@ size_t Counter::count() const {
 
 int Counter::total() const {
     // total() returns the sum of all counts in the counter.
-    return list->getTotal();
+    return mtotal;
 }
 
 void Counter::inc(const std::string& key, int by) {
@@ -31,6 +31,7 @@ void Counter::inc(const std::string& key, int by) {
         node = list->push(key, by);
         index->push(key, node);
     }
+    mtotal += by;
 }
 
 void Counter::dec(const std::string& key, int by) {
@@ -41,11 +42,13 @@ void Counter::dec(const std::string& key, int by) {
         node = list->push(key, -by);
         index->push(key, node);
     }
+    mtotal -= by;
 }
 
 void Counter::del(const std::string& key) {
     List::Node* node = index->find(key);
     if (node) {
+        mtotal -= node->value;
         index->remove(key);
         list->remove(node);
     }
@@ -59,10 +62,12 @@ int Counter::get(const std::string& key) const {
 void Counter::set(const std::string& key, int count) {
     List::Node* node = index->find(key);
     if (node) {
+        mtotal += count - node->value;
         node->value = count;
     } else {
         node = list->push(key, count);
         index->push(key, node);
+        mtotal += count;
     }
 }
 

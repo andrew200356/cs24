@@ -15,7 +15,7 @@ class Counter {
     // Member Variables
     List* list;    // Declare the List for the Counter
     Index* index;  // Declare the Index for the Counter
-    int mTotal;
+    int mtotal;
 
    public:
     class Iterator {
