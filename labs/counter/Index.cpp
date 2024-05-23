@@ -1,7 +1,6 @@
 #include "Index.h"
-
 #include <cstdint>
-#include <cstring>  // For memset
+#include <cstring> // For memset
 
 List::Node* const Index::DIRTY = reinterpret_cast<List::Node*>(1);
 
@@ -19,16 +18,23 @@ int Index::hashFunction(const std::string& key) const {
 }
 
 // Helper function to get index in charTable
-int Index::getCharIndex(char c) const {
+int Index::getCharIndex(std::string str) const {
+    if (str.size() != 1) {
+        return -1;
+    }
+    char c = str[0];
     if (c >= 'A' && c <= 'Z') {
         return c - 'A';
+    } else if (c >= 'a' && c <= 'z') {
+        return c - 'a' + 26;
     }
     return -1;
 }
 
 Index::Index(int capacity) : count(0), capacity(capacity) {
     table = new List::Node*[capacity]();
-    charTable = new List::Node*[26]();
+    charTable = new List::Node*[52](); // Initialize charTable for 52 characters
+    std::memset(charTable, 0, sizeof(List::Node*) * 52);
 }
 
 Index::~Index() {
@@ -37,12 +43,9 @@ Index::~Index() {
 }
 
 List::Node* Index::find(const std::string& key) const {
-    if (key.size() == 1) {
-        char upperKey = std::toupper(key[0]);
-        int charIndex = getCharIndex(upperKey);
-        if (charIndex != -1) {
-            return charTable[charIndex];
-        }
+    int charIndex = getCharIndex(key);
+    if (charIndex != -1) {
+        return charTable[charIndex];
     }
 
     size_t index = hashFunction(key) % capacity;
@@ -60,13 +63,10 @@ List::Node* Index::find(const std::string& key) const {
 }
 
 void Index::push(const std::string& key, List::Node* node) {
-    if (key.size() == 1) {
-        char upperKey = std::toupper(key[0]);
-        int charIndex = getCharIndex(upperKey);
-        if (charIndex != -1) {
-            charTable[charIndex] = node;
-            return;
-        }
+    int charIndex = getCharIndex(key);
+    if (charIndex != -1) {
+        charTable[charIndex] = node;
+        return;
     }
 
     if (static_cast<double>(count) / capacity > 0.7) {
@@ -90,13 +90,10 @@ void Index::push(const std::string& key, List::Node* node) {
 }
 
 void Index::remove(const std::string& key) {
-    if (key.size() == 1) {
-        char upperKey = std::toupper(key[0]);
-        int charIndex = getCharIndex(upperKey);
-        if (charIndex != -1) {
-            charTable[charIndex] = nullptr;
-            return;
-        }
+    int charIndex = getCharIndex(key);
+    if (charIndex != -1) {
+        charTable[charIndex] = nullptr;
+        return;
     }
 
     size_t index = hashFunction(key) % capacity;

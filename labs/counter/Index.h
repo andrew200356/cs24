@@ -28,7 +28,7 @@ class Index {
 
     int hashFunction(const std::string& key) const;
     void resizeAndRehash();
-    int getCharIndex(char c) const;
+    int getCharIndex(std::string str) const;
 };
 
 #endif
