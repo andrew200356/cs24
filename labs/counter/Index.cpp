@@ -18,7 +18,11 @@ int Index::hashFunction(const std::string& key) const {
 }
 
 // Helper function to get index in charTable
-int Index::getCharIndex(char c) const {
+int Index::getCharIndex(std::string str) const {
+    if (str.size() != 1) {
+        return -1;
+    }
+    char c = str[0];
     if (c >= 'A' && c <= 'Z') {
         return c - 'A';
     } else if (c >= 'a' && c <= 'z') {
@@ -39,7 +43,7 @@ Index::~Index() {
 }
 
 List::Node* Index::find(const std::string& key) const {
-    int charIndex = getCharIndex(key[0]);
+    int charIndex = getCharIndex(key);
     if (charIndex != -1) {
         return charTable[charIndex];
     }
@@ -59,7 +63,7 @@ List::Node* Index::find(const std::string& key) const {
 }
 
 void Index::push(const std::string& key, List::Node* node) {
-    int charIndex = getCharIndex(key[0]);
+    int charIndex = getCharIndex(key);
     if (charIndex != -1) {
         charTable[charIndex] = node;
         return;
@@ -86,7 +90,7 @@ void Index::push(const std::string& key, List::Node* node) {
 }
 
 void Index::remove(const std::string& key) {
-    int charIndex = getCharIndex(key[0]);
+    int charIndex = getCharIndex(key);
     if (charIndex != -1) {
         charTable[charIndex] = nullptr;
         return;
