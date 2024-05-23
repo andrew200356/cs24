@@ -7,7 +7,7 @@
 
 class Index {
 public:
-    Index(int capacity = 85000);
+    Index(int capacity = 86000);
     ~Index();
     
     void push(const std::string& key, List::Node* node);
