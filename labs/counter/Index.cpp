@@ -1,63 +1,19 @@
 #include "Index.h"
-
 #include <cstdint>
-#include <cstring>   // For memset
-#include <iostream>  // For debug output
-#include <string>
+#include <cstring> // For memset
+#include <iostream> // For debug output
 
-uint32_t MurmurHash3(const std::string& key, uint32_t seed = 0) {
-    const uint8_t* data = (const uint8_t*)key.c_str();
-    const int len = key.size();
-    const int nblocks = len / 4;
-    uint32_t h1 = seed;
+constexpr uint32_t FNV_32_OFFSET_BASIS = 0x811c9dc5;
+constexpr uint32_t FNV_32_PRIME = 0x01000193;
 
-    const uint32_t c1 = 0xcc9e2d51;
-    const uint32_t c2 = 0x1b873593;
-
-    const uint32_t* blocks = (const uint32_t*)(data + nblocks * 4);
-    for (int i = -nblocks; i; i++) {
-        uint32_t k1 = blocks[i];
-
-        k1 *= c1;
-        k1 = (k1 << 15) | (k1 >> (32 - 15));
-        k1 *= c2;
-
-        h1 ^= k1;
-        h1 = (h1 << 13) | (h1 >> (32 - 13));
-        h1 = h1 * 5 + 0xe6546b64;
-    }
-
-    const uint8_t* tail = (const uint8_t*)(data + nblocks * 4);
-    uint32_t k1 = 0;
-
-    switch (len & 3) {
-        case 3:
-            k1 ^= tail[2] << 16;
-            [[fallthrough]];
-        case 2:
-            k1 ^= tail[1] << 8;
-            [[fallthrough]];
-        case 1:
-            k1 ^= tail[0];
-            k1 *= c1;
-            k1 = (k1 << 15) | (k1 >> (32 - 15));
-            k1 *= c2;
-            h1 ^= k1;
-    }
-
-    h1 ^= len;
-
-    h1 ^= h1 >> 16;
-    h1 *= 0x85ebca6b;
-    h1 ^= h1 >> 13;
-    h1 *= 0xc2b2ae35;
-    h1 ^= h1 >> 16;
-
-    return h1;
-}
-
+// Primary hash function (FNV-1a)
 int Index::hashFunction(const std::string& key) const {
-    return static_cast<int>(MurmurHash3(key));
+    uint32_t hash = FNV_32_OFFSET_BASIS;
+    for (char c : key) {
+        hash ^= static_cast<uint32_t>(c);
+        hash *= FNV_32_PRIME;
+    }
+    return static_cast<int>(hash);
 }
 
 // Helper function to get index in charTable
@@ -73,7 +29,7 @@ int Index::getCharIndex(char c) const {
 Index::Index(int capacity) : count(0), capacity(capacity) {
     table = new Entry*[capacity]();
     charTable = new List::Node*[52]();
-    std::memset(charTable, 0, 52);  // Initialize charTable
+    std::memset(charTable, 0, 52); // Initialize charTable
 }
 
 Index::~Index() {
