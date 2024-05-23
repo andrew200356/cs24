@@ -73,7 +73,7 @@ void Index::push(const std::string& key, List::Node* node) {
         }
     }
 
-    if (static_cast<double>(count) / capacity > 0.7) {
+    if (static_cast<double>(count) / capacity > 0.6) {
         resizeAndRehash();
     }
 
