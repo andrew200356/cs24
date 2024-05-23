@@ -5,14 +5,28 @@
 constexpr uint32_t FNV_32_OFFSET_BASIS = 0x811c9dc5;
 constexpr uint32_t FNV_32_PRIME = 0x01000193;
 
+uint32_t JenkinsOneAtATimeHash(const std::string& key) {
+    uint32_t hash = 0;
+    for (char c : key) {
+        hash += static_cast<uint8_t>(c);
+        hash += (hash << 10);
+        hash ^= (hash >> 6);
+    }
+    hash += (hash << 3);
+    hash ^= (hash >> 11);
+    hash += (hash << 15);
+    return hash;
+}
+
 // Primary hash function (FNV-1a)
 int Index::hashFunction(const std::string& key) const {
-    uint32_t hash = FNV_32_OFFSET_BASIS;
-    for (char c : key) {
-        hash ^= static_cast<uint32_t>(c);
-        hash *= FNV_32_PRIME;
-    }
-    return static_cast<int>(hash);
+    return static_cast<int>(JenkinsOneAtATimeHash(key));
+    // uint32_t hash = FNV_32_OFFSET_BASIS;
+    // for (char c : key) {
+    //     hash ^= static_cast<uint32_t>(c);
+    //     hash *= FNV_32_PRIME;
+    // }
+    // return static_cast<int>(hash);
 }
 
 // Helper function to get index in charTable
