@@ -1,34 +1,36 @@
-// Index.h
-
 #ifndef INDEX_H
 #define INDEX_H
 
 #include <cstddef>
 #include <string>
-
 #include "List.h"
 
 class Index {
-   public:
-    static List::Node* const DIRTY;  // Sentinel for dirty nodes
-
+public:
     Index(int capacity = 85000);
     ~Index();
-
+    
     void push(const std::string& key, List::Node* node);
     List::Node* find(const std::string& key) const;
     void remove(const std::string& key);
 
-   private:
+private:
+    struct Entry {
+        std::string key;
+        List::Node* node;
+        Entry* next;
+        
+        Entry(const std::string& key, List::Node* node) : key(key), node(node), next(nullptr) {}
+    };
+
     size_t count;
     size_t capacity;
-    List::Node** table;
-    List::Node** charTable;  // Table for storing nodes of 'a'-'z' and 'A'-'Z'
-    mutable List::Node* wanted = nullptr;
+    Entry** table;
+    List::Node** charTable; // Table for storing nodes of 'A'-'Z'
 
     int hashFunction(const std::string& key) const;
+    int getCharIndex(char c) const; // Helper function to get index in charTable
     void resizeAndRehash();
-    int getCharIndex(std::string str) const;
 };
 
 #endif

@@ -1,29 +1,29 @@
 #include "Counter.h"
+#include <cstring>
+#include <cctype>
 
 // Counter Member Functions
 Counter::Counter() : mtotal(0) {
-    // The constructor should initialize any member variables.
     list = new List();
     index = new Index();
 }
 
 Counter::~Counter() {
-    // The destructor should free all memory allocated by the Counter.
     delete list;
     delete index;
 }
 
 size_t Counter::count() const {
-    // The count() function should return the number of keys stored in the counter.
     return list->getSize();
 }
 
 int Counter::total() const {
-    // total() returns the sum of all counts in the counter.
     return mtotal;
 }
 
 void Counter::inc(const std::string& key, int by) {
+    if (key.empty()) return;
+
     List::Node* node = index->find(key);
     if (node) {
         node->value += by;
@@ -35,6 +35,8 @@ void Counter::inc(const std::string& key, int by) {
 }
 
 void Counter::dec(const std::string& key, int by) {
+    if (key.empty()) return;
+
     List::Node* node = index->find(key);
     if (node) {
         node->value -= by;
@@ -46,6 +48,8 @@ void Counter::dec(const std::string& key, int by) {
 }
 
 void Counter::del(const std::string& key) {
+    if (key.empty()) return;
+
     List::Node* node = index->find(key);
     if (node) {
         mtotal -= node->value;
@@ -55,11 +59,15 @@ void Counter::del(const std::string& key) {
 }
 
 int Counter::get(const std::string& key) const {
+    if (key.empty()) return 0;
+
     List::Node* keynode = index->find(key);
     return keynode == nullptr ? 0 : keynode->value;
 }
 
 void Counter::set(const std::string& key, int count) {
+    if (key.empty()) return;
+
     List::Node* node = index->find(key);
     if (node) {
         mtotal += count - node->value;

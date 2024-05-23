@@ -1,8 +1,7 @@
 #include "Index.h"
 #include <cstdint>
 #include <cstring> // For memset
-
-List::Node* const Index::DIRTY = reinterpret_cast<List::Node*>(1);
+#include <iostream> // For debug output
 
 constexpr uint32_t FNV_32_OFFSET_BASIS = 0x811c9dc5;
 constexpr uint32_t FNV_32_PRIME = 0x01000193;
@@ -18,116 +17,119 @@ int Index::hashFunction(const std::string& key) const {
 }
 
 // Helper function to get index in charTable
-int Index::getCharIndex(std::string str) const {
-    if (str.size() != 1) {
-        return -1;
-    }
-    char c = str[0];
+int Index::getCharIndex(char c) const {
     if (c >= 'A' && c <= 'Z') {
         return c - 'A';
-    } else if (c >= 'a' && c <= 'z') {
-        return c - 'a' + 26;
     }
     return -1;
 }
 
 Index::Index(int capacity) : count(0), capacity(capacity) {
-    table = new List::Node*[capacity]();
-    charTable = new List::Node*[52](); // Initialize charTable for 52 characters
-    std::memset(charTable, 0, sizeof(List::Node*) * 52);
+    table = new Entry*[capacity]();
+    charTable = new List::Node*[26]();
+    std::memset(charTable, 0, 26); // Initialize charTable
 }
 
 Index::~Index() {
+    for (size_t i = 0; i < capacity; ++i) {
+        Entry* entry = table[i];
+        while (entry) {
+            Entry* next = entry->next;
+            delete entry;
+            entry = next;
+        }
+    }
     delete[] table;
     delete[] charTable;
 }
 
 List::Node* Index::find(const std::string& key) const {
-    int charIndex = getCharIndex(key);
-    if (charIndex != -1) {
-        return charTable[charIndex];
-    }
-
-    size_t index = hashFunction(key) % capacity;
-    size_t i = 0;
-
-    while (table[index]) {
-        if (table[index] != DIRTY && table[index]->key == key) {
-            return table[index];
+    if (key.size() == 1) {
+        char upperKey = std::toupper(key[0]);
+        int charIndex = getCharIndex(upperKey);
+        if (charIndex != -1) {
+            return charTable[charIndex];
         }
-        index = (index + i * i) % capacity;
-        ++i;
     }
 
+    int index = hashFunction(key) % capacity;
+    Entry* entry = table[index];
+    while (entry) {
+        if (entry->key == key) {
+            return entry->node;
+        }
+        entry = entry->next;
+    }
     return nullptr;
 }
 
 void Index::push(const std::string& key, List::Node* node) {
-    int charIndex = getCharIndex(key);
-    if (charIndex != -1) {
-        charTable[charIndex] = node;
-        return;
+    if (key.size() == 1) {
+        char upperKey = std::toupper(key[0]);
+        int charIndex = getCharIndex(upperKey);
+        if (charIndex != -1) {
+            charTable[charIndex] = node;
+            return;
+        }
     }
 
     if (static_cast<double>(count) / capacity > 0.7) {
         resizeAndRehash();
     }
 
-    size_t index = hashFunction(key) % capacity;
-    size_t i = 0;
-
-    while (table[index] && table[index] != DIRTY && table[index]->key != key) {
-        index = (index + i * i) % capacity;
-        ++i;
-    }
-
-    if (!table[index] || table[index] == DIRTY) {
-        ++count;
-        table[index] = node;
-    } else {
-        table[index]->value = node->value;
-    }
+    int index = hashFunction(key) % capacity;
+    Entry* newEntry = new Entry(key, node);
+    newEntry->next = table[index];
+    table[index] = newEntry;
+    ++count;
 }
 
 void Index::remove(const std::string& key) {
-    int charIndex = getCharIndex(key);
-    if (charIndex != -1) {
-        charTable[charIndex] = nullptr;
-        return;
+    if (key.size() == 1) {
+        char upperKey = std::toupper(key[0]);
+        int charIndex = getCharIndex(upperKey);
+        if (charIndex != -1) {
+            charTable[charIndex] = nullptr;
+            return;
+        }
     }
 
-    size_t index = hashFunction(key) % capacity;
-    size_t i = 0;
+    int index = hashFunction(key) % capacity;
+    Entry* entry = table[index];
+    Entry* prev = nullptr;
 
-    while (table[index]) {
-        if (table[index] != DIRTY && table[index]->key == key) {
-            table[index] = DIRTY;
+    while (entry) {
+        if (entry->key == key) {
+            if (prev) {
+                prev->next = entry->next;
+            } else {
+                table[index] = entry->next;
+            }
+            delete entry;
             --count;
             return;
         }
-        index = (index + i * i) % capacity;
-        ++i;
+        prev = entry;
+        entry = entry->next;
     }
 }
 
 void Index::resizeAndRehash() {
     size_t oldCapacity = capacity;
-    List::Node** oldTable = table;
+    Entry** oldTable = table;
 
     capacity = (count + 1) * 2;
-    table = new List::Node*[capacity]();
+    table = new Entry*[capacity]();
 
     for (size_t i = 0; i < oldCapacity; ++i) {
-        if (oldTable[i] && oldTable[i] != DIRTY) {
-            size_t index = hashFunction(oldTable[i]->key) % capacity;
-            size_t j = 0;
-            while (table[index]) {
-                index = (index + j * j) % capacity;
-                ++j;
-            }
-            table[index] = oldTable[i];
+        Entry* entry = oldTable[i];
+        while (entry) {
+            Entry* next = entry->next;
+            int index = hashFunction(entry->key) % capacity;
+            entry->next = table[index];
+            table[index] = entry;
+            entry = next;
         }
     }
-
     delete[] oldTable;
 }
