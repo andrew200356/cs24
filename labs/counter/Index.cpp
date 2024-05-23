@@ -20,14 +20,16 @@ int Index::hashFunction(const std::string& key) const {
 int Index::getCharIndex(char c) const {
     if (c >= 'A' && c <= 'Z') {
         return c - 'A';
+    } else if (c >= 'a' && c <= 'z') {
+        return c - 'a' + 26;
     }
     return -1;
 }
 
 Index::Index(int capacity) : count(0), capacity(capacity) {
     table = new Entry*[capacity]();
-    charTable = new List::Node*[26]();
-    std::memset(charTable, 0, 26); // Initialize charTable
+    charTable = new List::Node*[52]();
+    std::memset(charTable, 0, 52); // Initialize charTable
 }
 
 Index::~Index() {
