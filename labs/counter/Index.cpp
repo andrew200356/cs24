@@ -20,13 +20,13 @@ uint32_t JenkinsOneAtATimeHash(const std::string& key) {
 
 // Primary hash function (FNV-1a)
 int Index::hashFunction(const std::string& key) const {
-    return static_cast<int>(JenkinsOneAtATimeHash(key));
-    // uint32_t hash = FNV_32_OFFSET_BASIS;
-    // for (char c : key) {
-    //     hash ^= static_cast<uint32_t>(c);
-    //     hash *= FNV_32_PRIME;
-    // }
-    // return static_cast<int>(hash);
+    // return static_cast<int>(JenkinsOneAtATimeHash(key));
+    uint32_t hash = FNV_32_OFFSET_BASIS;
+    for (char c : key) {
+        hash ^= static_cast<uint32_t>(c);
+        hash *= FNV_32_PRIME;
+    }
+    return static_cast<int>(hash);
 }
 
 // Helper function to get index in charTable
@@ -87,7 +87,7 @@ void Index::push(const std::string& key, List::Node* node) {
         }
     }
 
-    if (static_cast<double>(count) / capacity > 0.9) {
+    if (static_cast<double>(count) / capacity > 0.8) {
         resizeAndRehash();
     }
 
