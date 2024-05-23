@@ -27,12 +27,17 @@ Index::~Index() {
 }
 
 List::Node* Index::find(const std::string& key) const {
+    if (wanted != nullptr && wanted->key == key) {
+        return wanted;
+    }
+
     size_t index = hashFunction(key) % capacity;
     size_t i = 1;
 
     while (table[index]) {
         if (table[index] != DIRTY && table[index]->key == key) {
-            return table[index];
+            wanted = table[index];
+            return wanted;
         }
         index = (index + i * i) % capacity;
         ++i;
@@ -69,6 +74,7 @@ void Index::remove(const std::string& key) {
     while (table[index]) {
         if (table[index] != DIRTY && table[index]->key == key) {
             table[index] = DIRTY;
+            wanted = nullptr;
             --count;
             return;
         }
