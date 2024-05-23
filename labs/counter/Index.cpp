@@ -1,8 +1,6 @@
 #include "Index.h"
 
 #include <cstdint>
-#include <cstring>   // For memset
-#include <iostream>  // For debug output
 
 constexpr uint32_t FNV_32_OFFSET_BASIS = 0x811c9dc5;
 constexpr uint32_t FNV_32_PRIME = 0x01000193;
@@ -30,7 +28,6 @@ int Index::getCharIndex(char c) const {
 Index::Index(int capacity) : count(0), capacity(capacity) {
     table = new Entry*[capacity]();
     charTable = new List::Node*[52]();
-    // std::memset(charTable, 0, 52);  // Initialize charTable
 }
 
 Index::~Index() {
