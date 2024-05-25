@@ -49,6 +49,26 @@ Heap::Entry Heap::pop() {
     Entry result = mData[0];
     mData[0] = mData[--mCount];
     if (mCount > 0) {
+        // Helper function to move an entry down the heap to maintain heap property
+        auto percolate_down = [this](size_t index) {
+            while (true) {
+                size_t left = index * 2 + 1;
+                size_t right = index * 2 + 2;
+                size_t smallest = index;
+
+                if (left < mCount && mData[left].score < mData[smallest].score) {
+                    smallest = left;
+                }
+                if (right < mCount && mData[right].score < mData[smallest].score) {
+                    smallest = right;
+                }
+                if (smallest == index) {
+                    break;
+                }
+                std::swap(mData[smallest], mData[index]);
+                index = smallest;
+            }
+        };
         percolate_down(0);
     }
     return result;
@@ -60,6 +80,17 @@ void Heap::push(const std::string& value, float score) {
         throw std::overflow_error("Heap is full");
     }
     mData[mCount] = {value, score};
+    // Helper function to move an entry up the heap to maintain heap property
+    auto percolate_up = [this](size_t index) {
+        while (index > 0) {
+            size_t parent = (index - 1) / 2;
+            if (mData[parent].score <= mData[index].score) {
+                break;
+            }
+            std::swap(mData[parent], mData[index]);
+            index = parent;
+        }
+    };
     percolate_up(mCount++);
 }
 
@@ -71,6 +102,26 @@ Heap::Entry Heap::pushpop(const std::string& value, float score) {
     Entry result = mData[0];
     if (score > result.score) {
         mData[0] = {value, score};
+        // Re-use the percolate_down helper function from pop
+        auto percolate_down = [this](size_t index) {
+            while (true) {
+                size_t left = index * 2 + 1;
+                size_t right = index * 2 + 2;
+                size_t smallest = index;
+
+                if (left < mCount && mData[left].score < mData[smallest].score) {
+                    smallest = left;
+                }
+                if (right < mCount && mData[right].score < mData[smallest].score) {
+                    smallest = right;
+                }
+                if (smallest == index) {
+                    break;
+                }
+                std::swap(mData[smallest], mData[index]);
+                index = smallest;
+            }
+        };
         percolate_down(0);
     }
     return result;
@@ -82,37 +133,4 @@ const Heap::Entry& Heap::top() const {
         throw std::underflow_error("Heap is empty");
     }
     return mData[0];
-}
-
-// Helper function to move an entry up the heap to maintain heap property
-void Heap::percolate_up(size_t index) {
-    while (index > 0) {
-        size_t parent = (index - 1) / 2;
-        if (mData[parent].score <= mData[index].score) {
-            break;
-        }
-        std::swap(mData[parent], mData[index]);
-        index = parent;
-    }
-}
-
-// Helper function to move an entry down the heap to maintain heap property
-void Heap::percolate_down(size_t index) {
-    while (true) {
-        size_t left = index * 2 + 1;
-        size_t right = index * 2 + 2;
-        size_t smallest = index;
-
-        if (left < mCount && mData[left].score < mData[smallest].score) {
-            smallest = left;
-        }
-        if (right < mCount && mData[right].score < mData[smallest].score) {
-            smallest = right;
-        }
-        if (smallest == index) {
-            break;
-        }
-        std::swap(mData[smallest], mData[index]);
-        index = smallest;
-    }
 }
