@@ -94,12 +94,21 @@ void Heap::push(const std::string& value, float score) {
     percolate_up(mCount++);
 }
 
-// Efficient version of a pop followed by a push
+// The pushpop() function is a more efficient version of a pop() followed by a push().
+// Instead of replacing the popped entry with the last entry in the vector, it replaces it with the pushed entry,
+// and then percolates that down. If there are no items in the heap, it throws a std::underflow_error.
 Heap::Entry Heap::pushpop(const std::string& value, float score) {
     if (mCount == 0) {
         throw std::underflow_error("Heap is empty");
     }
+    // Replace the root of the heap (the minimum element) with the new entry
+
+    // Save the root of the heap
     Entry result = mData[0];
+
+    // Replace the root of the heap with the new entry
+    mData[0] = {value, score};
+
     if (score > result.score) {
         mData[0] = {value, score};
         // Re-use the percolate_down helper function from pop
