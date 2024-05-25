@@ -4,7 +4,7 @@ CXXFLAGS=-g -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 OPTFLAGS=-O3 -std=c++17 -Wall -Wextra -Werror -Wno-unused-parameter
 # OPTFLAGS support for -O3 optimization level which is required for the lab
 
-all: main wordc charc wordct
+all: main wordct charc
 
 main: main.o Counter.o List.o Index.o Iterator.o
 	$(CXX) $(OPTFLAGS) -o $@ $^
@@ -26,12 +26,6 @@ Iterator.o: Iterator.cpp
 
 valgrind: main
 	valgrind --leak-check=full ./main
-
-test: test.o Index.o List.o Iterator.o Counter.o
-	$(CXX) $(OPTFLAGS) -o $@ $^
-
-test.o: test.cpp Index.h List.h Counter.h
-	$(CXX) $(OPTFLAGS) -c -o $@ $<
 
 word-count.o: word-count.cpp
 	$(CXX) $(OPTFLAGS) -c -o $@ $<
