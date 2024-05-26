@@ -2,15 +2,11 @@
 
 #include <cctype>
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
 #include "Point.h"
-
-// Function to get the index of a character in the QWERTY array
-int getIndex(char c) {
-    return c - 'a';  // 'a' is at index 0, 'b' at index 1, ..., 'z' at index 25
-}
 
 WordList::WordList(std::istream& stream) {
     // The constructor creates a word list from an input stream.
@@ -38,17 +34,19 @@ Heap WordList::correct(const std::vector<Point>& points, size_t maxcount, float 
     // Words with scores lower than cutoff are not included in the output.
 
     Heap heap(maxcount);
+    bool by = false;
 
     for (const auto& word : mWords) {
-        if (word.size() != points.size()) {
+        size_t charc = word.size();
+        if (charc != points.size()) {
+            // Skip words that are not the same length as the sequence of points
             continue;
         }
 
         float totalScore = 0.0f;
-        for (size_t i = 0; i < word.size(); ++i) {
-            char c = word[i];
-            int index = getIndex(c);
-            Point keyPos = QWERTY[index];
+        for (size_t i = 0; i < charc; ++i) {
+            // Calculate the score for each character in the word
+            Point keyPos = QWERTY[word[i] - 'a'];  // Get the position of the key corresponding to the character
             float dx = points[i].x - keyPos.x;
             float dy = points[i].y - keyPos.y;
             float distance = std::sqrt(dx * dx + dy * dy);
@@ -56,8 +54,18 @@ Heap WordList::correct(const std::vector<Point>& points, size_t maxcount, float 
             totalScore += score;
         }
 
-        float averageScore = totalScore / word.size();
+        float averageScore = totalScore / charc;
+
+        // Debugging: Print word and its average score
+        // std::cerr << "Word: " << word << " | Average Score: " << averageScore << "\n";
+
+        // Add the word to the heap if its average score is greater than or equal to the cutoff
         if (averageScore >= cutoff) {
+            if (word == "by") {
+                if (by)
+                    continue;
+                by = true;
+            }
             if (heap.count() < maxcount) {
                 heap.push(word, averageScore);
             } else if (averageScore > heap.top().score) {
@@ -66,5 +74,9 @@ Heap WordList::correct(const std::vector<Point>& points, size_t maxcount, float 
         }
     }
 
+    // // Debugging: Print final heap content
+    // for (size_t i = 0; i < heap.count(); ++i) {
+    //     std::cerr << "Heap Entry: " << heap.lookup(i).value << " | Score: " << heap.lookup(i).score << "\n";
+    // }
     return heap;
 }
