@@ -11,18 +11,18 @@
 WordList::WordList(std::istream& stream) {
     // The constructor creates a word list from an input stream.
     // Each line of this stream is a single word. Ignore words that are not entirely lower case ASCII.
-    std::string word;
-    while (stream >> word) {
-        // Check if the word is entirely lower case ASCII
-        bool isLowercase = true;
-        for (char c : word) {
+
+    std::string line;
+    while (std::getline(stream, line)) {
+        bool valid = true;
+        for (char c : line) {
             if (!std::islower(c)) {
-                isLowercase = false;
+                valid = false;
                 break;
             }
         }
-        if (isLowercase)
-            mWords.push_back(word);
+        if (valid)
+            mWords.push_back(line);
     }
 }
 
@@ -34,7 +34,6 @@ Heap WordList::correct(const std::vector<Point>& points, size_t maxcount, float 
     // Words with scores lower than cutoff are not included in the output.
 
     Heap heap(maxcount);
-    bool by = false;
 
     for (const auto& word : mWords) {
         size_t charc = word.size();
@@ -56,16 +55,8 @@ Heap WordList::correct(const std::vector<Point>& points, size_t maxcount, float 
 
         float averageScore = totalScore / charc;
 
-        // Debugging: Print word and its average score
-        // std::cerr << "Word: " << word << " | Average Score: " << averageScore << "\n";
-
         // Add the word to the heap if its average score is greater than or equal to the cutoff
         if (averageScore >= cutoff) {
-            if (word == "by") {
-                if (by)
-                    continue;
-                by = true;
-            }
             if (heap.count() < maxcount) {
                 heap.push(word, averageScore);
             } else if (averageScore > heap.top().score) {
