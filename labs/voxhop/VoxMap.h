@@ -8,17 +8,18 @@
 #include "Route.h"
 
 class VoxMap {
-  // Member Variables
+    // Member Variables
+    int width, depth, height;
+    std::vector<std::vector<std::vector<bool>>> map;
 
+    // Helper Functions
+    bool isValidPoint(const Point& p) const;
 
-  // Helper Functions
+   public:
+    VoxMap(std::istream& stream);
+    ~VoxMap();
 
-
-public:
-  VoxMap(std::istream& stream);
-  ~VoxMap();
-
-  Route route(Point src, Point dst);
+    Route route(Point src, Point dst);
 };
 
 #endif
