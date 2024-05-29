@@ -11,6 +11,8 @@
 VoxMap::VoxMap(std::istream& stream) {
     stream >> width >> depth >> height;
     map.resize(height, std::vector<std::vector<bool>>(depth, std::vector<bool>(width, false)));
+    std::string temp;
+    std::getline(stream, temp);
 
     for (int z = 0; z < height; ++z) {
         std::string line;
