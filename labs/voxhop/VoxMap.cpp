@@ -37,8 +37,9 @@ VoxMap::~VoxMap() {
 
 // Helper function to check if a point is valid
 bool VoxMap::isValidPoint(const Point& p) const {
-    return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z >= 0 && p.z < height &&
-           !map[p.z][p.y][p.x] && (p.z == 0 || map[p.z - 1][p.y][p.x]);
+    return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z > 0 && p.z < height  // Check if the point is within bounds (z > 0 to avoid falling off the map)
+           && !map[p.z][p.y][p.x]                                                         // Check if the point is not an obstacle
+           && (p.z == 0 || map[p.z - 1][p.y][p.x]);                                       // Check if the point is not floating
 }
 
 // Find the route from src to dst
