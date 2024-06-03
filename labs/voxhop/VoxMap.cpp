@@ -47,49 +47,73 @@ bool VoxMap::isValidPoint(const Point& p) const {
 
 // Heuristic function for A* (Manhattan distance)
 double VoxMap::heuristic(const Point& a, const Point& b) const {
-    return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+    return std::abs(a.x - b.x) + std::abs(a.y - b.y) + std::abs(a.z - b.z);
 }
 
-// Find the route from src to dst
+// A* algorithm to find the route from src to dst
 Route VoxMap::route(Point src, Point dst) {
     if (!isValidPoint(src)) {
-        throw InvalidPoint(src);
+        throw InvalidPoint(src);  // Throw an exception if the source point is invalid
     }
     if (!isValidPoint(dst)) {
-        throw InvalidPoint(dst);
+        throw InvalidPoint(dst);  // Throw an exception if the destination point is invalid
     }
 
+    auto toKey = [](const Point& p) {
+        return std::to_string(p.x) + "," + std::to_string(p.y) + "," + std::to_string(p.z);
+    };
+
     const std::vector<std::pair<int, int>> directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-    std::unordered_set<std::string> visited;
-    std::queue<std::pair<Point, Route>> q;
-    q.push({src, {}});
-    visited.insert(std::to_string(src.x) + "," + std::to_string(src.y) + "," + std::to_string(src.z));
+    std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>> openSet;
+    std::unordered_set<std::string> closedSet;
+    std::unordered_map<std::string, double> gScore;
+    std::unordered_map<std::string, Point> cameFrom;
+    std::unordered_map<std::string, Move> moveFrom;
 
-    while (!q.empty()) {
-        auto [current, path] = q.front();
-        q.pop();
+    gScore[toKey(src)] = 0.0;
+    openSet.push({heuristic(src, dst), src});
 
-        if (current.x == dst.x && current.y == dst.y && current.z == dst.z) {
+    while (!openSet.empty()) {
+        Point current = openSet.top().second;
+        openSet.pop();
+
+        if (current == dst) {
+            Route path;
+            for (Point p = dst; p != src; p = cameFrom[toKey(p)]) {
+                path.push_back(moveFrom[toKey(p)]);
+            }
+            std::reverse(path.begin(), path.end());
             return path;
         }
 
+        closedSet.insert(toKey(current));
+
         for (int i = 0; i < 4; ++i) {
-            Point next = {current.x + directions[i].first, current.y + directions[i].second, current.z};
-            while (next.z > 0 && !isValidPoint(next)) {
-                next.z--;
+            Point neighbor = {current.x + directions[i].first, current.y + directions[i].second, current.z};
+
+            // Handle falling
+            while (neighbor.z > 0 && isValidPoint({neighbor.x, neighbor.y, neighbor.z - 1})) {
+                neighbor.z--;  // Fall down
             }
-            while (next.z < height - 1 && isValidPoint({next.x, next.y, next.z + 1})) {
-                next.z++;
+
+            // Handle jumping up one level
+            if (neighbor.z < height - 1 && isValidPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
+                neighbor.z++;  // Jump up one level
             }
-            std::string key = std::to_string(next.x) + "," + std::to_string(next.y) + "," + std::to_string(next.z);
-            if (isValidPoint(next) && visited.find(key) == visited.end()) {
-                visited.insert(key);
-                Route newPath = path;
-                newPath.push_back(static_cast<Move>(i));
-                q.push({next, newPath});
+
+            if (closedSet.find(toKey(neighbor)) != closedSet.end()) {
+                continue;
+            }
+
+            double tentative_gScore = gScore[toKey(current)] + 1.0;
+            if (gScore.find(toKey(neighbor)) == gScore.end() || tentative_gScore < gScore[toKey(neighbor)]) {
+                cameFrom[toKey(neighbor)] = current;
+                moveFrom[toKey(neighbor)] = static_cast<Move>(i);
+                gScore[toKey(neighbor)] = tentative_gScore;
+                openSet.push({tentative_gScore + heuristic(neighbor, dst), neighbor});
             }
         }
     }
 
-    throw NoRoute(src, dst);
+    throw NoRoute(src, dst);  // Throw an exception if no route is found
 }
