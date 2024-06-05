@@ -14,6 +14,7 @@ class VoxMap {
 
     // Helper Functions
     bool isValidPoint(const Point& p) const;
+    bool isValidUpperPoint(const Point& p) const;
     double heuristic(const Point& a, const Point& b) const;
 
    public:

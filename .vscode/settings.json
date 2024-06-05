@@ -88,5 +88,6 @@
     "variant": "cpp",
     "format": "cpp",
     "queue": "cpp"
-  }
+  },
+  "editor.formatOnSave": true
 }
