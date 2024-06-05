@@ -94,6 +94,7 @@ Route VoxMap::route(Point src, Point dst) {
         // Check all neighbors, and add them to the openset if they are valid
         for (int i = 0; i < 4; ++i) {
             Point neighbor = {current.x + directions[i].first, current.y + directions[i].second, current.z};
+            // std::cout << "Checking neighbor " << neighbor << std::endl;
 
             // after moving, check if the point is valid
             // a point is valid if it is valid point and
@@ -104,10 +105,12 @@ Route VoxMap::route(Point src, Point dst) {
             } else if (!isValidPoint(neighbor) && neighbor.z < height - 1 && isValidPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
                 // Handle jumping up one level if the neighbor point was not valid
                 neighbor.z++;  // Jump up one level
+                // std::cout << "Jumping up to " << neighbor << std::endl;
             } else {
                 // Handle falling if the neighbor point was not valid and we can't jump up
-                while (neighbor.z > 0 && !isValidPoint(neighbor) && isValidPoint({neighbor.x, neighbor.y, neighbor.z - 1})) {
+                while (!isValidPoint(neighbor) && neighbor.z > 0) {
                     neighbor.z--;  // Fall down
+                    // std::cout << "Falling down from " << neighbor << std::endl;
                 }
             }
 
