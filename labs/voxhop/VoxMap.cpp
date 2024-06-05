@@ -118,20 +118,20 @@ Route VoxMap::route(Point src, Point dst) {
                 }
             }
 
-            std::cout << "Checking neighbor " << neighbor << std::endl;
+            // std::cout << "Checking neighbor " << neighbor << std::endl;
             if (isValidPoint(neighbor)) {
                 // Neighbor is immediately valid, proceed with it
             } else if (neighbor.z < height - 1 && isValidPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
                 // Handle jumping up one level if the neighbor point was not valid and there is headroom above
-                std::cout << "Jumping up to " << neighbor << std::endl;
+                // std::cout << "Jumping up to " << neighbor << std::endl;
                 neighbor.z++;  // Jump up one level
             } else {
                 // Handle falling if the neighbor point was not valid and we can't jump up
                 while (neighbor.z > 0 && (!isValidPoint(neighbor) || !map[neighbor.z - 1][neighbor.y][neighbor.x])) {
                     neighbor.z--;  // Fall down
-                    std::cout << "Falling to " << neighbor << std::endl;
+                    // std::cout << "Falling to " << neighbor << std::endl;
                 }
-                std::cout << "Falling down to " << neighbor << std::endl;
+                // std::cout << "Falling down to " << neighbor << std::endl;
             }
 
             // Skip the neighbor if it is not valid or has already been visited
