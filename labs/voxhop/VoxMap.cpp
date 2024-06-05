@@ -50,6 +50,11 @@ bool VoxMap::isValidUpperPoint(const Point& p) const {
     return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z > 0 && p.z < height;  // Check if the point is within bounds (z > 0 to avoid falling off the map)
 }
 
+bool VoxMap::isValidGround(const Point& p) const {
+    return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z >= 0 && p.z < height  // Check if the point is within bounds (z > 0 to avoid falling off the map)
+           && !map[p.z][p.y][p.x];                                                         // Check if the point is an obstacle
+}
+
 // Heuristic function for A* (Manhattan distance)
 double VoxMap::heuristic(const Point& a, const Point& b) const {
     return std::abs(a.x - b.x) + std::abs(a.y - b.y);
@@ -118,17 +123,20 @@ Route VoxMap::route(Point src, Point dst) {
                 }
             }
 
-            // std::cout << "Checking neighbor " << neighbor << std::endl;
+            std::cout << "Checking neighbor " << neighbor << std::endl;
             if (isValidPoint(neighbor)) {
                 // Neighbor is immediately valid, proceed with it
             } else if (neighbor.z < height - 1 && isValidPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
                 // Handle jumping up one level if the neighbor point was not valid and there is headroom above
+                std::cout << "Jumping up to " << neighbor << std::endl;
                 neighbor.z++;  // Jump up one level
             } else {
                 // Handle falling if the neighbor point was not valid and we can't jump up
-                while (neighbor.z > 0) {
+                while (neighbor.z > 0 && (!isValidPoint(neighbor) || !map[neighbor.z - 1][neighbor.y][neighbor.x])) {
                     neighbor.z--;  // Fall down
+                    std::cout << "Falling to " << neighbor << std::endl;
                 }
+                std::cout << "Falling down to " << neighbor << std::endl;
             }
 
             // Skip the neighbor if it is not valid or has already been visited
