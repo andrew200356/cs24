@@ -50,11 +50,6 @@ bool VoxMap::isValidUpperPoint(const Point& p) const {
     return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z > 0 && p.z < height;  // Check if the point is within bounds (z > 0 to avoid falling off the map)
 }
 
-bool VoxMap::isValidGround(const Point& p) const {
-    return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z >= 0 && p.z < height  // Check if the point is within bounds (z > 0 to avoid falling off the map)
-           && !map[p.z][p.y][p.x];                                                         // Check if the point is an obstacle
-}
-
 // Heuristic function for A* (Manhattan distance)
 double VoxMap::heuristic(const Point& a, const Point& b) const {
     return std::abs(a.x - b.x) + std::abs(a.y - b.y);
