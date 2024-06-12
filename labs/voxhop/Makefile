@@ -1,4 +1,4 @@
-CXXFLAGS = -O3 -Wall -Wextra -Werror -std=c++17 -Wno-unused-parameter
+CXXFLAGS = -pg -O3 -Wall -Wextra -Werror -std=c++17 -Wno-unused-parameter
 CXX      = g++
 
 .PHONY: all clean
