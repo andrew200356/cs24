@@ -61,11 +61,13 @@ Point VoxMap::fall(Point point) const {
 }
 
 Point VoxMap::jump(Point point) const {
-    if (point.z < height - 1 && !map[point.z + 1][point.y][point.x] && !map[point.z + 2][point.y][point.x]) {
-        point.z++;
-        return point;
+    if (point.z < height - 1 && !map[point.z + 1][point.y][point.x]) {
+        if (point.z < height - 2 && !map[point.z + 2][point.y][point.x]) {
+            point.z++;
+            return point;
+        }
     }
-    point.z = -1;  // Mark as invalid if jump is not possible
+    point.z = -1; // Mark as invalid if jump is not possible
     return point;
 }
 
