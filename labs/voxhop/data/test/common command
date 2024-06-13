@@ -1,0 +1,5 @@
+scripts/testcase.py -n 1000 data/mines-of-solomon.vox > data/test/mines.tsv
+
+./test  data/mines-of-solomon.vox < data/test/mines.tsv
+
+gprof ./test > data/result/mines.txt

@@ -75,6 +75,10 @@ double VoxMap::heuristic(const Point& a, const Point& b) const {
     return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 
+auto toKey = [](const Point& p) {
+    return std::to_string(p.x) + "," + std::to_string(p.y) + "," + std::to_string(p.z);
+};
+
 // A* algorithm to find the route from src to dst
 Route VoxMap::route(Point src, Point dst) {
     if (!isValidPoint(src)) {
@@ -84,16 +88,12 @@ Route VoxMap::route(Point src, Point dst) {
         throw InvalidPoint(dst);  // Throw an exception if the destination point is invalid
     }
 
-    auto toKey = [](const Point& p) {
-        return std::to_string(p.x) + "," + std::to_string(p.y) + "," + std::to_string(p.z);
-    };
-
     const std::vector<std::pair<int, int>> directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>> openSet;
     std::unordered_set<std::string> closedSet;
-    std::map<std::string, double> gScore;
-    std::map<std::string, Point> cameFrom;
-    std::map<std::string, Move> moveFrom;
+    std::unordered_map<std::string, double> gScore;
+    std::unordered_map<std::string, Point> cameFrom;
+    std::unordered_map<std::string, Move> moveFrom;
 
     gScore[toKey(src)] = 0.0;
     openSet.push({heuristic(src, dst), src});
@@ -161,5 +161,5 @@ Route VoxMap::route(Point src, Point dst) {
         }
     }
 
-    throw NoRoute(src, dst);  // Throw an exception if no route is found
+    throw NoRoute(src, dst);
 }
