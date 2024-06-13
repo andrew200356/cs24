@@ -29,3 +29,4 @@ labs/typo/typo
 labs/voxhop/test
 labs/voxhop/scripts/lib/__pycache__/*.pyc
 labs/voxhop/scripts/lib/maps/__pycache__/*.pyc
+labs/voxhop/main
