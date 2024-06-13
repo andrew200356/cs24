@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <map>
 #include <queue>
 #include <sstream>
 #include <stdexcept>
@@ -62,12 +63,10 @@ Point VoxMap::fall(Point point) const {
 
 Point VoxMap::jump(Point point) const {
     if (point.z < height - 1 && !map[point.z + 1][point.y][point.x]) {
-        if (point.z < height - 2 && !map[point.z + 2][point.y][point.x]) {
-            point.z++;
-            return point;
-        }
+        point.z++;
+        return point;
     }
-    point.z = -1; // Mark as invalid if jump is not possible
+    point.z = -1;  // Mark as invalid if jump is not possible
     return point;
 }
 
@@ -92,9 +91,9 @@ Route VoxMap::route(Point src, Point dst) {
     const std::vector<std::pair<int, int>> directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>> openSet;
     std::unordered_set<std::string> closedSet;
-    std::unordered_map<std::string, double> gScore;
-    std::unordered_map<std::string, Point> cameFrom;
-    std::unordered_map<std::string, Move> moveFrom;
+    std::map<std::string, double> gScore;
+    std::map<std::string, Point> cameFrom;
+    std::map<std::string, Move> moveFrom;
 
     gScore[toKey(src)] = 0.0;
     openSet.push({heuristic(src, dst), src});
@@ -125,7 +124,7 @@ Route VoxMap::route(Point src, Point dst) {
             if (!inBound(neighbor)) {
                 continue;
             }
-
+            // std::cout << "Neighbor: " << neighbor << std::endl;
             // Check if the neighbor is an obstacle
             if (!map[neighbor.z][neighbor.y][neighbor.x]) {
                 // Check if the neighbor is floating and needs to fall
