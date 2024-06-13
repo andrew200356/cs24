@@ -10,9 +10,9 @@ The world map is represented in memory as a 3D vector of booleans. Each boolean 
 
 ### Route Query Algorithm
 
-The program uses the A* algorithm to perform route queries. A* is chosen for its efficiency in finding the shortest path by considering both the actual cost from the start node and an estimated cost to the goal node. The heuristic used is the Manhattan distance in 3D.
+The program uses the A*algorithm to perform route queries. A* is chosen for its efficiency in finding the shortest path by considering both the actual cost from the start node and an estimated cost to the goal node. The heuristic used is the Manhattan distance in 3D.
 
-#### Steps:
+#### Steps
 
 1. **Initialization**:
    - Load the map dimensions and voxel data into a 3D vector.

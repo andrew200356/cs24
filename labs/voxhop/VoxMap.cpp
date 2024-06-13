@@ -46,7 +46,7 @@ bool VoxMap::isValidPoint(const Point& p) const {
 }
 
 // Helper function to check if a point is valid upper point
-bool VoxMap::isValidUpperPoint(const Point& p) const {
+bool VoxMap::inBound(const Point& p) const {
     return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z > 0 && p.z < height;  // Check if the point is within bounds (z > 0 to avoid falling off the map)
 }
 
@@ -104,38 +104,63 @@ Route VoxMap::route(Point src, Point dst) {
             // Check the block directly above the current position
             // first make sure it is a valid point
 
-            if (isValidUpperPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
-                // Check if there is a block above the current position
-                if (map[neighbor.z + 1][neighbor.y][neighbor.x]) {
-                    continue;
-                }
+            // first check bounds, if out of bounds, skip
+            if (!inBound(neighbor)) {
+                continue;
             }
+            // then check the (front), if the front is a block, go to jump part
+            else if (map[neighbor.z][neighbor.y][neighbor.x] == 0) {
+                // if neighbor is not an obstacle, we can move to it
 
-            if (isValidUpperPoint({current.x, current.y, current.z + 1})) {
-                // Check if there is a block above the current position
+                // Check floor
+                // first find if there is a block below the neighbor
+                if (neighbor.z != 0) {
+                    // neighbor is not floating, we good
+                } else {
+                    // neighbor is floating, we need to fall down until we find a valid floor
+                    while (neighbor.z > 0 && map[neighbor.z][neighbor.y][neighbor.x] == 0) {
+                        neighbor.z--;  // Fall down
+                        // std::cout << "Falling to " << neighbor << std::endl;
+                    }
+                }
+            } else {
+                // if the front is a block, we need to jump
+                // first check if there is a block above the current position
                 if (map[current.z + 1][current.y][current.x]) {
                     continue;
                 }
+                // then check if there is a block above the neighbor
+                if (map[neighbor.z + 1][neighbor.y][neighbor.x]) {
+                    continue;
+                }
+
+                // if the block above current and neighbor is not an obstacle, we can jump
+                if (inBound({neighbor.x, neighbor.y, neighbor.z + 1}) && !map[neighbor.z + 1][neighbor.y][neighbor.x]) {
+                    // Handle jumping up one level if the neighbor point was not valid and there is headroom above
+                    // std::cout << "Jumping up to " << neighbor << std::endl;
+                    neighbor.z++;  // Jump up one level
+                }
             }
 
-            // std::cout << "Checking neighbor " << neighbor << std::endl;
-            if (isValidPoint(neighbor)) {
-                // Neighbor is immediately valid, proceed with it
-            } else if (neighbor.z < height - 1 && isValidPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
-                // Handle jumping up one level if the neighbor point was not valid and there is headroom above
-                // std::cout << "Jumping up to " << neighbor << std::endl;
-                neighbor.z++;  // Jump up one level
-            } else {
-                // Handle falling if the neighbor point was not valid and we can't jump up
-                while (neighbor.z > 0 && (!isValidPoint(neighbor) || !map[neighbor.z - 1][neighbor.y][neighbor.x])) {
-                    neighbor.z--;  // Fall down
-                    // std::cout << "Falling to " << neighbor << std::endl;
-                }
-                // std::cout << "Falling down to " << neighbor << std::endl;
-            }
+            // // std::cout << "Checking neighbor " << neighbor << std::endl;
+            // if (isValidPoint(neighbor)) {
+            //     // Neighbor is immediately valid, proceed with it
+            // } else if (neighbor.z < height - 1 && isValidPoint({neighbor.x, neighbor.y, neighbor.z + 1})) {
+            //     // Handle jumping up one level if the neighbor point was not valid and there is headroom above
+            //     // std::cout << "Jumping up to " << neighbor << std::endl;
+            //     neighbor.z++;  // Jump up one level
+            // } else {
+            //     // Handle falling if the neighbor point was not valid and we can't jump up
+            //     while (neighbor.z > 0 && (!isValidPoint(neighbor) || !map[neighbor.z - 1][neighbor.y][neighbor.x])) {
+            //         neighbor.z--;  // Fall down
+            //         // std::cout << "Falling to " << neighbor << std::endl;
+            //     }
+            //     // std::cout << "Falling down to " << neighbor << std::endl;
+            // }
 
             // Skip the neighbor if it is not valid or has already been visited
             if (!isValidPoint(neighbor) || closedSet.find(toKey(neighbor)) != closedSet.end()) {
+                // can be optimized
                 continue;
             }
 
