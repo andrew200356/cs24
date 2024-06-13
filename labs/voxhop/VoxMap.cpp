@@ -114,7 +114,7 @@ Route VoxMap::route(Point src, Point dst) {
 
                 // Check floor
                 // first find if there is a block below the neighbor
-                if (neighbor.z != 0) {
+                if (neighbor.z > 1 && map[neighbor.z - 1][neighbor.y][neighbor.x] != 0) {
                     // neighbor is not floating, we good
                 } else {
                     // neighbor is floating, we need to fall down until we find a valid floor
@@ -125,13 +125,17 @@ Route VoxMap::route(Point src, Point dst) {
                 }
             } else {
                 // if the front is a block, we need to jump
-                // first check if there is a block above the current position
-                if (map[current.z + 1][current.y][current.x]) {
-                    continue;
+                if (inBound({current.x, current.y, current.z + 1})) {
+                    // first check if there is a block above the current position
+                    if (map[current.z + 1][current.y][current.x]) {
+                        continue;
+                    }
                 }
-                // then check if there is a block above the neighbor
-                if (map[neighbor.z + 1][neighbor.y][neighbor.x]) {
-                    continue;
+                if (inBound({neighbor.x, neighbor.y, neighbor.z + 1})) {
+                    // then check if there is a block above the neighbor
+                    if (map[neighbor.z + 1][neighbor.y][neighbor.x]) {
+                        continue;
+                    }
                 }
 
                 // if the block above current and neighbor is not an obstacle, we can jump

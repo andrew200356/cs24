@@ -15,6 +15,9 @@ class VoxMap {
     // Helper Functions
     bool isValidPoint(const Point& p) const;
     bool inBound(const Point& p) const;
+    Point jump(Point point) const;
+    Point fall(Point point) const;
+    
     double heuristic(const Point& a, const Point& b) const;
 
    public:
