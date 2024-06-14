@@ -40,14 +40,14 @@ VoxMap::~VoxMap() {
 }
 
 // Helper function to check if a point is valid
-bool VoxMap::isValidPoint(const Point& p) const {
+inline bool VoxMap::isValidPoint(const Point& p) const {
     return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z > 0 && p.z < height  // Check if the point is within bounds (z > 0 to avoid falling off the map)
            && !map[p.z][p.y][p.x]                                                         // Check if the point is not an obstacle
            && (p.z == 0 || map[p.z - 1][p.y][p.x]);                                       // Check if the point is not floating
 }
 
 // Helper function to check if a point is valid upper point
-bool VoxMap::inBound(const Point& p) const {
+inline bool VoxMap::inBound(const Point& p) const {
     return p.x >= 0 && p.x < width && p.y >= 0 && p.y < depth && p.z > 0 && p.z < height;  // Check if the point is within bounds (z > 0 to avoid falling off the map)
 }
 
@@ -112,7 +112,6 @@ Route VoxMap::route(Point src, Point dst) {
 
     throw NoRoute(src, dst);
 }
-
 
 Route VoxMap::reconstructPath(const Point& src, const Point& dst,
                               const std::unordered_map<Point, Point, PointHash>& cameFrom,
