@@ -17,8 +17,10 @@ class VoxMap {
 
     struct PointHash {
         std::size_t operator()(const Point& p) const {
-            // Use a combination of prime numbers for hashing
-            return p.x * 73856093 ^ p.y * 19349663 ^ p.z * 83492791;
+            std::size_t h = p.x;
+            h = h * 31 + p.y;
+            h = h * 31 + p.z;
+            return h;
         }
     };
 
