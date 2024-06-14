@@ -82,90 +82,89 @@ auto toKey = [](const Point& p) {
 // A* algorithm to find the route from src to dst
 Route VoxMap::route(Point src, Point dst) {
     if (!isValidPoint(src)) {
-        throw InvalidPoint(src);  // Throw an exception if the source point is invalid
+        throw InvalidPoint(src);
     }
     if (!isValidPoint(dst)) {
-        throw InvalidPoint(dst);  // Throw an exception if the destination point is invalid
+        throw InvalidPoint(dst);
     }
 
     const std::vector<std::pair<int, int>> directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>> openSet;
-    std::unordered_set<std::string> closedSet;
-    std::unordered_map<std::string, double> gScore;
-    std::unordered_map<std::string, Point> cameFrom;
-    std::unordered_map<std::string, Move> moveFrom;
+    std::unordered_set<Point, PointHash> closedSet;
+    std::unordered_map<Point, double, PointHash> gScore;
+    std::unordered_map<Point, Point, PointHash> cameFrom;
+    std::unordered_map<Point, Move, PointHash> moveFrom;
 
-    gScore[toKey(src)] = 0.0;
+    gScore[src] = 0.0;
     openSet.push({heuristic(src, dst), src});
 
-    // Main loop of the A* algorithm
     while (!openSet.empty()) {
         Point current = openSet.top().second;
         openSet.pop();
 
-        // Check if the destination is reached
         if (current == dst) {
             return reconstructPath(src, dst, cameFrom, moveFrom);
         }
 
-        closedSet.insert(toKey(current));
-
+        closedSet.insert(current);
         exploreNeighbors(current, directions, openSet, closedSet, gScore, cameFrom, moveFrom, dst);
     }
 
     throw NoRoute(src, dst);
 }
 
-Route VoxMap::reconstructPath(const Point& src, const Point& dst, const std::unordered_map<std::string, Point>& cameFrom, const std::unordered_map<std::string, Move>& moveFrom) const {
+
+Route VoxMap::reconstructPath(const Point& src, const Point& dst,
+                              const std::unordered_map<Point, Point, PointHash>& cameFrom,
+                              const std::unordered_map<Point, Move, PointHash>& moveFrom) const {
     Route path;
-    for (Point p = dst; p != src; p = cameFrom.at(toKey(p))) {
-        path.push_back(moveFrom.at(toKey(p)));
+    for (Point p = dst; p != src; p = cameFrom.at(p)) {
+        path.push_back(moveFrom.at(p));
     }
     std::reverse(path.begin(), path.end());
     return path;
 }
 
-void VoxMap::exploreNeighbors(const Point& current, const std::vector<std::pair<int, int>>& directions, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>& openSet, std::unordered_set<std::string>& closedSet, std::unordered_map<std::string, double>& gScore, std::unordered_map<std::string, Point>& cameFrom, std::unordered_map<std::string, Move>& moveFrom, const Point& dst) const {
+void VoxMap::exploreNeighbors(const Point& current,
+                              const std::vector<std::pair<int, int>>& directions,
+                              std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>& openSet,
+                              std::unordered_set<Point, PointHash>& closedSet,
+                              std::unordered_map<Point, double, PointHash>& gScore,
+                              std::unordered_map<Point, Point, PointHash>& cameFrom,
+                              std::unordered_map<Point, Move, PointHash>& moveFrom,
+                              const Point& dst) const {
     for (int i = 0; i < 4; ++i) {
         Point neighbor = {current.x + directions[i].first, current.y + directions[i].second, current.z};
 
-        // Check if the move is valid
-        // Check bounds
         if (!inBound(neighbor)) {
             continue;
         }
-        // std::cout << "Neighbor: " << neighbor << std::endl;
-        // Check if the neighbor is an obstacle
+
         if (!map[neighbor.z][neighbor.y][neighbor.x]) {
-            // Check if the neighbor is floating and needs to fall
             if (neighbor.z > 0 && !map[neighbor.z - 1][neighbor.y][neighbor.x]) {
                 neighbor = fall(neighbor);
-                if (neighbor.z == -1) continue;  // If falling is not possible, continue to the next neighbor
+                if (neighbor.z == -1) continue;
             }
         } else {
-            // Check for jump if the neighbor is an obstacle
             if (inBound({current.x, current.y, current.z + 1}) && map[current.z + 1][current.y][current.x]) {
-                continue;  // Skip if there's a block directly above the current position
+                continue;
             }
             if (inBound({neighbor.x, neighbor.y, neighbor.z + 1}) && map[neighbor.z + 1][neighbor.y][neighbor.x]) {
-                continue;  // Skip if there's a block directly above the neighbor position
+                continue;
             }
-
-            // Perform the jump
             neighbor = jump(neighbor);
-            if (neighbor.z == -1) continue;  // If jumping is not possible, continue to the next neighbor
+            if (neighbor.z == -1) continue;
         }
 
-        // Skip the neighbor if it is not valid or has already been visited
-        if (!isValidPoint(neighbor) || closedSet.find(toKey(neighbor)) != closedSet.end()) {
+        if (!isValidPoint(neighbor) || closedSet.find(neighbor) != closedSet.end()) {
             continue;
         }
 
-        double tentative_gScore = gScore[toKey(current)] + 1.0;
-        if (gScore.find(toKey(neighbor)) == gScore.end() || tentative_gScore < gScore[toKey(neighbor)]) {
-            cameFrom[toKey(neighbor)] = current;
-            moveFrom[toKey(neighbor)] = static_cast<Move>(i);
-            gScore[toKey(neighbor)] = tentative_gScore;
+        double tentative_gScore = gScore[current] + 1.0;
+        if (gScore.find(neighbor) == gScore.end() || tentative_gScore < gScore[neighbor]) {
+            cameFrom[neighbor] = current;
+            moveFrom[neighbor] = static_cast<Move>(i);
+            gScore[neighbor] = tentative_gScore;
             openSet.push({tentative_gScore + heuristic(neighbor, dst), neighbor});
         }
     }

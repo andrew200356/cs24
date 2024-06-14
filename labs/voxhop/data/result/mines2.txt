@@ -1,0 +1,248 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 35.79      0.97     0.97  1356693     0.00     0.00  VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const
+ 27.68      1.72     0.75       50    15.00    53.40  VoxMap::route(Point, Point)
+  7.38      1.92     0.20  1391116     0.00     0.00  std::__detail::_Map_base<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&)
+  6.27      2.09     0.17      559     0.30     0.30  std::_Hashtable<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  5.90      2.25     0.16      559     0.29     0.29  std::_Hashtable<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  5.54      2.40     0.15      559     0.27     0.27  std::_Hashtable<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  4.43      2.52     0.12  1391116     0.00     0.00  std::__detail::_Map_base<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&)
+  3.32      2.61     0.09  4520958     0.00     0.00  std::__detail::_Map_base<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&)
+  1.48      2.65     0.04   259495     0.00     0.00  VoxMap::fall(Point) const
+  1.11      2.68     0.03                             _init
+  0.37      2.69     0.01  4698732     0.00     0.00  VoxMap::isValidPoint(Point const&) const
+  0.37      2.70     0.01  1356783     0.00     0.00  operator<<(std::ostream&, std::vector<Move, std::allocator<Move> > const&)
+  0.37      2.71     0.01        1    10.00    10.00  VoxMap::VoxMap(std::istream&)
+  0.00      2.71     0.00      552     0.00     0.00  void std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >::_M_realloc_insert<std::pair<double, Point> >(__gnu_cxx::__normal_iterator<std::pair<double, Point>*, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > > >, std::pair<double, Point>&&)
+  0.00      2.71     0.00      440     0.00     0.00  void std::vector<Move, std::allocator<Move> >::_M_realloc_insert<Move const&>(__gnu_cxx::__normal_iterator<Move*, std::vector<Move, std::allocator<Move> > >, Move const&)
+  0.00      2.71     0.00      101     0.00     0.00  read_point(char const*, std::istream&)
+  0.00      2.71     0.00       48     0.00     0.00  VoxMap::reconstructPath(Point const&, Point const&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > > const&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > > const&) const
+  0.00      2.71     0.00        4     0.00     0.00  operator<<(std::ostream&, Point const&)
+  0.00      2.71     0.00        1     0.00     0.00  std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > >::_M_fill_insert(__gnu_cxx::__normal_iterator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >*, std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > > >, unsigned long, std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > const&)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.37% of 2.71 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     98.9    0.00    2.68                 main [1]
+                0.75    1.92      50/50          VoxMap::route(Point, Point) [2]
+                0.01    0.00       1/1           VoxMap::VoxMap(std::istream&) [14]
+                0.00    0.00      48/1356783     operator<<(std::ostream&, std::vector<Move, std::allocator<Move> > const&) [13]
+                0.00    0.00     101/101         read_point(char const*, std::istream&) [23]
+-----------------------------------------------
+                0.75    1.92      50/50          main [1]
+[2]     98.5    0.75    1.92      50         VoxMap::route(Point, Point) [2]
+                0.97    0.94 1356693/1356693     VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+                0.01    0.00 1356735/1356783     operator<<(std::ostream&, std::vector<Move, std::allocator<Move> > const&) [13]
+                0.00    0.00      50/4520958     std::__detail::_Map_base<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [6]
+                0.00    0.00     100/4698732     VoxMap::isValidPoint(Point const&) const [12]
+                0.00    0.00      50/552         void std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >::_M_realloc_insert<std::pair<double, Point> >(__gnu_cxx::__normal_iterator<std::pair<double, Point>*, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > > >, std::pair<double, Point>&&) [21]
+                0.00    0.00      48/48          VoxMap::reconstructPath(Point const&, Point const&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > > const&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > > const&) const [24]
+-----------------------------------------------
+                0.97    0.94 1356693/1356693     VoxMap::route(Point, Point) [2]
+[3]     70.5    0.97    0.94 1356693         VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+                0.20    0.15 1391116/1391116     std::__detail::_Map_base<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [4]
+                0.12    0.16 1391116/1391116     std::__detail::_Map_base<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [5]
+                0.09    0.17 4520908/4520958     std::__detail::_Map_base<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [6]
+                0.04    0.00  259495/259495      VoxMap::fall(Point) const [10]
+                0.01    0.00 4698632/4698732     VoxMap::isValidPoint(Point const&) const [12]
+                0.00    0.00     502/552         void std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >::_M_realloc_insert<std::pair<double, Point> >(__gnu_cxx::__normal_iterator<std::pair<double, Point>*, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > > >, std::pair<double, Point>&&) [21]
+-----------------------------------------------
+                0.20    0.15 1391116/1391116     VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+[4]     12.9    0.20    0.15 1391116         std::__detail::_Map_base<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [4]
+                0.15    0.00     559/559         std::_Hashtable<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [9]
+-----------------------------------------------
+                0.12    0.16 1391116/1391116     VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+[5]     10.3    0.12    0.16 1391116         std::__detail::_Map_base<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [5]
+                0.16    0.00     559/559         std::_Hashtable<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [8]
+-----------------------------------------------
+                0.00    0.00      50/4520958     VoxMap::route(Point, Point) [2]
+                0.09    0.17 4520908/4520958     VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+[6]      9.6    0.09    0.17 4520958         std::__detail::_Map_base<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [6]
+                0.17    0.00     559/559         std::_Hashtable<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [7]
+-----------------------------------------------
+                0.17    0.00     559/559         std::__detail::_Map_base<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [6]
+[7]      6.3    0.17    0.00     559         std::_Hashtable<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [7]
+-----------------------------------------------
+                0.16    0.00     559/559         std::__detail::_Map_base<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [5]
+[8]      5.9    0.16    0.00     559         std::_Hashtable<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [8]
+-----------------------------------------------
+                0.15    0.00     559/559         std::__detail::_Map_base<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&) [4]
+[9]      5.5    0.15    0.00     559         std::_Hashtable<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [9]
+-----------------------------------------------
+                0.04    0.00  259495/259495      VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+[10]     1.5    0.04    0.00  259495         VoxMap::fall(Point) const [10]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     1.1    0.03    0.00                 _init [11]
+                0.00    0.00       4/4           operator<<(std::ostream&, Point const&) [25]
+-----------------------------------------------
+                0.00    0.00     100/4698732     VoxMap::route(Point, Point) [2]
+                0.01    0.00 4698632/4698732     VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+[12]     0.4    0.01    0.00 4698732         VoxMap::isValidPoint(Point const&) const [12]
+-----------------------------------------------
+                0.00    0.00      48/1356783     main [1]
+                0.01    0.00 1356735/1356783     VoxMap::route(Point, Point) [2]
+[13]     0.4    0.01    0.00 1356783         operator<<(std::ostream&, std::vector<Move, std::allocator<Move> > const&) [13]
+-----------------------------------------------
+                0.01    0.00       1/1           main [1]
+[14]     0.4    0.01    0.00       1         VoxMap::VoxMap(std::istream&) [14]
+                0.00    0.00       1/1           std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > >::_M_fill_insert(__gnu_cxx::__normal_iterator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >*, std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > > >, unsigned long, std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > const&) [26]
+-----------------------------------------------
+                0.00    0.00      50/552         VoxMap::route(Point, Point) [2]
+                0.00    0.00     502/552         VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [3]
+[21]     0.0    0.00    0.00     552         void std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >::_M_realloc_insert<std::pair<double, Point> >(__gnu_cxx::__normal_iterator<std::pair<double, Point>*, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > > >, std::pair<double, Point>&&) [21]
+-----------------------------------------------
+                0.00    0.00     440/440         VoxMap::reconstructPath(Point const&, Point const&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > > const&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > > const&) const [24]
+[22]     0.0    0.00    0.00     440         void std::vector<Move, std::allocator<Move> >::_M_realloc_insert<Move const&>(__gnu_cxx::__normal_iterator<Move*, std::vector<Move, std::allocator<Move> > >, Move const&) [22]
+-----------------------------------------------
+                0.00    0.00     101/101         main [1]
+[23]     0.0    0.00    0.00     101         read_point(char const*, std::istream&) [23]
+-----------------------------------------------
+                0.00    0.00      48/48          VoxMap::route(Point, Point) [2]
+[24]     0.0    0.00    0.00      48         VoxMap::reconstructPath(Point const&, Point const&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > > const&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > > const&) const [24]
+                0.00    0.00     440/440         void std::vector<Move, std::allocator<Move> >::_M_realloc_insert<Move const&>(__gnu_cxx::__normal_iterator<Move*, std::vector<Move, std::allocator<Move> > >, Move const&) [22]
+-----------------------------------------------
+                0.00    0.00       4/4           _init [11]
+[25]     0.0    0.00    0.00       4         operator<<(std::ostream&, Point const&) [25]
+-----------------------------------------------
+                0.00    0.00       1/1           VoxMap::VoxMap(std::istream&) [14]
+[26]     0.0    0.00    0.00       1         std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > >::_M_fill_insert(__gnu_cxx::__normal_iterator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >*, std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > > >, unsigned long, std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > const&) [26]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [23] read_point(char const*, std::istream&) [8] std::_Hashtable<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [4] std::__detail::_Map_base<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&)
+   [2] VoxMap::route(Point, Point) [9] std::_Hashtable<Point, std::pair<Point const, Point>, std::allocator<std::pair<Point const, Point> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [6] std::__detail::_Map_base<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&)
+  [14] VoxMap::VoxMap(std::istream&) [7] std::_Hashtable<Point, std::pair<Point const, double>, std::allocator<std::pair<Point const, double> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [25] operator<<(std::ostream&, Point const&)
+  [12] VoxMap::isValidPoint(Point const&) const [22] void std::vector<Move, std::allocator<Move> >::_M_realloc_insert<Move const&>(__gnu_cxx::__normal_iterator<Move*, std::vector<Move, std::allocator<Move> > >, Move const&) [13] operator<<(std::ostream&, std::vector<Move, std::allocator<Move> > const&)
+  [24] VoxMap::reconstructPath(Point const&, Point const&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > > const&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > > const&) const [26] std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > >::_M_fill_insert(__gnu_cxx::__normal_iterator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >*, std::vector<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >, std::allocator<std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > > > >, unsigned long, std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > > const&) [11] _init
+   [3] VoxMap::exploreNeighbors(Point const&, std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >, std::greater<void> >&, std::unordered_set<Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<Point> >&, std::unordered_map<Point, double, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, double> > >&, std::unordered_map<Point, Point, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Point> > >&, std::unordered_map<Point, Move, VoxMap::PointHash, std::equal_to<Point>, std::allocator<std::pair<Point const, Move> > >&, Point const&) const [21] void std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > >::_M_realloc_insert<std::pair<double, Point> >(__gnu_cxx::__normal_iterator<std::pair<double, Point>*, std::vector<std::pair<double, Point>, std::allocator<std::pair<double, Point> > > >, std::pair<double, Point>&&)
+  [10] VoxMap::fall(Point) const [5] std::__detail::_Map_base<Point, std::pair<Point const, Move>, std::allocator<std::pair<Point const, Move> >, std::__detail::_Select1st, std::equal_to<Point>, VoxMap::PointHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](Point const&)

@@ -15,14 +15,35 @@ class VoxMap {
     int width, depth, height;
     std::vector<std::vector<std::vector<bool>>> map;
 
+    struct PointHash {
+        std::size_t operator()(const Point& p) const {
+            std::size_t seed = 0;
+            seed ^= std::hash<int>()(p.x) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            seed ^= std::hash<int>()(p.y) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            seed ^= std::hash<int>()(p.z) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            return seed;
+        }
+    };
+
     // Helper Functions
     bool isValidPoint(const Point& p) const;
     bool inBound(const Point& p) const;
     Point jump(Point point) const;
     Point fall(Point point) const;
-    Route reconstructPath(const Point& src, const Point& dst, const std::unordered_map<std::string, Point>& cameFrom, const std::unordered_map<std::string, Move>& moveFrom) const;
-    void exploreNeighbors(const Point& current, const std::vector<std::pair<int, int>>& directions, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>& openSet, std::unordered_set<std::string>& closedSet, std::unordered_map<std::string, double>& gScore, std::unordered_map<std::string, Point>& cameFrom, std::unordered_map<std::string, Move>& moveFrom, const Point& dst) const;
     double heuristic(const Point& a, const Point& b) const;
+
+    Route reconstructPath(const Point& src, const Point& dst,
+                          const std::unordered_map<Point, Point, PointHash>& cameFrom,
+                          const std::unordered_map<Point, Move, PointHash>& moveFrom) const;  // Function to reconstruct the path
+
+    void exploreNeighbors(const Point& current,
+                          const std::vector<std::pair<int, int>>& directions,
+                          std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>& openSet,
+                          std::unordered_set<Point, PointHash>& closedSet,
+                          std::unordered_map<Point, double, PointHash>& gScore,
+                          std::unordered_map<Point, Point, PointHash>& cameFrom,
+                          std::unordered_map<Point, Move, PointHash>& moveFrom,
+                          const Point& dst) const;  // Function to explore neighbors in the A* algorithm
 
    public:
     VoxMap(std::istream& stream);
