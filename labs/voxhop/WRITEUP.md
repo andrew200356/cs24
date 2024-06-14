@@ -35,21 +35,88 @@ The program uses the A*algorithm to perform route queries. A* is chosen for its 
 - **Priority Queue** (`std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>`):
   - Stores nodes to be explored, prioritized by their estimated total cost.
   - Chosen for its efficient retrieval of the node with the lowest cost.
-- **Unordered Set** (`std::unordered_set<std::string>`):
+- **Unordered Set** (`std::unordered_set<Point, PointHash>`):
   - Keeps track of visited nodes.
   - Chosen for its efficient O(1) average-time complexity for lookups.
-- **Unordered Map** (`std::unordered_map<std::string, double>`):
+- **Unordered Map** (`std::unordered_map<Point, double, PointHash>`):
   - Stores the gScore (cost from start to node) and cameFrom (path reconstruction) information.
   - Chosen for its efficient O(1) average-time complexity for insertions and lookups.
 
 ### Big-O Runtime Analysis
 
-- **Map Loading**: O(width*depth*height) - Reading and storing each voxel.
-- **A* Initialization**: O(1) - Initializing data structures.
+- **Map Loading**: `O(width * depth * height)` - Reading and storing each voxel.
+- **A* Initialization**: `O(1)` - Initializing data structures.
 - **A* Main Loop**:
-  - Each node expansion: O(log n) for priority queue operations.
-  - Neighbor exploration: O(1) per neighbor.
-  - Overall complexity: O(n log n), where n is the number of nodes.
-- **Path Reconstruction**: O(k), where k is the length of the path.
+  - Each node expansion: `O(log n)` for priority queue operations.
+  - Neighbor exploration: `O(1)` per neighbor, `O(z)` if falling, overall `O(z)`
+  - Overall complexity: `O(n log n + n*z)`, where n is the number of nodes.
+- **Path Reconstruction**: `O(k)`, where k is the length of the path.
 
-### Gradescope Submission
+#ifndef VOXMAP_H
+#define VOXMAP_H
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+
+// Point structure to represent a point in the map
+struct Point {
+    int x, y, z;
+    bool operator==(const Point& other) const {
+        return x == other.x && y == other.y && z == other.z;
+    }
+};
+
+// Hash function for Point
+struct PointHash {
+    std::size_t operator()(const Point& p) const {
+        std::size_t seed = 0;
+        seed ^= std::hash<int>()(p.x) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        seed ^= std::hash<int>()(p.y) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        seed ^= std::hash<int>()(p.z) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        return seed;
+    }
+};
+
+// Enum for possible moves
+enum Move {
+    UP, DOWN, LEFT, RIGHT
+};
+
+// Type alias for the route
+using Route = std::vector<Move>;
+
+class VoxMap {
+public:
+    VoxMap(std::istream& stream);  // Constructor to initialize the map from an input stream
+    ~VoxMap();  // Destructor
+
+    Route route(Point src, Point dst);  // A* algorithm to find the route from src to dst
+
+private:
+    int width, depth, height;
+    std::vector<std::vector<std::vector<bool>>> map;
+
+    bool isValidPoint(const Point& p) const;  // Helper function to check if a point is valid
+    bool inBound(const Point& p) const;  // Helper function to check if a point is within bounds
+    Point fall(Point point) const;  // Function to simulate a fall
+    Point jump(Point point) const;  // Function to simulate a jump
+    double heuristic(const Point& a, const Point& b) const;  // Heuristic function for A* (Manhattan distance)
+    Route reconstructPath(const Point& src, const Point& dst,
+                          const std::unordered_map<Point, Point, PointHash>& cameFrom,
+                          const std::unordered_map<Point, Move, PointHash>& moveFrom) const;  // Function to reconstruct the path
+
+    void exploreNeighbors(const Point& current,
+                          const std::vector<std::pair<int, int>>& directions,
+                          std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>& openSet,
+                          std::unordered_set<Point, PointHash>& closedSet,
+                          std::unordered_map<Point, double, PointHash>& gScore,
+                          std::unordered_map<Point, Point, PointHash>& cameFrom,
+                          std::unordered_map<Point, Move, PointHash>& moveFrom,
+                          const Point& dst) const;  // Function to explore neighbors in the A* algorithm
+};
+
+#endif // VOXMAP_H
+```
