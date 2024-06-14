@@ -105,61 +105,68 @@ Route VoxMap::route(Point src, Point dst) {
 
         // Check if the destination is reached
         if (current == dst) {
-            Route path;
-            for (Point p = dst; p != src; p = cameFrom[toKey(p)]) {
-                path.push_back(moveFrom[toKey(p)]);
-            }
-            std::reverse(path.begin(), path.end());
-            return path;
+            return reconstructPath(src, dst, cameFrom, moveFrom);
         }
 
         closedSet.insert(toKey(current));
 
-        // Explore all possible neighbors
-        for (int i = 0; i < 4; ++i) {
-            Point neighbor = {current.x + directions[i].first, current.y + directions[i].second, current.z};
-
-            // Check if the move is valid
-            // Check bounds
-            if (!inBound(neighbor)) {
-                continue;
-            }
-            // std::cout << "Neighbor: " << neighbor << std::endl;
-            // Check if the neighbor is an obstacle
-            if (!map[neighbor.z][neighbor.y][neighbor.x]) {
-                // Check if the neighbor is floating and needs to fall
-                if (neighbor.z > 0 && !map[neighbor.z - 1][neighbor.y][neighbor.x]) {
-                    neighbor = fall(neighbor);
-                    if (neighbor.z == -1) continue;  // If falling is not possible, continue to the next neighbor
-                }
-            } else {
-                // Check for jump if the neighbor is an obstacle
-                if (inBound({current.x, current.y, current.z + 1}) && map[current.z + 1][current.y][current.x]) {
-                    continue;  // Skip if there's a block directly above the current position
-                }
-                if (inBound({neighbor.x, neighbor.y, neighbor.z + 1}) && map[neighbor.z + 1][neighbor.y][neighbor.x]) {
-                    continue;  // Skip if there's a block directly above the neighbor position
-                }
-
-                // Perform the jump
-                neighbor = jump(neighbor);
-                if (neighbor.z == -1) continue;  // If jumping is not possible, continue to the next neighbor
-            }
-
-            // Skip the neighbor if it is not valid or has already been visited
-            if (!isValidPoint(neighbor) || closedSet.find(toKey(neighbor)) != closedSet.end()) {
-                continue;
-            }
-
-            double tentative_gScore = gScore[toKey(current)] + 1.0;
-            if (gScore.find(toKey(neighbor)) == gScore.end() || tentative_gScore < gScore[toKey(neighbor)]) {
-                cameFrom[toKey(neighbor)] = current;
-                moveFrom[toKey(neighbor)] = static_cast<Move>(i);
-                gScore[toKey(neighbor)] = tentative_gScore;
-                openSet.push({tentative_gScore + heuristic(neighbor, dst), neighbor});
-            }
-        }
+        exploreNeighbors(current, directions, openSet, closedSet, gScore, cameFrom, moveFrom, dst);
     }
 
     throw NoRoute(src, dst);
+}
+
+Route VoxMap::reconstructPath(const Point& src, const Point& dst, const std::unordered_map<std::string, Point>& cameFrom, const std::unordered_map<std::string, Move>& moveFrom) const {
+    Route path;
+    for (Point p = dst; p != src; p = cameFrom.at(toKey(p))) {
+        path.push_back(moveFrom.at(toKey(p)));
+    }
+    std::reverse(path.begin(), path.end());
+    return path;
+}
+
+void VoxMap::exploreNeighbors(const Point& current, const std::vector<std::pair<int, int>>& directions, std::priority_queue<std::pair<double, Point>, std::vector<std::pair<double, Point>>, std::greater<>>& openSet, std::unordered_set<std::string>& closedSet, std::unordered_map<std::string, double>& gScore, std::unordered_map<std::string, Point>& cameFrom, std::unordered_map<std::string, Move>& moveFrom, const Point& dst) const {
+    for (int i = 0; i < 4; ++i) {
+        Point neighbor = {current.x + directions[i].first, current.y + directions[i].second, current.z};
+
+        // Check if the move is valid
+        // Check bounds
+        if (!inBound(neighbor)) {
+            continue;
+        }
+        // std::cout << "Neighbor: " << neighbor << std::endl;
+        // Check if the neighbor is an obstacle
+        if (!map[neighbor.z][neighbor.y][neighbor.x]) {
+            // Check if the neighbor is floating and needs to fall
+            if (neighbor.z > 0 && !map[neighbor.z - 1][neighbor.y][neighbor.x]) {
+                neighbor = fall(neighbor);
+                if (neighbor.z == -1) continue;  // If falling is not possible, continue to the next neighbor
+            }
+        } else {
+            // Check for jump if the neighbor is an obstacle
+            if (inBound({current.x, current.y, current.z + 1}) && map[current.z + 1][current.y][current.x]) {
+                continue;  // Skip if there's a block directly above the current position
+            }
+            if (inBound({neighbor.x, neighbor.y, neighbor.z + 1}) && map[neighbor.z + 1][neighbor.y][neighbor.x]) {
+                continue;  // Skip if there's a block directly above the neighbor position
+            }
+
+            // Perform the jump
+            neighbor = jump(neighbor);
+            if (neighbor.z == -1) continue;  // If jumping is not possible, continue to the next neighbor
+        }
+
+        // Skip the neighbor if it is not valid or has already been visited
+        if (!isValidPoint(neighbor) || closedSet.find(toKey(neighbor)) != closedSet.end()) {
+            continue;
+        }
+
+        double tentative_gScore = gScore[toKey(current)] + 1.0;
+        if (gScore.find(toKey(neighbor)) == gScore.end() || tentative_gScore < gScore[toKey(neighbor)]) {
+            cameFrom[toKey(neighbor)] = current;
+            moveFrom[toKey(neighbor)] = static_cast<Move>(i);
+            gScore[toKey(neighbor)] = tentative_gScore;
+            openSet.push({tentative_gScore + heuristic(neighbor, dst), neighbor});
+        }
+    }
 }
